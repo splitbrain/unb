@@ -1470,6 +1470,14 @@ if ($_POST['action'] == 'sendemail' &&
 		$error .= $UNB_T['error.access denied'] . '<br />';
 	}
 
+
+	// ANDI
+	if( (time() - $UNB['LoginUser']->GetRegDate()) < 60*60*24*14 ||
+	    !UnbGetLastPost("User=".(int) $UNB['LoginUserID']) ) {
+		$error .= $UNB_T['error.access denied'] . '<br />';
+	}
+
+
 	if (($_POST['id'] == '' || trim($_POST['Msg']) == ''))
 	{
 		$error .= $UNB_T['cp.error.form not complete'] . '<br />';
