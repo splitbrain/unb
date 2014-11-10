@@ -212,10 +212,10 @@ function AbbcProc($text, $check = false, $totext = false)
 		$protocols = 'http|https|ftp|ftps|mailto|xmpp';   // list of recognised URL protocols (can be extended)
 		$userclass = '%\-.0-9a-z~';   // character class for usernames
 		$passclass = '!#$%&()*+\-./0-9=?a-z^\_~';   // character class for passwords
-		$pathclass = '!%()+,\-./0-9;=@a-z\]\_~';   // character class for pathnames
-		$queryclass = '!#$%&()+,\-./0-9;=?@a-z\]\_~';   // character class for pathnames
-		$anchorclass = '!%()+,\-./0-9;=@a-z\]\_~';   // character class for page anchors
-		$afterclass = '\t\r\n !"\'():;<>|';   // character class of symbols after an URL
+                $pathclass = '!%()+,\-./0-9:;=@a-z[\]\_~';   // character class for pathnames
+                $queryclass = '!#$%&()+,\-./0-9:;=?@a-z[\]\_~';   // character class for pathnames
+                $anchorclass = '!%()+,\-./0-9;=@a-z[\]\_~';   // character class for page anchors
+                $afterclass = '\t\r\n !"\'();<>|';   // character class of symbols after an URL
 		$after2 = ',[\t\r\n ]|\.[\t\r\n ]|\?[\t\r\n ]';   // alternative list of (multiple) symbols after an URL
 
 		// NOTE: There is a possible problem with auto-lists and auto-URLs:
