@@ -1795,7 +1795,14 @@ function UnbForwardHTML($url)
 	global $UNB, $UNB_T;
 	$TP =& $UNB['TP'];
 
-	if (!rc('no_forward'))
+	$rc_noforward = rc('no_forward');
+	// ANDI disable autoforwarding for external URLs
+	if(preg_match('/^https?:\/\//i', $url) && strpos(strtolower($url), rc('home_url')) !== 0)
+	{
+		$rc_noforward = 1;
+	}
+
+	if (!$rc_noforward)
 	{
 		// make absolute URL because this doesn't care about the <base href> attribute
 		if (!preg_match('_^([a-z]+):_i', $url) && rc('home_url'))
@@ -1860,7 +1867,7 @@ function UnbForwardHTML($url)
 		$TP['headCSS'] .= '<link rel="stylesheet" href="' . $UNB['CssBaseURL'] . $cssFile . '.css.php" type="text/css" />' . endl;
 
 	$a = '';
-	if (!rc('no_forward')) $a .= '<meta http-equiv="refresh" content="1; URL=' . t2i($url) . '" />';
+	if (!$rc_noforward) $a .= '<meta http-equiv="refresh" content="1; URL=' . t2i($url) . '" />';
 	UnbCallHook('page.htmlhead', $a);
 	$TP['headCustom'] = $a;
 
@@ -1868,7 +1875,7 @@ function UnbForwardHTML($url)
 	$TP['headNoIndex'] = true;
 
 	$TP['url'] = $url;
-	$TP['autoForward'] = !rc('no_forward');
+	$TP['autoForward'] = !$rc_noforward;
 	$TP['urlJs'] = str_replace('"', '\\\\\\"', $url);
 
 	UteRemember('_forward.html', $TP);

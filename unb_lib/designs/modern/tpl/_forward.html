@@ -16,9 +16,12 @@
 </head>
 <body{if $headSimple} class="simple"{endif}>
 
-<div class="forward_page">
-{tr "head.forwarding to"}:<br />
-<a href="{t2i $url}">{t2h $url}</a>
+<div class="forward_page" style="text-align: center; margin-top: 3em">
+<p>You're now leaving the DokuWiki user forums. Please follow this link if you want to continue:</p>
+
+<p><a href="{t2i $url}" style="font-size: 120%">{t2h $url}</a></p>
+
+<p style="margin-top: 4em">Use your browser's back button if you did not intend to visit the link shown above.</p>
 </div>
 
 {if $autoForward}
