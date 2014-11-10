@@ -22,7 +22,7 @@ if (!isset($UTE)) $UTE = array();
 // WARNING: This option is useless if the PHP option 'asp_tags' is enabled
 //          because it can only recognise standard (long and short) PHP tags.
 //
-$UTE['__skipPHP'] = true;
+$UTE['__skipPHP'] = false; //ANDI enabled for tob bar include
 
 // Template code tag delimiter keys. These are the opening and closing keys
 // that define the beginning and end of template code tags. You can use keys

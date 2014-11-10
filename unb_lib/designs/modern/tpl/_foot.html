@@ -43,6 +43,10 @@
 {$footAddPostFootCodeSimple}
 
 {if $headHTML}
+<?php
+    /* ANDI include directly via PHP because, UNB will think our styles are template commands */
+    include('/var/www/wiki/htdocs/lib/tpl/dokuwiki/dwtb.html');
+?>
 </body>
 </html>
 {endif}
