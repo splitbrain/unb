@@ -1,0 +1,258 @@
+{require-css "thread"}
+
+<a id="threadlisttop"></a>
+{if not $threadsInForum}
+	<div class="all_threads_section">
+	{if or or $threadlistActionMarkRead $threadlistActionNew $threadlistPages}
+		<div class="all_thread_actions_top">
+{set $div ""}
+{if $threadlistActionMarkRead}{$div}{$threadlistActionMarkRead}{set $div " &middot; "}{endif}
+{if and $threadlistActionMarkRead $threadlistActionNew}{set $div "<br />"}{endif}
+{if $threadlistActionNew}{$div}{$threadlistActionNew}{set $div " &middot; "}{endif}
+{if $threadlistPages}{$div}{$threadlistPages}{set $div " &middot; "}{endif}
+		</div>
+	{endif}
+{endif}
+
+{if $threadlistEditformLink}<form id="form" action="{$threadlistEditformLink}" method="post">{endif}
+{if not $threadsInForum}
+	{if not $searchTitle}
+		<h1>{trnum "threadlist.topics" sizeof $threadlist}</h1>
+	{else}
+		<h1>{$searchTitle}</h1>
+	{endif}
+
+	<div class="all_threads_container">
+{else}
+	<div class="all_threads_in_forum">
+{endif}
+{set $threadContainerOpen 0}
+
+{foreach $t in $threadlist}
+
+{if $t.importantDelimiter}
+	{if $threadContainerOpen}
+		</div><!-- thread_container -->
+		{set $threadContainerOpen 0}
+		{set $ShadowBottomOffset 4}
+		{include "_shadow_bottom.html"}
+	{endif}
+	<!--div class="thread_between_note">This was all important. The following topics will be sorted by their last post again.</div-->
+{endif}
+{if $t.oldDelimiter}
+	{if $threadContainerOpen}
+		</div><!-- thread_container -->
+		{set $threadContainerOpen 0}
+		{set $ShadowBottomOffset 4}
+		{include "_shadow_bottom.html"}
+	{endif}
+	<div class="thread_between_note">
+		{-- use another text if we're searching for unread threads, in that case the next one will be unread, so use this as identifier}
+		{if $t.flagNew}
+			{tr "thread.following old but still unread"}
+		{else}
+			{tr "thread.following old"}
+		{endif}
+	</div>
+{endif}
+
+{if $t.editThis}<a id="here"></a>{endif}
+{if $threadContainerOpen}
+	<div class="thread_content {if $t.defaultOrder}{$t.impclass}{endif} thread_separator"><div></div></div>
+{else}
+	<div class="thread_container {if $t.defaultOrder}{$t.impclass}{endif} {if $t.firstitem}first{endif}">
+	{set $threadContainerOpen 1}
+{endif}
+<div class="thread_content {$t.impclass}">
+	<div class="thread_icon">
+		<a href="{$t.linkThreadIcon}"><img {$t.image} title="{$t.imageTitle}" style="margin: 4px 0px;" /></a>
+	</div>
+
+	{if $threadlistShowForum}
+	<div class="thread_forum">
+		<small>{tr "forum"}: <a href="{$t.linkForum}">{$t.forumName}</a> {$t.forumHiddenImage} {$t.forumIgnoredImage}</small>
+	</div>
+	{endif}
+
+	<div class="thread_data">
+		<span class="info">
+			<!--{if $threadlistShowForum}
+				<small>{tr "forum"}:</small> <a href="{$t.linkForum}">{$t.forumName}</a>
+			{endif}-->
+			{$t.pages}
+			{$t.attachImage}{$t.bookmarkImage}{$t.linkEdit}{$t.hiddenImage}{$t.ignoredImage}
+		</span>
+
+		<span class="name">
+			{$t.addPreSubject}
+			{if $t.isMoved}<small>{tr "moved"}:</small> {endif}
+			{if $t.linkThread}
+				{$t.linkThread}{if $t.flagNew}<b>{endif}{$t.subject}{if $t.flagNew}</b>{endif}</a>
+			{endif}
+			{$t.unreadCount}
+			{$t.movedForum}
+			{$t.importantPoll}
+			{$t.importantThread}
+			{$t.poll}
+		</span>
+
+		<!-- {if $t.desc}<div class="desc">{--$t.desc}</div>{endif} -->
+	</div>
+
+	{if not $t.isMoved}
+		<div class="thread_counter">
+			<table cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td class="desc">
+					{if $t.desc}
+						{$t.desc}
+					{endif}
+				</td>
+			{if $t.views}
+				<td class="viewcount">
+					{$t.views} {trnum "views" $t.views}
+					{if $t.viewsUsers}
+						{trnum "by n users" $t.viewsUsers "n" $t.viewsUsers}
+					{endif}
+				</td>
+			{endif}
+				<td class="replycount">
+					{if $t.replies}
+						{$t.replies} {trnum "replies" $t.replies}
+						{if $t.repliesUsers}
+							{trnum "by n users" $t.repliesUsers "n" $t.repliesUsers}
+						{endif}
+					{endif}
+				</td>
+			{if $t.startUser}
+				<td class="topicstart">
+					{tr "topic started"} {if $t.startDate}{$t.startDate}<br />{endif}{tr "by"} {$t.startUser}
+				</td>
+			{endif}
+			<td class="lastpost">
+				{if $t.lastpostDate}
+					{tr "last post"} <a href="{$t.lastpostLink}">{$t.lastpostDate}</a>{if $t.lastpostAuthor}<br />{tr "by"} {$t.lastpostAuthor}{endif}
+				{endif}
+			</td>
+			</tr>
+			</table>
+		</div>
+	{endif}{-- not moved}
+</div>
+
+{if $t.editThis}
+	<div class="thread_content thread_edit {$t.impclass}">
+		<input type="hidden" name="action" value="editthread" />
+		<input type="hidden" name="ID" value="{$t.id}" />
+
+		<table cellspacing="0" cellpadding="0" style="width: 100%;">
+			<tr>
+				<td class="leftcol">{tr "subject"}:</td>
+				<td><div class="outerTextfield100pc"><input type="text" name="Subject" maxlength="150" value="{$t.formSubject}" /></div></td>
+			</tr>
+			<tr>
+				<td class="leftcol">{tr "description"}:</td>
+				<td><div class="outerTextfield100pc"><input type="text" name="Desc" maxlength="150" value="{$t.formDesc}" /></div></td>
+			</tr>
+			<tr>
+				<td class="leftcol">{tr "options"}:</td>
+				<td>
+					{if not $t.isMoved}
+						<label><input type="checkbox" name="CloseThread" value="1" {form_checked_if $t.isClosed} />{tr "closed"}</label> &nbsp;
+					{endif}
+					<label><input type="checkbox" name="ImportantThread" value="1" {form_checked_if $t.isImportant} />{tr "important"}</label>
+				</td>
+			</tr>
+
+			{if not $t.isMoved}
+			<tr>
+				<td class="leftcol">{tr "forum"}:</td>
+				<td>
+					<select name="Forum" onchange="getel('MovedLink').checked=true;">
+					{$threadlistEditForumOptions}
+					</select> &nbsp;
+					<label><input type="checkbox" name="MovedLink" id="MovedLink" value="1" />{tr "show moved note"}</label>
+				</td>
+			</tr>
+			{endif}
+
+			{if $threadlistEditAddFields}
+			<tr>
+				<td class="leftcol" style="padding-top: 5px; vertical-align: top;">{tr "_threadattributes.edit thread.more fields"}:</td>
+				<td style="padding-top: 3px;">{$threadlistEditAddFields}</td>
+			</tr>
+			{endif}
+		</table>
+
+		<div style="text-align: right;">
+			<label><input type="checkbox" name="Remove" value="1" {$threadlistFormSureDelete} />{tr "delete"}</label> &middot;
+			<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" /> &middot;
+			<a href="{$threadlistEditCancelLink}">{tr "cancel"}</a>
+		</div>
+	</div>
+{endif}
+
+{endforeach}
+<a id="threadlistbottom"></a>
+
+{if empty $threadlist}
+	<div class="error" style="margin: 1px 0 4px;"><div>
+		{$threadlistNoneFoundMsg}
+	</div></div>
+	{set $ShadowBottomOffset 4}
+	{include "_shadow_bottom.html"}
+{endif}
+
+{if $threadContainerOpen}
+	</div><!-- thread_container -->
+	{set $threadContainerOpen 0}
+	{set $ShadowBottomOffset 4}
+	{include "_shadow_bottom.html"}
+{endif}
+{if not $threadsInForum}
+	</div><!-- all_threads_container -->
+{else}
+	</div><!-- all_threads_in_forum -->
+{endif}
+{if $threadlistEditformLink}</form>{endif}
+{if not $threadsInForum}
+	</div><!-- all_threads_section -->
+{endif}
+
+{if not $threadsInForum}
+	{if or or or $threadlistActionAdvanced $threadlistActionMarkRead $threadlistActionNew $threadlistPages}
+		<div class="all_thread_actions_bottom">
+			{set $div ""}
+			{if $threadlistActionAdvanced}
+				{$div}<a href="javascript:nothing()" onclick="setImageId('advanced_link_img_threads', toggleVisIdScroll('advanced_options_threads') == 1, '{imgurl}arrow_down.png', '{imgurl}arrow_right.png')"><img {$UNBImage.arrow_down} id="advanced_link_img_threads" />  {tr "advanced options"}</a>
+				{set $div " &middot; "}
+			{endif}
+			{if $threadlistActionMarkRead}{$div}{$threadlistActionMarkRead}{set $div " &middot; "}{endif}
+			{if and $threadlistActionMarkRead $threadlistActionNew}{set $div "<br />"}{endif}
+			{if $threadlistActionNew}{$div}{$threadlistActionNew}{set $div " &middot; "}{endif}
+			{if $threadlistPages}{$div}{$threadlistPages}{set $div " &middot; "}{endif}
+		</div>
+	{endif}
+
+	{if $threadlistActionAdvanced}{-- advanced options}
+		<div id="advanced_options_threads" class="p">
+		<h1>{tr "forum.advanced options"}</h1>
+		<div class="advanced_options_container">
+		<div class="advanced_options_content">
+		{$threadlistAdvNotification}
+		{$threadlistAdvIgnoreForum}
+		{$threadlistAdvHideForum}
+		{$threadlistAdvShowHiddenForums}
+		{$threadlistAdvShowHiddenThreads}
+		</div><!-- advanced_options_content -->
+		</div><!-- advanced_options_container -->
+		{set $ShadowBottomOffset 0}
+		{include "_shadow_bottom.html"}
+		</div>
+
+		{=beginjs}
+		toggleVisId("advanced_options_threads", false);
+		setImageId("advanced_link_img_threads", true, "{imgurl}arrow_right.png");
+		{=endjs}
+	{endif}{-- advanced options}
+{endif}{-- not threads in forum}

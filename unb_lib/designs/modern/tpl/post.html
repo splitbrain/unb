@@ -1,0 +1,208 @@
+{require-js "post"}
+{require-txt "post"}
+
+{-- BEGIN POLL (from page 2 on)}
+{if and and $postlistPoll (eq $post.num 1) (gt $post.numAll 1)}
+{include "poll.html"}
+{endif}{-- postlistPoll and first post in thread}
+{-- END POLL}
+
+<div class="post_container {if mod $post.numAll 2}oddcount{endif} {if $post.firstitem}first{endif} {if $post.lastitem}last{endif}" id="p{$post.id}">
+
+<input type="hidden" id="post_id_{$post.num}" value="{$post.id}" />{-- for fast reply editor}
+
+{if $post.threadLink}
+<div class="post_threadinfo">
+{tr "topic"}: <a href="{$post.threadLink}">{$post.threadSubject}</a>
+{if $post.threadDescription}
+<small>({$post.threadDescription})</small>
+{endif}
+&nbsp;{tr "post.in the forum"}: {$post.forumLinks}
+</div>
+{endif}
+
+<div class="post_header">
+{if $post.avatarUrl}
+<span class="post_avatar" style=""><img src="{$post.avatarUrl}" {$post.avatarSize} alt="{tr "avatar"}" /></span>
+{endif}
+
+<div class="post_headinfo">
+<span class="post_actions">
+{set $x ""}
+{if $post.replyLink}{set $x "·"}
+	{if $post.useFastReply}
+		<a href="javascript:replyTo({$post.num})">{tr "post.do fast reply"}</a>
+	{else}
+		<a href="{$post.replyLink}">{tr "post.do reply"}</a>
+	{endif}
+{endif}
+{if $post.quoteLink}{set $x "·"}
+ {$x} <a href="{$post.quoteLink}">{tr "post.do quote"}</a>
+{endif}
+{if $post.editLink}{set $x "·"}
+ {if $x}|{endif} <a href="{$post.editLink}">{tr "post.do edit"}</a>
+{endif}
+{if $post.deleteLink}{set $x "·"}
+ {$x} <a href="{$post.deleteLink}">{tr "post.do delete"}</a>
+{endif}
+</span>
+
+<span class="post_username" onclick="setImageId('post_{$post.num}_moreimg', toggleVisId('post_{$post.num}_more') == 1, '{imgurl}arrow_down.png', '{imgurl}arrow_right.png')">
+	<img id="post_{$post.num}_moreimg" src="{imgurl}arrow_down.png" alt="" />
+	{$post.authorName}
+</span>
+<span class="post_userinfo">{--$post.authorOnlineImg}{if $post.authorThreadStarter} <img {$UNBImage.starter} title="{tr "post.thread starter"}" />{endif} {if $post.authorStatus}<i>({$post.authorStatus})</i>{endif}</span>
+<span class="post_date">{$post.date}</span>
+{if $post.numAll}
+<span class="post_num"><a href="{$post.hereLink}">#{$post.numAll}</a></span>
+{endif}
+</div><!-- post_headinfo -->
+</div><!-- post_header -->
+
+<div id="post_{$post.num}_more" class="post_moreinfo">
+{if $post.authorTitle}
+<small>{tr "user title"}:</small> <b>{$post.authorTitle}</b><br />
+{endif}
+{if $post.authorMemberSince}
+{tr "member"} {$post.authorMemberSince} · {$post.authorPostCount}
+{else}
+{tr "post.no profile"}
+{endif}
+{if $post.authorLocation}
+ · {tr "location"}: {$post.authorLocation}
+{endif}
+<br />
+{if $post.authorGroups}
+<small>{tr "group memberships"}:</small> {$post.authorGroups}<br />
+{endif}
+<div class="post_moreactions">
+{set $x ""}
+{if $post.profileLink}
+<a href="{$post.profileLink}"><img src="{imgurl}vcard.png" alt="" /> {tr "post.show profile"}</a>
+{set $x "·"}
+{endif}
+{if $post.emailLink}
+ {$x} <a href="{$post.emailLink}"><img src="{imgurl}email.png" alt="" /> {tr "post.send e-mail"}</a>
+{set $x "·"}
+{endif}
+{if $post.unreadLink}
+ {$x} <a href="{$post.unreadLink}"><img src="{imgurl}unread.png" alt="" /> {tr "post.mark unread"}</a>
+{set $x "·"}
+{endif}
+{if $post.hereLink}
+ {$x} <a href="{$post.hereLink}"><img src="{imgurl}goto_post.png" alt="" /> {tr "post.link to this post"}</a>
+{set $x "·"}
+{endif}
+{if $post.ipLink}
+ {$x} <a href="{$post.ipLink}"><img src="{imgurl}host.png" alt="" /> {tr "post.show ip"}</a>
+{set $x "·"}
+{endif}
+</div><!-- post_moreactions -->
+
+{if $post.usersRead}
+<div class="post_users_read">
+{tr "post.read by"}: {$post.usersRead}
+</div>
+{endif}
+</div><!-- post_moreinfo -->
+<script type="text/javascript">
+//toggleMoreInfo({$post.num}, 0);
+setImageId('post_{$post.num}_moreimg', toggleVisId('post_{$post.num}_more', 0) == 1, '{imgurl}arrow_down.png', '{imgurl}arrow_right.png')
+</script>
+
+{if $post.isPreview}
+<div class="post_infobar">
+{tr "post.is preview"}
+</div>
+{endif}
+
+{if $post.editedAfterViewed}
+<div class="post_infobar">
+<img {$UNBImage.write} /> {tr "post.changed since last read"}
+</div>
+{endif}
+
+{if $post.spamwarning}
+<div class="post_infobar">
+{$post.spamwarning}
+</div>
+{endif}
+
+<div class="post_content">
+{if or $post.replyToNum $post.subject}
+<div class="post_subject">
+{if $post.replyToNum}
+	<small>{tr "post.in reply to post"} <b><a href="{$post.replyToLink}">{$post.replyToNum}</a></b></small><br />
+{endif}
+{if $post.subject}
+	<small>{tr "subject"}:</small> <b>{$post.subject}</b><br />
+{endif}
+</div><!-- post_subject -->
+{endif}
+
+<div class="post_body">
+{$post.postBody}
+</div><!-- post_body -->
+
+{if $post.signature}
+<div class="post_signature">
+{$post.signature}
+</div><!-- post_signature -->
+{endif}
+
+{if sizeof $post.attachlist}
+<div class="post_attach">
+	<div class="post_attach_head">
+		{trnum "post.attach~" (sizeof $post.attachlist) "n" (sizeof $post.attachlist)}:
+	</div>
+{foreach $attach in $post.attachlist}
+	<div class="post_attach_file">
+		<img src="{imgurl}attach.png" alt="" />
+{if $attach.error}
+		{$attach.error}
+{else}
+{if $attach.noopen}
+		{$attach.filename} <small>{$attach.size}</small><br />
+		<b>{tr "post.error.attach.no permission"}</b>
+{else}
+		<a href="{$attach.linkOpen}" title="{tr "post.attach.open"}">{$attach.filename}</a> | <a href="{$attach.linkSave}" title="{tr "post.attach.save~"}">{tr "post.attach.save"}</a> &nbsp; <small>{$attach.size}{if $attach.views}, {$attach.views}{endif}</small><br />
+{if $attach.image}
+{if $attach.inlineImage}
+		<span class="post_attach_image"><img src="{$attach.linkOpen}" {$attach.imageSize} alt="{tr "post.attach.image"}" /></span>
+{else}
+		<span class="post_attach_thumbnail" title="{tr "post.attach.image~"}"><a href="{$attach.linkOpen}"><img src="{$attach.linkThumbnail}" {$attach.thumbnailSize} alt="{tr "post.attach.thumbnail"}" /></a></span>
+{endif}{-- inlineImage}
+{endif}{-- image}
+{endif}{-- noopen}
+{endif}{-- error}
+	</div>
+{endforeach}
+</div><!-- post_attach -->
+{endif}
+
+{-- INLINE POLL PLACE}
+
+{if $post.editNote}
+<div class="post_notes">
+<img {$UNBImage.write} />
+{$post.editNote}<br />
+{if $post.editReason}
+<b>{tr "post.edit reason"}:</b> {$post.editReason}
+{endif}
+</div><!-- post_notes -->
+{endif}
+
+<div style="clear: both;"></div>
+</div><!-- post_content -->
+</div><!-- post_container -->
+{set $ShadowBottomOffset 4}
+{include "_shadow_bottom.html"}
+
+{-- BEGIN POLL}
+{if and $postlistPoll (eq $post.numAll 1)}
+{include "poll.html"}
+{endif}{-- postlistPoll and first post in thread}
+{-- END POLL}
+
+<div id="reply_{$post.num}_cont"></div>
+<script type="text/javascript">toggleReplyCont({$post.num}, 0);</script>

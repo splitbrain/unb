@@ -1,0 +1,27 @@
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="summary" />
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "cp.summary"}</h1>
+
+<div class="page_content">
+{tr "username"}: {$controlpanelUsername}, {tr "userid"}: {$controlpanelUserID}<br />
+{tr "group memberships"}: {$controlpanelUserGroups}<br />
+{tr "registered on"} {$controlpanelRegDate}<br />
+{tr "number of posts"}: {$controlpanelPosts} ({tr "share"}: {$controlpanelPostsPercent}%)
+</div><!-- page_content -->
+
+{if $controlpanelMayRemoveUser}
+<div class="buttons">
+<input type="submit" name="Remove" value="{tr "cp.remove user"}" {$controlpanelSureDelete} />
+</div>
+{endif}
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

@@ -1,0 +1,66 @@
+{require-css "controlpanel"}
+{require-css "forumvis"}
+{require-txt "controlpanel"}
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "_forumvis.cpcategory"}</h1>
+
+<div class="page_content">
+
+<div class="option first">
+<table class="groupstable" cellspacing="0" cellpadding="0" width="100%" border="0">
+{foreach $groupslist}
+<tr class="{$styleclass}{if not mod $num 2} oddcount{endif}">
+	<td class="name">{$Name}</td>
+	<td class="editactions">{$actions}</td>
+</tr>
+{endforeach}
+</table>
+</div><!-- option -->
+
+</div><!-- page_content -->
+
+{if $forumvisEditor}
+<h1>{tr "_forumvis.edit group"}</h1>
+
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="cat" value="forumvis" />
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="groupid" value="{$forumvisGroupID}" />
+
+<div class="page_content">
+<div class="option first" id="here">
+
+<div class="box">
+<input type="hidden" name="SetGroupMembers" value="1" />
+{tr "_forumvis.visible forums"}
+</div>
+<div class="box indent">
+<div style="max-height: 200px; overflow: auto;">
+{foreach $forumvisForums}
+	<label><input type="checkbox" name="VisibleForum[]" value="{$id}" {form_checked_if $selected} />{$name}</label><br />
+{endforeach}
+</div>
+</div>
+</div><!-- option -->
+
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+
+</form>
+{else}{-- $forumvisEditor}
+
+<div class="page_content">
+{$forumvisEditorMsg}
+</div><!-- page_content -->
+
+{endif}{-- $forumvisEditor}
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->

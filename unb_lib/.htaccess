@@ -1,0 +1,13 @@
+# Don't allow direct PHP requests in this directory
+<Files *.inc.php>
+	Order allow,deny
+	Deny from all
+</Files>
+<Files *.lib.php>
+	Order allow,deny
+	Deny from all
+</Files>
+<Files captcha_words_*.txt>
+	Order allow,deny
+	Deny from all
+</Files>

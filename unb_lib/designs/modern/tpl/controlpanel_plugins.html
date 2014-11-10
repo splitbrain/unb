@@ -1,0 +1,116 @@
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="plugins" />
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "cp.category.plugins"}</h1>
+
+{----------------------------------------------------------------------------}
+{if eq $controlpanelPluginsPagetype "list"}
+<div class="page_content">
+<div class="option first">
+
+<h2>{tr "cp.plugins list"}</h2>
+
+{foreach $controlpanelPlugins}
+<div class="plugin{if $firstitem} first{endif}{if not mod $num 2} oddcount{endif}{if neq $status "ok"} disabled{endif}">
+	<div class="actions">
+		{set $div ""}
+		{if $configLink}
+			{$.div}<a href="{$configLink}">{tr "cp.plugin.config"}</a>
+			{set $div " &middot; "}
+		{endif}
+		{$.div}<a href="{$infoLink}">{tr "cp.plugin.info"}</a>
+	</div>
+	<div class="name">{$name}</div>
+	<div class="desc">{$desc}</div>
+	{if eq $status "wrongversion"}
+		<div class="status_error"><img {$.UNBImage.error} class="icon" />{$statusTitle}</div>
+	{endif}
+</div>
+{endforeach}
+
+</div><!-- option -->
+</div><!-- page_content -->
+{endif}{-- $controlpanelPluginsPagetype = "list"}
+
+{----------------------------------------------------------------------------}
+{if eq $controlpanelPluginsPagetype "info"}
+<div class="page_content">
+<div class="option first">
+
+<h2>{tr "cp.plugin info on x" "x" $controlpanelPluginName}</h2>
+
+<table cellspacing="0" cellpadding="0" style="width: 100%;" class="plugininfo">
+<tr>
+	<td class="leftcol">{tr "cp.pluginfo.status"}:</td>
+	<td>{$controlpanelPluginStatus}</td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.pluginfo.description"}:</td>
+	<td>{$controlpanelPluginDesc}</td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.pluginfo.author"}:</td>
+	<td>{$controlpanelPluginAuthor}</td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.pluginfo.languages"}:</td>
+	<td>{$controlpanelPluginLang}</td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.pluginfo.version"}:</td>
+	<td>{$controlpanelPluginVersion}</td>
+</tr>
+</table>
+
+</div><!-- option -->
+</div><!-- page_content -->
+{endif}{-- $controlpanelPluginsPagetype = "info"}
+
+{----------------------------------------------------------------------------}
+{if eq $controlpanelPluginsPagetype "config"}
+<div class="page_content">
+<div class="option first">
+
+<h2>{tr "cp.plugin config of x" "x" $controlpanelPluginName}</h2>
+
+<input type="hidden" name="page" value="config" />
+<input type="hidden" name="action" value="pluginconfig" />
+<input type="hidden" name="pluginname" value="{$controlpanelPluginName}" />
+
+{set $fieldname "EnableThisPlugin"}
+{set $fieldvalue $controlpanelEnableThisPlugin}
+{set $fieldlabel "cp.enable this plugin"}
+{set $fielddesc "cp.enable this plugin~"}
+{include "cp_box_check.html"}
+
+{foreach $controlpanelPluginConfigFields}
+	{if eq $fieldtype "checkbox"}
+		{include "cp_box_check.html"}
+	{elseif eq $fieldtype "text"}
+		{include "cp_box_text.html"}
+	{elseif eq $fieldtype "label"}
+		{include "cp_box_label.html"}
+	{elseif eq $fieldtype "tablegroup"}
+		{include "cp_box_tablegroup.html"}
+	{elseif eq $fieldtype "tabletext"}
+		{include "cp_box_tabletext.html"}
+	{endif}
+{endforeach}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+{endif}{-- $controlpanelPluginsPagetype = "config"}
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

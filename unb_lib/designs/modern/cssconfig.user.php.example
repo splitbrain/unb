@@ -1,0 +1,19 @@
+<?php
+// Put your custom CSS configuration changes here.
+
+// To disable new IE7 rendering capabilities, uncomment this line:
+#$_ie7 = false;
+
+// Alternative common font style definitions
+
+// Mac OS X defaults: (Enable this section: ul.head_navigation {padding-bottom: 2px;})
+#$UNB['Font']['family'] = 'Lucida Grande, Arial Unicode MS, Arial, helvetica, sans-serif';
+#$UNB['Font']['size'] = '12px';
+#$UNB['Font']['smallsize'] = '0.9em';
+
+// UNB 1.5 defaults: (Enable this section: ul.head_navigation li a span.backimage)
+#$UNB['Font']['family'] = 'Verdana, Arial, helvetica, sans-serif';
+#$UNB['Font']['size'] = '8pt';
+#$UNB['Font']['smallsize'] = '7pt';
+
+?>

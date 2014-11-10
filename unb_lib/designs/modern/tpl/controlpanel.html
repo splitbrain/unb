@@ -1,0 +1,79 @@
+{require-css "controlpanel"}
+{require-txt "controlpanel"}
+
+<div class="categories_outer_container">
+<div class="categories_container">
+<div class="categories">
+{foreach $controlpanelCategories}
+	{if $NewGroup}
+		<span class="newgroup"></span>
+	{endif}
+	{if $Link}
+		<a class="{if $Selected}selected{endif} {if $First}first{endif}" href="{$Link}">{tr $TitleKey}</a>
+	{else}
+		<div class="text">{tr $TitleKey}</div>
+	{endif}
+{endforeach}
+</div>
+</div><!-- categories_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- categories_outer_container -->
+
+{-- Summary}
+{if eq $controlpanelSelectedCat "summary"}
+{include "controlpanel_summary.html"}
+{endif}
+
+{-- Account}
+{if eq $controlpanelSelectedCat "account"}
+{include "controlpanel_account.html"}
+{endif}
+
+{-- Appearance options}
+{if eq $controlpanelSelectedCat "appearance"}
+{include "controlpanel_appearance.html"}
+{endif}
+
+{-- Post options}
+{if eq $controlpanelSelectedCat "postoptions"}
+{include "controlpanel_postoptions.html"}
+{endif}
+
+{-- Watched Topics}
+{if eq $controlpanelSelectedCat "watched"}
+{include "controlpanel_watched.html"}
+{endif}
+
+{-- Bookmarks}
+{if eq $controlpanelSelectedCat "bookmarks"}
+{include "controlpanel_bookmarks.html"}
+{endif}
+
+{-- Topic filters}
+{if eq $controlpanelSelectedCat "filters"}
+{include "controlpanel_filters.html"}
+{endif}
+
+{-- Board settings}
+{if eq $controlpanelSelectedCat "boardconf"}
+{include "controlpanel_boardconf.html"}
+{endif}
+
+{-- Board appearance}
+{if eq $controlpanelSelectedCat "boardapp"}
+{include "controlpanel_boardapp.html"}
+{endif}
+
+{-- Security}
+{if eq $controlpanelSelectedCat "security"}
+{include "controlpanel_security.html"}
+{endif}
+
+{-- Plug-ins}
+{if eq $controlpanelSelectedCat "plugins"}
+{include "controlpanel_plugins.html"}
+{endif}
+
+{-- Further plug-in-handled categories}
+{include $controlpanelMoreCats}

@@ -1,0 +1,88 @@
+<div class="poll_container">
+<div class="poll_content">
+<img src="{imgurl}poll.png" alt="poll" style="float: right; margin-top: 5px;" />
+<div class="poll_question">
+<small>{tr "poll"}:</small> <b>{$postlistPoll.question}</b>
+</div>
+
+{if $postlistPoll.options}
+	<form action="{$postlistPoll.formLink}" method="post">
+	<div class="poll_options">
+	<input type="hidden" name="action" value="vote" />
+	{foreach $option in $postlistPoll.options}
+	<div class="poll_option">
+	<label><input type="radio" class="radio" name="Vote" value="{$option.voteId}" />{$option.text}</label>
+	</div>
+	{endforeach}
+	<input type="submit" value="{tr "post.do vote"}" style="margin-top: 4px;" />
+	</div>
+	</form>
+	<!--div class="poll_options">
+	{tr "poll.cast your vote"}:
+	{foreach $option in $postlistPoll.options}
+	<div class="poll_option">
+	<a href="{$option.voteLink}">{--$option.text}</a>
+	</div>
+	{endforeach}
+	</div-->
+{endif}{-- $postlistPoll.options}
+
+{if $postlistPoll.votes}
+	<div class="poll_results">
+	{if $postlistPoll.users}
+	<div class="poll_usersvoted">{tr "poll.users have voted"}:</div>
+	{endif}
+
+	{foreach $vote in $postlistPoll.votes}
+		<div class="poll_graph {if $vote.myVote}myvote{endif}" style="width: {mul $vote.relpercent 0.8}%;"></div>
+		<small style="clear: right; float: right; margin-top: 0px;">({trnum "poll.vote details" $vote.count "count" $vote.count "percent" $vote.percentPadded})</small>
+		<span class="poll_optiontext">{$vote.text}</span><br />
+		{if $postlistPoll.users}
+			<div class="poll_usersvoted">
+			{set $x ""}
+			{foreach $user in $postlistPoll.users}
+				{if eq $user.voteId $vote.voteId}
+					{$x}<a href="{$user.userLink}">{$user.userName}</a>{set $x ", "}
+				{endif}
+			{endforeach}
+			</div>
+		{endif}
+	{endforeach}
+	</div><!-- poll_results -->
+{endif}{-- $postlistPoll.votes}
+
+<div class="poll_status">
+	{set $div ""}
+	{if $postlistPoll.ended}
+	{tr "poll.ended time" "time" $postlistPoll.endTime}
+	{set $div " &middot; "}
+	{elseif $postlistPoll.unlimited}
+	{tr "poll.no timelimit"}
+	{set $div " &middot; "}
+	{else}{-- still running}
+	{tr "poll.ends time" "time" $postlistPoll.endTime "abstime" $postlistPoll.endTimeAbs}
+	{set $div " &middot; "}
+	{endif}
+
+	{$div}{trnum "poll.n votes" $postlistPoll.sumcount "n" $postlistPoll.sumcount}
+	{set $div " &middot; "}
+	{if $postlistPoll.resultsLink}
+	{$div}<a href="{$postlistPoll.resultsLink}"><img {$UNBImage.votes} /> {tr "poll.show results"}</a>
+	{set $div " &middot; "}
+	{endif}
+	{if $postlistPoll.unvoteLink}
+	{$div}<a href="{$postlistPoll.unvoteLink}"><img {$UNBImage.task2} /> {tr "poll.cancel vote"}</a>
+	{set $div " &middot; "}
+	{elseif $postlistPoll.voteLink}
+	{$div}<a href="{$postlistPoll.voteLink}"><img {$UNBImage.task} /> {tr "poll.back to voting"}</a>
+	{set $div " &middot; "}
+	{endif}
+	{if $postlistPoll.showUsersLink}
+	{$div}<a href="{$postlistPoll.showUsersLink}"><img {$UNBImage.users} /> {tr "poll.show users"}</a>
+	{set $div " &middot; "}
+	{endif}
+</div><!-- poll_status -->
+</div><!-- poll_content -->
+</div><!-- poll_container -->
+{set $ShadowBottomOffset 12}
+{include "_shadow_bottom.html"}

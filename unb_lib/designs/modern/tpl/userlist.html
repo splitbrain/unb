@@ -1,0 +1,296 @@
+{require-css "userlist"}
+
+{if or $userlistLinkUsers $userlistLinkTeam}
+<div class="path">
+{set $div ""}
+{if eq $userlistType "users"}
+	{$div}{tr "users.userlist"}
+	{set $div " | "}
+{elseif $userlistLinkUsers}
+	{$div}<a href="{$userlistLinkUsers}">{tr "users.userlist"}</a>
+	{set $div " | "}
+{endif}
+{if eq $userlistType "team"}
+	{$div}{tr "users.team"}
+	{set $div " | "}
+{elseif $userlistLinkTeam}
+	{$div}<a href="{$userlistLinkTeam}">{tr "users.team"}</a>
+	{set $div " | "}
+{endif}
+{if $userlistEnableTraceUsers}
+	{if eq $userlistType "online"}
+		{$div}{tr "users.online users"}
+		{set $div " | "}
+	{elseif $userlistLinkOnline}
+		{$div}<a href="{$userlistLinkOnline}">{tr "users.online users"}</a>
+		{set $div " | "}
+	{endif}
+{endif}
+</div>
+{endif}
+
+{if eq $userlistType "users"}
+	<div class="users_filter_container">
+	<div class="users_filter_content">
+	{tr "users.filter"}:&nbsp;{$userlistFilter}<br />
+	{if $userlistGroupSel}
+		{$userlistGroupSel}<br />
+	{endif}
+	{if $userlistFindUsername}
+		{$userlistFindUsername}<br />
+	{endif}
+	<img {$UNBImage.sort} /> {tr "users.sorting"}:
+	{if eq $userlistSort "name"}
+		{tr "users.sort.name"}
+	{else}
+		<a href="{$userlistLinkSortName}">{tr "users.sort.name"}</a>
+	{endif}
+	{if eq $userlistSort "regdate"}
+		&middot; {tr "users.sort.regdate"}
+	{else}
+		&middot; <a href="{$userlistLinkSortRegdate}">{tr "users.sort.regdate"}</a>
+	{endif}
+	{if eq $userlistSort "posts"}
+		&middot; {tr "users.sort.posts"}
+	{else}
+		&middot; <a href="{$userlistLinkSortPosts}">{tr "users.sort.posts"}</a>
+	{endif}
+	{if eq $userlistSort "id"}
+		&middot; ID
+	{endif}
+	</div><!-- users_filter_content -->
+	</div><!-- users_filter_container -->
+	{set $ShadowBottomOffset 4}
+	{include "_shadow_bottom.html"}
+
+	{if and (not $userlistCount) $userlistAdd}
+		<div class="list_user_head_0" style="text-align: center;">{tr "users.error.no users found"}</div>
+	{endif}
+
+	<div class="users_actions_top">
+		{set $div ""}
+		{if $userlistTotalCount}
+			{$div}{trnum "users.n users" $userlistTotalCount "n" $userlistTotalCount}
+			{set $div " &middot; "}
+		{endif}
+		{if $userlistActionNew}
+			{$div}{$userlistActionNew}
+			{set $div " &middot; "}
+		{endif}			
+		{if $userlistPageStr}
+			{$div}{$userlistPageStr}
+			{set $div " &middot; "}
+		{endif}			
+	</div>
+
+	{if or $userlist $userlistAdd}
+		<div class="users_container">
+		<div class="users_content">
+		{if $userlistAdd}
+			<form action="{$userlistAddFormLink}" method="post">
+		{endif}
+		{--table header}
+		<table cellspacing="0" cellpadding="0" width="100%">
+		<colgroup>
+			<col width="210" />
+			{if $userlistShowRegdate}<col width="105" />{endif}
+			{if $userlistShowLocation}<col />{endif}
+			{if $userlistShowPosts}<col width="80" align="center" />{endif}
+			{if $userlistShowLastpost}<col width="155" />{endif}
+		</colgroup>
+
+		{if $userlist}
+			<tr class="head">
+				<td style="white-space: nowrap;">{tr "username"}{if eq $userlistSort "name"} <img {$UNBImage.up} />{endif}</td>
+			{if $userlistShowRegdate}
+				<td style="white-space: nowrap;">{tr "registered on"}{if eq $userlistSort "regdate"} <img {$UNBImage.up} />{endif}</td>
+			{endif}
+			{if $userlistShowLocation}
+				<td style="white-space: nowrap;">{tr "location"}</td>
+			{endif}
+			{if $userlistShowPosts}
+				<td align="center" style="white-space: nowrap;">{tr "users.posts"}{if eq $userlistSort "posts"} <img {$UNBImage.down} />{endif}</td>
+			{endif}
+			{if $userlistShowLastpost}
+				<td style="white-space: nowrap;">{tr "last post"}</td>
+			{endif}
+			</tr>
+		{endif}{-- $userlist}
+
+		{--table contents}
+		{foreach $u in $userlist}
+		<tr class="data {if $u.firstitem}first{endif} {if and $u.lastitem not $userlistAddFormLink}last{endif}">
+			<td>
+				<span style="float: right;">
+					{$u.hasPhoto}{$u.genderImg} {$u.onlineImg}
+					{if $u.editLink}
+						<a href="{$u.editLink}"><img {$UNBImage.edit} title="{tr "users.edit"}" /></a>
+					{endif}
+				</span>
+
+				{$u.link}&nbsp; <small>{$u.statusText}</small>
+			</td>
+			{if $userlistShowRegdate}
+				<td style="white-space: nowrap;">
+					{$u.regDate}
+				</td>
+			{endif}
+			{if $userlistShowLocation}
+				<td>
+				{if $u.location}
+					{$u.location}
+				{else}
+					&nbsp;
+				{endif}
+				</td>
+			{endif}
+			{if $userlistShowPosts}
+				<td align="center">
+				{if $u.posts}
+					<a href="{$u.postsLink}">{$u.posts}</a>
+				{else}
+					{$u.posts}
+				{endif}
+				</td>
+			{endif}
+			{if $userlistShowLastpost}
+				<td style="white-space: nowrap;">
+				{if $u.lastpost}
+					{$u.lastpost}
+				{else}
+					&nbsp;
+				{endif}
+				</td>
+			{endif}
+		</tr>
+		{endforeach}
+
+		{--add user}
+		{if $userlistAddFormLink}
+			<tr valign="top" class="edit">
+				<td colspan="{$userlistColCount}">
+					<a id="newuser"></a>
+					<input type="hidden" name="action" value="adduser" />
+
+					<table cellspacing="0" cellpadding="0" width="100%">
+					<tr>
+						<td class="leftcol">{tr "users.new username"}:</td>
+						<td><div class="outerTextfield100pc"><input type="text" name="Name" maxlength="40" /></div></td>
+						<td rowspan="3" class="rightcol">
+							<a href="{$userlistAddCancelLink}">{tr "cancel"}</a><br />
+							<input type="submit" class="button" value="{tr "save"}" style="margin-top: 6px;" />
+						</td>
+					</tr>
+					<tr>
+						<td class="leftcol">{tr "password"}:</td>
+						<td><div class="outerTextfield100pc"><input type="password" name="Password" maxlength="40" /></div></td>
+					</tr>
+					<tr>
+						<td class="leftcol">{tr "users.email address"}:</td>
+						<td><div class="outerTextfield100pc"><input type="text" name="EMail" maxlength="100" /></div></td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+		{endif}
+		</table>
+		{if $userlistAdd}
+			</form>
+		{endif}
+		</div><!-- users_content -->
+		</div><!-- users_container -->
+		{set $ShadowBottomOffset 4}
+		{include "_shadow_bottom.html"}
+	{else}
+		<div class="error" style="margin: 1px 0 4px;"><div>
+			{tr "users.error.no users found"}
+		</div></div>
+		{set $ShadowBottomOffset 4}
+		{include "_shadow_bottom.html"}
+	{endif}{-- or $userlist $userlistAdd}
+
+	{if gte (sizeof $userlist) 15}
+		<div class="users_actions_bottom">
+			{set $div ""}
+			{if $userlistActionNew}
+				{$div}{$userlistActionNew}
+				{set $div " &middot; "}
+			{endif}			
+			{if $userlistPageStr}
+				{$div}{$userlistPageStr}
+				{set $div " &middot; "}
+			{endif}			
+		</div>
+	{endif}
+{endif}{--$userlistType = "users"}
+
+{if eq $userlistType "team"}
+	{$userlistTeamSelectGroup}
+	{foreach $t in $userlistTeams}
+		<h1 style="clear: both;">{$t.groupname}</h1>
+		{foreach $u in $t.users}
+			<div class="vcard_outer_container">
+			<div class="vcard_container">
+			<div class="vcard_content">
+				{if $u.avatarUrl}
+					<img src="{$u.avatarUrl}"{$u.avatarSize} class="avatar" alt="{tr "avatar"}" />
+				{endif}
+				<div class="username">{$u.link}&nbsp; {$u.onlineImg}{$u.genderImg}{$u.hasPhoto}{$u.status}</div>
+				<div class="title">{$u.title}</div>
+				<div><small>{tr "member"} {$u.memberSince}</small></div>
+				<div class="contacts">{$u.emailLink}{$u.jabberLink}{$u.icqLink}{$u.aimLink}{$u.yimLink}{$u.msnLink}{$u.websiteLink}</div>
+				<table cellspacing="0" cellpadding="0">
+				{if $u.location}
+					<tr><td class="leftcol">{tr "location"}</td><td>{$u.location}</td></tr>
+				{endif}
+				<tr><td class="leftcol">{tr "users.posts"}</td><td>{$u.posts}</td></tr>
+				</table>
+			</div><!-- vcard_content -->
+			</div><!-- vcard_container -->
+			{set $ShadowBottomOffset 0}
+			{include "_shadow_bottom.html"}
+			</div><!-- vcard_outer_container -->
+		{endforeach}
+	{endforeach}
+{endif}{--$userlistType = "team"}
+
+{if eq $userlistType "online"}
+	{if $userlistOnlineError}
+		<div class="p error">{$userlistOnlineError}</div>
+	{else}
+		<div class="users_container">
+		<div class="users_content">
+		<table cellspacing="0" cellpadding="0" width="100%">
+		<colgroup>
+			<col width="220" />
+			<col />
+		</colgroup>
+
+		<tr class="head">
+			<td>{tr "username"}</td>
+			<td>{tr "users.last activity"}</td>
+		</tr>
+
+		{foreach $u in $userlistOnline}
+			<tr valign="top" class="data {if $u.firstitem}first{endif} {if $u.lastitem}last{endif}">
+				<td>
+					{$u.name}&nbsp; {$u.onlineImg}{$u.genderImg}{$u.status}
+				</td>
+				<td>
+					{$u.where}{$u.when}
+				</td>
+			</tr>
+		{endforeach}
+		</table>
+		</div><!-- users_content -->
+		</div><!-- users_container -->
+		{set $ShadowBottomOffset 4}
+		{include "_shadow_bottom.html"}
+
+		{if $userlistOnlineReloadInterval}
+			<script type="text/javascript">//<![CDATA[
+			window.setTimeout("location.href=\"{$userlistOnlineReloadUrl}\";", {$userlistOnlineReloadInterval});
+			//]]></script>
+		{endif}
+	{endif}{--no error}
+{endif}{--$userlistType = "online"}

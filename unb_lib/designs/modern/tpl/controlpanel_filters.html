@@ -1,0 +1,70 @@
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="filters" />
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "cp.topic filters"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.topic filter~"}
+</div>
+<div class="box">
+
+{if $controlpanelFilters}
+{tr "cp.n filters set" "n" sizeof $controlpanelFilters}
+</div>
+<div class="box">
+{foreach $f in $controlpanelFilters}
+	{if $f.newForum}
+		<h2 class="forumname" style="padding-top: 10px;">
+		{tr "forum"}: <a href="{$f.forumLink}">{$f.forum}</a>
+		</h2>
+	{endif}
+	<div class="box" style="margin-left: 20px;">
+		<div style="float: left; clear: right;">
+		{if $f.thread}
+			<a href="{$f.threadLink}">
+			{$f.thread}
+			</a>
+		{else}
+			({tr "cp.entire forum"})
+		{endif}
+		</div>
+
+		<div style="float: right; clear: right; text-align: right; margin-left: 20px;"><small>
+			{if $f.lastPost}
+				{tr "last post"}: {$f.lastPost} &nbsp;
+			{endif}
+			{if $f.hidden}<img {$UNBImage.hide} title="{tr "thread.advanced.hiding"}" />{endif}
+			{if $f.ignored}<img {$UNBImage.ignore} title="{tr "thread.advanced.ignoring"}" />{endif}
+			&nbsp; <input type="checkbox" name="{$f.unfilterName}" value="1" />
+		</small></div>
+	</div>
+{endforeach}{-- controlpanelFilters}
+<div style="clear: right; line-height: 1px;">&nbsp;</div>
+{else}
+{tr "cp.no filters set"}
+{endif}{-- controlpanelFilters}
+
+</div>
+</div><!-- option -->
+
+<div class="option">
+<label><input type="checkbox" name="RemoveOlderThan" value="1" />{tr "cp.filter.remove older than.1"}</label> <input type="text" name="NumOfDays" size="4" maxlength="4" style="width: 4em;" /> {tr "cp.filter.remove older than.2"}
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="RemoveFilters" value="{tr "cp.remove selected filters"}" />
+</div>
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

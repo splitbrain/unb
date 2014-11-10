@@ -1,0 +1,100 @@
+{require-css "controlpanel"}
+{require-css "groupseditor"}
+{require-txt "controlpanel"}
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "_groupseditor.cpcategory"}</h1>
+
+<div class="page_content">
+
+<div class="option first">
+<table class="groupstable" cellspacing="0" cellpadding="0" width="100%" border="0">
+{foreach $groupslist}
+<tr class="{$styleclass}{if not mod $num 2} oddcount{endif}">
+	<td class="name">{$Name}</td>
+	<td class="count">
+		{if neq $ID %UNB_GROUP_GUESTS}{-- not for guests}
+			{trnum "_groupseditor.n users" $MembersCount "n" $MembersCount}
+		{endif}
+	</td>
+	<td class="showinteam">{if $ShowInTeam}{tr "_groupseditor.show in team"}{endif}</td>
+	<td class="publicgroup">{if $PublicGroup}{tr "_groupseditor.public group"}{endif}</td>
+	<td class="editactions">{$actions}</td>
+</tr>
+{endforeach}
+</table>
+</div><!-- option -->
+
+<div class="option">
+{if $groupseditorAddLink}<a href="{$groupseditorAddLink}"><img {$UNBImage.add} /> {tr "_groupseditor.add"}</a>{endif}
+</div><!-- option -->
+
+</div><!-- page_content -->
+
+{if $groupseditorEditor}
+<h1>{tr "_groupseditor.edit group"}</h1>
+
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="cat" value="groupseditor" />
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="groupid" value="{$groupseditorGroupID}" />
+
+<div class="page_content">
+<div class="option first" id="here">
+<div class="box">
+{tr "_groupseditor.group name"}
+</div>
+<div class="box indent">
+<div class="outerTextfield100pc"><input type="text" name="Name" value="{$groupseditorName}" size="40" maxlength="40" /></div>
+</div>
+
+{if $groupseditorMaySetUsers}
+<div class="box">
+<input type="hidden" name="SetGroupMembers" value="1" />
+{tr "_groupseditor.group members"}
+</div>
+<div class="box indent">
+<div style="max-height: 200px; overflow: auto;">
+{foreach $groupseditorUsers}
+	<label><input type="checkbox" name="GroupMembers[]" value="{$id}" {form_checked_if $selected} />{$name}</label><br />
+{endforeach}
+</div>
+</div>
+{endif}{-- $groupseditorMaySetUsers}
+
+{if $groupseditorMayShowInTeam}
+<div class="box">
+<label><input type="checkbox" name="ShowInTeam" value="1" {form_checked_if $groupseditorShowInTeam} />{tr "_groupseditor.show in team"}</label>
+</div>
+<div class="box small indent">
+{tr "_groupseditor.show in team~"}
+</div>
+{endif}{-- $groupseditorMayShowInTeam}
+
+{if $groupseditorMayPublicGroup}
+<div class="box">
+<label><input type="checkbox" name="PublicGroup" value="1" {form_checked_if $groupseditorPublicGroup} />{tr "_groupseditor.public group"}</label>
+</div>
+<div class="box small indent">
+{tr "_groupseditor.public group~"}
+</div>
+{endif}{-- $groupseditorMayPublicGroup}
+</div><!-- option -->
+
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+{if $groupseditorMayRemove}
+	<input type="submit" name="remove" value="{tr "delete"}" {$controlpanelSureDelete} />
+{endif}
+</div>
+
+</form>
+{endif}{-- $groupseditorEditor}
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->

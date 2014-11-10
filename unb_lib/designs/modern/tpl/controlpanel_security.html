@@ -1,0 +1,321 @@
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="security" />
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "cp.security.user accounts"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+<h2>{tr "cp.new user validation"}</h2>
+<div class="box small">
+{tr "cp.new user validation~"}
+</div>
+<div class="box">
+<select name="NewUserValidation">
+	<option value="0" {form_selected_if eq $controlpanelNewUserValidation 0}>{tr "cp.new user validation.disabled"}</option>
+	<option value="1" {form_selected_if eq $controlpanelNewUserValidation 1}>{tr "cp.new user validation.immediate"}</option>
+	<option value="2" {form_selected_if eq $controlpanelNewUserValidation 2}>{tr "cp.new user validation.email"}</option>
+	<option value="3" {form_selected_if eq $controlpanelNewUserValidation 3}>{tr "cp.new user validation.manual"}</option>
+</select>
+</div>
+
+<h2>{tr "cp.disallowed usernames"}</h2>
+<div class="box small">
+{tr "cp.disallowed usernames~"}
+</div>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="DisallowedUsernames" value="{$controlpanelDisallowedUsernames}" size="40" maxlength="200" /></div>
+</div>
+
+<h2>{tr "cp.disallowed emails"}</h2>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="DisallowedEmails" value="{$controlpanelDisallowedEmails}" size="40" maxlength="200" /></div>
+</div>
+
+<h2>{tr "cp.allowed email domains"}</h2>
+<div class="box small">
+{tr "cp.allowed email domains~"}
+</div>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="AllowedEmailDomains" value="{$controlpanelAllowedEmailDomains}" size="40" maxlength="200" /></div>
+</div>
+
+{set $fieldname "DisallowEmailReuse"}
+{set $fieldvalue $controlpanelDisallowEmailReuse}
+{set $fieldlabel "cp.disallow email reuse"}
+{set $fielddesc "cp.disallow email reuse~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "UsernameMinlength"}
+{set $fieldvalue $controlpanelUsernameMinlength}
+{set $fieldlabel "cp.username minlength"}
+{set $fieldunit "cp.username minlength.unit"}
+{set $fielddesc "cp.username minlength~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "UsernameMaxlength"}
+{set $fieldvalue $controlpanelUsernameMaxlength}
+{set $fieldlabel "cp.username maxlength"}
+{set $fieldunit "cp.username maxlength.unit"}
+{set $fielddesc "cp.username maxlength~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "UsertitleMaxlength"}
+{set $fieldvalue $controlpanelUsertitleMaxlength}
+{set $fieldlabel "cp.usertitle maxlength"}
+{set $fieldunit "cp.usertitle maxlength.unit"}
+{set $fielddesc "cp.usertitle maxlength~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "PassMinlength"}
+{set $fieldvalue $controlpanelPassMinlength}
+{set $fieldlabel "cp.password minlength"}
+{set $fieldunit "cp.password minlength.unit"}
+{set $fielddesc "cp.password minlength~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "PassNotusername"}
+{set $fieldvalue $controlpanelPassNotusername}
+{set $fieldlabel "cp.password not username"}
+{set $fielddesc "cp.password not username~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "PassNeednumber"}
+{set $fieldvalue $controlpanelPassNeednumber}
+{set $fieldlabel "cp.password need number"}
+{set $fielddesc "cp.password need number~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "PassNeedspecial"}
+{set $fieldvalue $controlpanelPassNeedspecial}
+{set $fieldlabel "cp.password need special"}
+{set $fielddesc "cp.password need special~"}
+{include "cp_box_check.html"}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.security.avatars and photos"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+{set $fieldname "AvatarsEnabled"}
+{set $fieldvalue $controlpanelAvatarsEnabled}
+{set $fieldlabel "cp.avatars enabled"}
+{set $fielddesc "cp.avatars enabled~"}
+{set $fieldonclick "toggleVisId('avatar_data', this.checked)"}
+{include "cp_box_check.html"}
+
+{set $fieldonclick ""}
+
+<div id="avatar_data">
+{set $fieldname "AllowRemoteAvatars"}
+{set $fieldvalue $controlpanelAllowRemoteAvatars}
+{set $fieldlabel "cp.allow remote avatar"}
+{set $fielddesc "cp.allow remote avatar~"}
+{include "cp_box_check.html"}
+
+<div class="box">
+{tr "cp.maximum avatar size"}: <input type="text" name="AvatarX" value="{$controlpanelAvatarX}" size="10" maxlength="10" style="width: 50px;" /> &times; <input type="text" name="AvatarY" value="{$controlpanelAvatarY}" size="10" maxlength="10" style="width: 50px;" /> {tr "pixels"}, <input type="text" name="AvatarBytes" value="{$controlpanelAvatarBytes}" size="10" maxlength="10" style="width: 70px;" /> {tr "bytes"}
+</div>
+<div class="box small indent">
+{tr "cp.maximum avatar size~"}
+</div>
+</div><!-- avatar_data -->
+{if not $controlpanelAvatarsEnabled}{html_hide_id "avatar_data"}{endif}
+
+{set $fieldname "PhotosEnabled"}
+{set $fieldvalue $controlpanelPhotosEnabled}
+{set $fieldlabel "cp.photos enabled"}
+{set $fielddesc "cp.photos enabled~"}
+{set $fieldonclick "toggleVisId('photo_data', this.checked)"}
+{include "cp_box_check.html"}
+
+{set $fieldonclick ""}
+
+<div class="box" id="photo_data">
+{tr "cp.maximum photo size"}: <input type="text" name="PhotoX" value="{$controlpanelPhotoX}" size="10" maxlength="10" style="width: 50px;" /> &times; <input type="text" name="PhotoY" value="{$controlpanelPhotoY}" size="10" maxlength="10" style="width: 50px;" /> {tr "pixels"}, <input type="text" name="PhotoBytes" value="{$controlpanelPhotoBytes}" size="10" maxlength="10" style="width: 70px;" /> {tr "bytes"}
+</div>
+{if not $controlpanelPhotosEnabled}{html_hide_id "photo_data"}{endif}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.security.posts and topics"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+{set $fieldname "MaxPostLen"}
+{set $fieldvalue $controlpanelMaxPostLen}
+{set $fieldlabel "cp.maximum post length"}
+{set $fieldunit "cp.maximum post length.unit"}
+{set $fielddesc "cp.maximum post length~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "MaxSigLen"}
+{set $fieldvalue $controlpanelMaxSigLen}
+{set $fieldlabel "cp.maximum signature length"}
+{set $fieldunit "cp.maximum signature length.unit"}
+{set $fielddesc "cp.maximum signature length~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "AttachBytes"}
+{set $fieldvalue $controlpanelAttachBytes}
+{set $fieldlabel "cp.maximum attachment size"}
+{set $fieldunit "cp.maximum attachment size.unit"}
+{set $fielddesc "cp.maximum attachment size~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "AttachExts"}
+{set $fieldvalue $controlpanelAttachExts}
+{set $fieldlabel "cp.attachment extensions"}
+{set $fielddesc "cp.attachment extensions~"}
+{set $fieldsize 40}
+{set $fieldlength 200}
+{include "cp_box_text.html"}
+
+{set $fieldname "TopicSubjectMinlength"}
+{set $fieldvalue $controlpanelTopicSubjectMinlength}
+{set $fieldlabel "cp.minimum topic subject length"}
+{set $fieldunit "cp.minimum topic subject length.unit"}
+{set $fielddesc "cp.minimum topic subject length~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "TopicSubjectMaxlength"}
+{set $fieldvalue $controlpanelTopicSubjectMaxlength}
+{set $fieldlabel "cp.maximum topic subject length"}
+{set $fieldunit "cp.maximum topic subject length.unit"}
+{set $fielddesc "cp.maximum topic subject length~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "AbbcSigNoFont"}
+{set $fieldvalue $controlpanelAbbcSigNoFont}
+{set $fieldlabel "cp.abbc signature no font"}
+{set $fielddesc "cp.abbc signature no font~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "AbbcSigNoUrl"}
+{set $fieldvalue $controlpanelAbbcSigNoUrl}
+{set $fieldlabel "cp.abbc signature no url"}
+{set $fielddesc "cp.abbc signature no url~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "AbbcSigNoImg"}
+{set $fieldvalue $controlpanelAbbcSigNoImg}
+{set $fieldlabel "cp.abbc signature no img"}
+{set $fielddesc "cp.abbc signature no img~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "AbbcSigNoSmilies"}
+{set $fieldvalue $controlpanelAbbcSigNoSmilies}
+{set $fieldlabel "cp.abbc signature no smilies"}
+{set $fielddesc "cp.abbc signature no smilies~"}
+{include "cp_box_check.html"}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.security.advanced"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+{set $fieldname "NoCookies"}
+{set $fieldvalue $controlpanelNoCookies}
+{set $fieldlabel "cp.no cookies"}
+{set $fielddesc "cp.no cookies~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "SessionIpNetmask"}
+{set $fieldvalue $controlpanelSessionIpNetmask}
+{set $fieldlabel "cp.session ip netmask"}
+{set $fieldunit "cp.session ip netmask.unit"}
+{set $fielddesc "cp.session ip netmask~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "UseVeriword"}
+{set $fieldvalue $controlpanelUseVeriword}
+{set $fieldlabel "cp.use veriword"}
+{set $fielddesc "cp.use veriword~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "AutoBanFloodIp"}
+{set $fieldvalue $controlpanelAutoBanFloodIp}
+{set $fieldlabel "cp.autoban flood ip"}
+{set $fielddesc "cp.autoban flood ip~"}
+{include "cp_box_check.html"}
+
+<div class="box indent">
+{tr "cp.autoban.on more than"} <input type="text" name="AutoBanFloodIpThreshold" value="{$controlpanelAutoBanFloodIpThreshold}" size="10" maxlength="10" style="width: 40px;" /> {tr "cp.autoban.requests in"} <input type="text" name="AutoBanFloodIpPeriod" value="{$controlpanelAutoBanFloodIpPeriod}" size="10" maxlength="10" style="width: 40px;" /> {tr "cp.autoban.seconds"}
+</div>
+
+<a id="admin_lock"></a>
+{set $fieldname "AdminLock"}
+{set $fieldvalue $controlpanelAdminLock}
+{set $fieldlabel "cp.admin lock"}
+{set $fielddesc "cp.admin lock~"}
+{set $fieldonclick "toggleVisId('admin_lock_msg', this.checked)"}
+{include "cp_box_check.html"}
+
+{set $fieldonclick ""}
+
+<div id="admin_lock_msg">
+<div class="box indent">
+{tr "cp.admin lock message"}
+</div>
+<div class="box indent">
+<div class="outerTextarea100pc"><textarea name="AdminLockMessage" cols="40" rows="5">{$controlpanelAdminLockMessage}</textarea></div>
+</div>
+</div><!-- admin_lock_msg -->
+{if not $controlpanelAdminLock}{html_hide_id "admin_lock_msg"}{endif}
+
+{set $fieldname "ReadOnly"}
+{set $fieldvalue $controlpanelReadOnly}
+{set $fieldlabel "cp.read only"}
+{set $fielddesc "cp.read only~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "EnableVersioncheck"}
+{set $fieldvalue $controlpanelEnableVersioncheck}
+{set $fieldlabel "cp.enable version check"}
+{set $fielddesc "cp.enable version check~"}
+{include "cp_box_check.html"}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

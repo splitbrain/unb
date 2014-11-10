@@ -1,0 +1,18 @@
+<div class="box">
+{tr $fieldlabel}
+</div>
+<div class="box indent">
+{if gt $fieldsize 20}
+	<div class="outerTextfield100pc"><input type="text" name="{$fieldname}" value="{$fieldvalue}" size="{$fieldsize}" maxlength="{$fieldlength}" /></div>
+{else}
+	<input type="text" name="{$fieldname}" value="{$fieldvalue}" size="{$fieldsize}" maxlength="{$fieldlength}" style="width: {mul $fieldsize 10}px;" />
+	{if tr $fieldunit}
+	{tr $fieldunit}
+	{endif}
+{endif}
+</div>
+{if tr $fielddesc}
+<div class="box small indent">
+{tr $fielddesc}
+</div>
+{endif}

@@ -1,0 +1,65 @@
+Unclassified NewsBoard
+Copyright 2003-5 by Yves Goergen
+Homepage: http://newsboard.unclassified.de
+See docs/license.txt for distribution/license details
+
+------------------------------------------------------------------------------
+
+IMPORTANT NOTE:  A more current and detailed installation guide can be found
+                 on the UNB homepage in the online documentation at
+                 http://newsboard.unclassified.de/docs.php#admin_install
+
+------------------------------------------------------------------------------
+How to install this Unclassified NewsBoard release:
+
+1. Unpack the distributed archive file into a directory on your webserver. The
+   only limitation for the files is they need to be chmod 0666 in some cases,
+   namely when the files are owned by another user than the PHP process. You
+   can use docs/test/test.php to retrieve all necessary information about your
+   server environment.
+
+   Please DO NOT upload the docs/ directory on your webspace. You won't need
+   it anyway and it may be unsafe to do so in some cases.
+
+2. Make sure you hold a MySQL database account where you are allowed to create
+   tables and access to their data. You will need the following information to
+   connect to the database:
+   - Server name: IP address or hostname
+   - User and password
+   - Database name
+
+3. You are now ready to run the automatic installation script. Its URL is the
+   hostname and path that you copied the files into, followed by "install.php",
+   i.e.: http://localhost/forum/install.php
+
+   This script will first ask you some questions about the forum's title and
+   your database account information and then create all necessary tables in
+   the database and create some first initialisation records.
+
+   If you want to upgrade from an older UNB version (from 1.4.x on), select
+   the "Update" option. This will perform all modifications to your database
+   layout and keep all users, forums, posts etc.
+
+4. As the install script will tell you now, you still need to adjust some of
+   the board settings, like the e-mail account to be used or display options.
+   Just follow the link to the control panel. You should also update your
+   profile and change your username and password there.
+
+5. You can now create all forums you wish to offer to your users and set all
+   access rights accordingly.
+
+6. When you're finished with all this, unlock the board by unchecking the
+   "Administrative board lock" option in the "Advanced Configuration".
+
+You can do some configuration after this time, i.e. changing designs by
+updating the according CSS files and designs.cfg.php, or change some special
+user rights by assigning a user to additional groups and/or edit the rules in
+the ACL editor. But remember a validated user MUST be member of the "Users"
+group!
+
+To get some more information on how to use this software, see the help page or
+the documentation on the project website. And don't forget to check the website
+for further updates of this board!
+
+Have a lot of fun...
+-- Yves

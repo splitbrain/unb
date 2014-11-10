@@ -1,0 +1,134 @@
+{require-css "search"}
+{require-txt "search"}
+
+{if $searchFormUrl}
+<h1>{tr "search.search posts"}</h1>
+
+<div class="search_container">
+<div class="search_content">
+<form action="{$searchFormUrl}" method="get">
+{UnbFormSessionId}
+<input type="hidden" name="req" value="search" />
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr valign="top">
+	<td width="50%">
+		{tr "search.search for"} <input type="text" size="38" maxlength="200" name="Query" value="{form_htmldata "Query"}" style="width: 20em;" />
+	</td>
+	<td width="50%">
+		{tr "search.display as"} <span style="white-space: nowrap;"><label><input type="radio" name="ResultView" value="1" {form_checkedval "ResultView" 1} />{tr "threads"}</label> <label><input type="radio" name="ResultView" value="2" {form_checkednot "ResultView" 1} />{tr "posts"}</label></span>
+	</td>
+</tr>
+
+<tr valign="top">
+	<td>
+		<label><input type="checkbox" name="InSubject" value="1" {form_checked "InSubject"} />{tr "search.in subject"}</label> <label><input type="checkbox" name="InMessage" value="1" {form_checked "InMessage"} />{tr "search.in message"}</label> <label><input type="checkbox" name="InUser" value="1" {form_checked "InUser"} />{tr "username"}</label> <input type="submit" class="defaultbutton" value="{tr "search"}" />
+	</td>
+	<td>
+		{tr "search.sorting"} <span style="white-space: nowrap;"><label><input type="radio" name="Sort" value="1" {form_checkednot "Sort" 2} />{tr "search.ascending"}</label> <label><input type="radio" name="Sort" value="2" {form_checkedval "Sort" 2} />{tr "search.descending"}</label></span>
+	</td>
+</tr>
+
+<tr valign="top">
+	<td>
+		{tr "date"} {tr "search.date from"} <input type="text" size="10" maxlength="11" name="DateFrom" value="{form_htmldata "DateFrom"}" style="width: 7em;" /> {tr "search.date until"} <input type="text" size="10" maxlength="11" name="DateUntil" value="{form_htmldata "DateUntil"}" style="width: 7em;" /> <small>{tr "search.date format~"}</small>
+	</td>
+	<td>
+		{tr "search.in forum"} <select name="Forum">
+		<option value="0" {form_selectedval "Forum" 0}>{tr "search.all forums"}</option>
+		{$searchForumsOptions}
+		</select>
+	</td>
+</tr>
+
+<tr valign="top">
+	<td colspan="3"><small>{tr "search.tip~"}</small></td>
+</tr>
+
+</table>
+</form>
+</div><!-- search_content -->
+</div><!-- search_container -->
+{set $ShadowBottomOffset 4}
+{include "_shadow_bottom.html"}
+<br />
+
+{if $searchAdvancedLinks}
+<h1>{tr "search.special"}</h1>
+<div class="search_container">
+<div class="search_content">
+{$searchAdvancedLinks}
+</div><!-- search_content -->
+</div><!-- search_container -->
+{set $ShadowBottomOffset 4}
+{include "_shadow_bottom.html"}
+{endif}
+{endif}{--$searchFormUrl}
+
+{if $searchShowResult}
+{include "announcelist.html"}
+
+{if not $searchTitle}
+	{set $searchTitle tr "search.result"}
+{endif}
+{if $searchResultsCount}
+	{set $searchTitle concat concat concat $searchTitle " <small>(" $searchResultsCount ")</small>"}
+{endif}
+
+{if $searchShowThreads}
+{include "threadlist.html"}
+{endif}
+{if $searchShowPosts}
+{include "postlist.html"}
+{if not $searchResultsCount}
+<div class="error" style="margin: 1px 0 4px;"><div>
+{tr "search.no posts found"}
+</div></div>
+{set $ShadowBottomOffset 4}
+{include "_shadow_bottom.html"}
+{endif}
+{endif}
+
+{if or $searchActionSpecial $searchActionMarkRead}
+<div class="search_actions">
+{set $div ""}
+{if and $searchResultsCount $searchActionSpecial}
+	{$div}<a href="javascript:nothing()" onclick="setImageId('advanced_link_img_search', toggleVisIdScroll('advanced_options_search') == 1, '{imgurl}arrow_down.png', '{imgurl}arrow_right.png')"><img {$UNBImage.arrow_down} id="advanced_link_img_search" />  {tr "search.special"}</a>
+	{set $div " &middot; "}
+	{-- leave this block empty if nothing found, to preserve correct spacing}
+{endif}
+{if $searchActionMarkRead}
+	{$div}{$searchActionMarkRead}
+	{set $div " &middot; "}
+{endif}
+</div>
+{endif}
+
+{if $searchActionSpecial}
+	<div id="advanced_options_search">
+		<h1>{tr "search.special"}</h1>
+
+		<div class="search_container">
+		<div class="search_content">
+		{$searchAdvancedLinksBottom}
+		</div><!-- search_content -->
+		</div><!-- search_container -->
+		{set $ShadowBottomOffset 4}
+		{include "_shadow_bottom.html"}
+	</div>
+	{if $searchResultsCount}
+		{=beginjs}
+		toggleVisId("advanced_options_search", false);
+		setImageId("advanced_link_img_search", true, "{imgurl}arrow_right.png");
+		{=endjs}
+	{endif}
+{endif}
+
+<div class="p" style="clear: both;">{$jumpForumBox}</div>
+
+{if $threadlistIconsLegend}
+<div style="text-align: right; clear: both;">
+{$threadlistIconsLegend}
+</div>
+{endif}
+
+{endif}{--$searchShowResult}

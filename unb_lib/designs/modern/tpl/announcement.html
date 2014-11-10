@@ -1,0 +1,58 @@
+{require-css "announcement"}
+
+{if not $announcementsInList}
+<div class="all_announcements_container">
+<div class="announcement_container {if $announcement.important}important{endif}">
+{endif}
+
+{if $announcement.isPreview}
+<div class="announcement_infobar">
+	{tr "announcement.is preview"}
+</div>
+{endif}
+
+<div class="announcement_content {if $announcement.important}important{endif} {if $announcement.firstitem}first{endif} {if $announcement.lastitem}last{endif}">
+	<div class="announcement_icon">
+		<img {if $announcement.important}{$UNBImage.warning}{else}{$UNBImage.info}{endif} />
+	</div>
+
+	<div class="announcement_actions">
+		{set $div ""}
+		{if $announcement.readLink}
+			{$div}{$announcement.readLink}
+			{set $div " &middot; "}
+		{endif}
+		{if $announcement.readUsersCount}
+			{$div}{$announcement.unreadForAllLink}
+			({$announcement.readUsersCount} {trnum "users" $announcement.readUsersCount})
+			{set $div " &middot; "}
+		{endif}
+		{if $announcement.editLink}
+			{$div}<a href="{$announcement.editLink}"><img {$UNBImage.edit} title="{tr "announcement.edit~"}" /> {tr "announcement.edit"}</a>
+			{set $div " &middot; "}
+		{endif}
+	</div>
+
+	<div class="announcement_data">
+		{$announcement.date} {tr "by"} {$announcement.author}
+		{if $announcement.access}
+			({$announcement.access})
+		{endif}
+	</div>
+
+	{if $announcement.subject}
+	<div class="announcement_subject">
+	<small>{tr "subject"}:</small> <b>{$announcement.subject}</b>
+	</div><!-- announcement_subject -->
+	{endif}
+
+	<div class="announcement_body">
+		{$announcement.message}
+	</div>
+</div><!-- announcement_content -->
+
+{if not $announcementsInList}
+</div><!-- announcement_container -->
+</div><!-- all_announcements_container -->
+{endif}
+

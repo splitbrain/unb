@@ -1,0 +1,77 @@
+{if not $threadSplitFormLink}
+{include "postlist.html"}
+
+{if or $searchForumTextbox $jumpForumBox}
+<div class="jumpandsearchbox">
+{if $searchForumTextbox}
+<div class="searchbox">{$searchForumTextbox}</div>
+{endif}
+{if $jumpForumBox}
+<div class="jumpforumbox">{$jumpForumBox}</div>
+{endif}
+</div>
+{endif}
+{endif}{-- not $threadSplitFormLink}
+
+{if $threadSplitFormLink}
+{require-css "post"}
+
+<form action="{$threadSplitFormLink}" method="post">
+<input type="hidden" name="_dummy" value="1" />{-- TODO: remove this?}
+<input type="hidden" name="id" value="{$threadSplitThreadId}" />
+<input type="hidden" name="split" value="2" />
+<input type="hidden" name="forumid" value="{$threadSplitForumId}" />
+
+<div class="p">
+{tr "thread.split~" "n" $threadSplitDisplayLimitLength}
+</div>
+
+<div class="p">
+<table cellspacing="0" cellpadding="0" class="thread_split_data" width="100%">
+<tr>
+	<td class="leftcol">{tr "subject"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="Subject" value="{$threadSplitSubject}" size="40" maxlength="150" /></div></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "description"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="Desc" value="{$threadSplitDescription}" size="40" maxlength="150" /></div></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "forum"}:</td>
+	<td><select name="newforumid">
+		{$threadSplitForums}
+		</select></td>
+</tr>
+</table>
+</div>
+
+{foreach $postlist}
+<div class="p thread_split_post">
+<div class="head"><div>
+	{if gte $num 2}{-- Show split-off checkbox from the second post on}
+	<div class="checkbox">
+		<label><input type="checkbox" name="PostID[]" value="{$postid}" />{tr "post.split"}</label>
+	</div>
+	{endif}
+	<a href="{$postlink}">#{$num}</a>&nbsp; <b>{$user}</b>{$status} {tr "wrote on"} {$date}:
+</div></div>
+{if $subject}
+<div class="subject">
+	<small>{tr "subject"}:</small> <b>{$subject}</b>
+</div>
+{endif}
+<div class="body">
+	{$body}
+</div>
+</div><!-- p -->
+{endforeach}
+
+{if sizeof $postlist}
+<div class="p">
+	<input type="submit" class="defaultbutton" value="{tr "thread.split"}" />
+</div>
+{endif}
+
+</form>
+
+{endif}{-- $threadSplitFormLink}

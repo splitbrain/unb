@@ -1,0 +1,16 @@
+<tr>
+	<td class="leftcol">{tr $fieldlabel}:</td>
+	<td>
+{if gt $fieldsize 20}
+		<div class="outerTextfield100pc"><input type="text" name="{$fieldname}" value="{$fieldvalue}" size="{$fieldsize}" maxlength="{$fieldlength}" /></div>
+{else}
+		<input type="text" name="{$fieldname}" value="{$fieldvalue}" size="{$fieldsize}" maxlength="{$fieldlength}" style="width: {mul $fieldsize 10}px;" />
+		{if tr $fieldunit}
+			{tr $fieldunit}
+		{endif}
+{endif}
+	</td>
+</tr>
+{if tr $fielddesc}
+	<td class="small indent">{tr $fielddesc}</td>
+{endif}

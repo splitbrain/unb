@@ -1,0 +1,112 @@
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "cp.watched topics settings"}</h1>
+
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="watched" />
+
+<div class="page_content">
+<div class="option first">
+<h2>{tr "cp.default notification"}</h2>
+<div class="box small">
+{tr "cp.default notification~"}
+</div>
+<div class="box">
+<input type="hidden" name="SetNotify" value="1" />
+<label><input type="checkbox" name="NotifyEMail" value="1" {form_checked_if $controlpanelNotifyEMail} />{tr "e-mail"}</label>&nbsp;
+{if rc "enable_jabber"}
+<label><input type="checkbox" name="NotifyJabber" value="1" {form_checked_if $controlpanelNotifyJabber} />{tr "jabber"}</label>
+{endif}
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+
+</form>
+
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="watched" />
+
+<h1>{tr "cp.currently watched topics"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.currently watched topics~"}
+</div>
+<div class="box">
+
+{if $controlpanelWatchs}
+{tr "cp.n notifications set" "n" sizeof $controlpanelWatchs}
+</div>
+<div class="box">
+{foreach $w in $controlpanelWatchs}
+	{if or $w.newForum not $w.thread}
+		<h2 class="forumname" style="padding-top: 10px;">
+		{tr "forum"}: <a href="{$w.forumLink}">{$w.forum}</a>
+		{if or $w.forumHidden $w.forumIgnored} &nbsp; {endif}
+		{if $w.forumHidden}<img {$UNBImage.hide} title="{tr "forum.advanced.hiding"}" />{endif}
+		{if $w.forumIgnored}<img {$UNBImage.ignore} title="{tr "forum.advanced.ignoring"}" />{endif}
+		</h2>
+	{endif}
+	<div class="box" style="margin-left: 20px;">
+		<div style="float: left; clear: right;">
+		{if $w.thread}
+			<a href="{$w.threadLink}">
+			{if $w.newPosts}<img {$UNBImage.unread} title="{tr "goto_unread_post"}" />&nbsp;<b>{endif}
+			{$w.thread}
+			{if $w.newPosts}</b>{endif}
+			</a>
+			{if or or $w.threadBookmarked $w.threadHidden $w.threadIgnored} &nbsp; {endif}
+			{if $w.threadBookmarked}<img {$UNBImage.bookmark} title="{tr "bookmark"}" />{endif}
+			{if $w.threadHidden}<img {$UNBImage.hide} title="{tr "thread.advanced.hiding"}" />{endif}
+			{if $w.threadIgnored}<img {$UNBImage.ignore} title="{tr "thread.advanced.ignoring"}" />{endif}
+		{else}
+			({tr "cp.entire forum"})
+		{endif}
+		</div>
+
+		<div style="float: right; clear: right; text-align: right; margin-left: 20px;"><small>
+			{if $w.lastPost}
+				{tr "last post"}: {$w.lastPost} &nbsp;
+			{endif}
+			{if $w.notifyEMail}
+				<img {$UNBImage.email} title="{tr "e-mail"}" /> {tr "e-mail"}
+			{endif}
+			{if $w.notifyJabber}
+				<img {$UNBImage.jabber} title="{tr "jabber"}" /> {tr "jabber"}
+			{endif}
+			&nbsp; <input type="checkbox" name="{$w.unwatchName}" value="1" />
+		</small></div>
+	</div>
+{endforeach}{-- controlpanelWatchs}
+<div style="clear: right; line-height: 1px;">&nbsp;</div>
+{else}
+{tr "cp.no notifications set"}
+{endif}{-- controlpanelWatchs}
+
+</div>
+</div><!-- option -->
+
+<div class="option">
+<label><input type="checkbox" name="RemoveOlderThan" value="1" />{tr "cp.notify.remove older than.1"}</label> <input type="text" name="NumOfDays" size="4" maxlength="4" style="width: 4em;" /> {tr "cp.notify.remove older than.2"}
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="RemoveSubscriptions" value="{tr "cp.remove selected subscriptions"}" />
+</div>
+
+</form>
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->

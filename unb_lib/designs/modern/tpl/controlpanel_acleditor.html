@@ -1,0 +1,201 @@
+{require-css "controlpanel"}
+{require-css "acleditor"}
+{require-txt "controlpanel"}
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "_acleditor.cpcategory"}</h1>
+
+<div class="page_content">
+
+<div class="option first">
+{tr "_acleditor.description"}
+</div><!-- option -->
+
+<div class="option">
+<table class="acltable" cellspacing="0" cellpadding="0" width="100%" border="0">
+{foreach $acllist}
+{if $userdata}
+<tr class="userrow">
+	<td colspan="4"><div>{$userdata}</div></td>
+</tr>
+{endif}
+<tr class="{$styleclass}">
+	<td>{if $forumdata}{$forumdata}{endif}</td>
+	<td class="action">{$actiondata}</td>
+	<td class="grant">{$grantdata}</td>
+	<td class="editactions">{$actions}</td>
+</tr>
+{endforeach}
+</table>
+</div><!-- option -->
+
+<div class="option">
+{if $acleditorAddLink}<a href="{$acleditorAddLink}"><img {$UNBImage.add} /> {tr "_acleditor.add"}</a>{endif}
+</div><!-- option -->
+
+</div><!-- page_content -->
+
+{if $acleditorEditor}
+<h1>{tr "_acleditor.edit rule"}</h1>
+
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="cat" value="acleditor" />
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="ruleid" value="{$acleditorRuleID}" />
+
+<div class="page_content">
+<div class="option first" id="here">
+<div class="box">
+<table class="aclediting" cellspacing="0" cellpadding="0" width="100%">
+<tr class="first">
+	<td width="48%">{tr "_acleditor.select group"}</td>
+	<td width="4%" class="middle"><small>{tr "_acleditor.or"}</small></td>
+	<td width="48%">{tr "_acleditor.select user"}</td>
+</tr>
+<tr>
+	<td>
+		<select name="GroupID" id="GroupID" onchange="OnIDsChanged()">
+			<option value="0">{tr "_acleditor.all users"}</option>
+			{foreach $acleditorGroups}
+			<option value="{$id}" {form_selected_if eq $.acleditorGroupID $id}>{$title}</option>
+			{endforeach}
+		</select>
+	</td>
+	<td></td>
+	<td>
+		<div class="outerTextfield100pc"><input type="text" name="UserID" id="UserID" onkeyup="OnIDsChanged()" value="{$acleditorUserID}" size="40" maxlength="40" /></div>
+	</td>
+</tr>
+
+<tr id="SpecificRow1" class="margin">
+	<td>{tr "_acleditor.select forum"}</td>
+	<td class="middle"><small>{tr "_acleditor.or"}</small></td>
+	<td>{tr "_acleditor.select thread"}</td>
+</tr>
+<tr id="SpecificRow2">
+	<td>
+		<select name="ForumID" id="ForumID" onchange="OnIDsChanged()">
+			<option value="0">{tr "_acleditor.all forums"}</option>
+			{$acleditorForums}
+		</select>
+	</td>
+	<td></td>
+	<td>
+		<div class="outerTextfield100pc"><input type="text" name="ThreadID" id="ThreadID" onkeyup="OnIDsChanged()" value="{$acleditorThreadID}" size="40" maxlength="40" /></div>
+	</td>
+</tr>
+
+<tr class="margin">
+	<td>{tr "_acleditor.select action"}</td>
+	<td class="middle"><small>{tr "_acleditor.and"}</small></td>
+	<td>{tr "_acleditor.set grant"}</td>
+</tr>
+<tr>
+	<td>
+		<select name="ActionID" id="ActionID" onchange="OnActionChanged()">
+			<option value="0" {if $.acleditorActionID}disabled="disabled"{endif} id="ActionID0">{tr "_acleditor.select one"}</option>
+			{foreach $acleditorActions}
+			<option value="{$id}" class="{$styleclass}" {form_selected_if eq $.acleditorActionID $id}>{$title}</option>
+			{endforeach}
+		</select>
+	</td>
+	<td></td>
+	<td>
+		<div id="GrantNum" class="outerTextfield100pc"><input type="text" name="GrantNum" value="{$acleditorGrantNum}" size="40" maxlength="40" /></div>
+		<div id="GrantCheck"><select name="GrantCheck" id="GrantCheckCtl" onchange="OnGrantChanged()">
+			<option value="0" class="denied" {form_selected_if not $acleditorGrantCheck}>{tr "_acleditor.deny this action"}</option>
+			<option value="1" class="allowed" {form_selected_if $acleditorGrantCheck}>{tr "_acleditor.allow this action"}</option>
+		</select></div>
+	</td>
+</tr>
+</table>
+</div>
+
+{=beginjs}
+var NumericIDs = new Array({$acleditorNumericIDs});
+var SpecificIDs = new Array({$acleditorSpecificIDs});
+
+function OnActionChanged()
+{{
+	var sel_id = getel("ActionID").value;
+	
+	// Select numeric/option grant fields
+	var is_numeric = false;
+	for (var index in NumericIDs)
+		if (NumericIDs[index] == sel_id)
+			is_numeric = true;
+	toggleVisId("GrantNum", is_numeric);
+	toggleVisId("GrantCheck", !is_numeric);
+
+	// Show/hide forum fields
+	var is_specific = false;
+	for (var index in SpecificIDs)
+		if (SpecificIDs[index] == sel_id)
+			is_specific = true;
+	toggleVisId("SpecificRow1", is_specific);
+	toggleVisId("SpecificRow2", is_specific);
+	
+	toggleEnabledId("ActionID0", false);
+}
+OnActionChanged();
+
+function OnGrantChanged()
+{{
+	var sel_id = getel("GrantCheckCtl").value;
+	getel("GrantCheckCtl").className = sel_id == 1 ? "allowed" : "denied";
+}
+//OnGrantChanged();
+//setTimeout("OnGrantChanged();", 1000);
+window.onload = OnGrantChanged;
+
+function OnIDsChanged()
+{{
+	// Enable only one of both group/user fields
+	toggleEnabledId("UserID", getel("GroupID").value == 0);
+	toggleEnabledId("GroupID", getel("UserID").value == 0);
+
+	// Enable only one of both forum/thread fields
+	toggleEnabledId("ThreadID", getel("ForumID").value == 0);
+	toggleEnabledId("ForumID", getel("ThreadID").value == 0);
+}
+OnIDsChanged();
+{=endjs}
+
+<div class="box">
+<label><input type="checkbox" name="Enabled" value="1" {form_checked_if $acleditorEnabled} />{tr "_acleditor.enable rule"}</label>
+</div>
+<div class="box small indent">
+{tr "_acleditor.enable rule~"}
+</div>
+</div><!-- option -->
+
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+{if $acleditorMayRemove}
+	<input type="submit" name="remove" value="{tr "delete"}" {$controlpanelSureDelete} />
+{endif}
+</div>
+
+</form>
+{endif}{-- $acleditorEditor}
+
+<h1>{tr "_acleditor.annotations"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box">
+<div>{tr "_acleditor.annotation_1"}</div>
+<div>{tr "_acleditor.annotation_2"}</div>
+<div>{tr "_acleditor.annotation_docs"}</div>
+</div>
+</div><!-- option -->
+
+</div><!-- page_content -->
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->

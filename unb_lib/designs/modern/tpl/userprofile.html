@@ -1,0 +1,175 @@
+{require-css "userprofile"}
+
+{if $userprofileShowProfile}
+	<div class="p">
+	{if $userprofileEditLink}
+		<a href="{$userprofileEditLink}" style="float: right;"><img {$UNBImage.edit} /> {tr "edit profile"}</a>
+	{endif}
+	<span class="profile_username">{$userprofileName}</span>
+	</div>
+
+	<div class="p">
+	<h1>{tr "user profile"}</h1>
+
+	<table cellspacing="0" cellpadding="0" width="100%" class="profile_personaldata">
+	{if $userprofilePhotoUrl}
+	<tr>
+		<td class="photocol" rowspan="{add 6 sizeof $userprofileContacts}">
+			<img src="{$userprofilePhotoUrl}" alt="{tr "user photo"}" />
+		</td>
+	{elseif $userprofileHomepage}
+	<tr>
+	{endif}
+	{if $userprofileHomepage}
+		<td class="leftcol">{tr "homepage"}</td>
+		<td class="rightcol"><img {$UNBImage.homepage} />&nbsp; {$userprofileHomepage}</td>
+	</tr>
+	{elseif $userprofilePhotoUrl}
+	</tr>
+	{endif}
+	{foreach $userprofileContacts}
+	<tr>
+		<td class="leftcol">{$title}</td>
+		<td class="rightcol">
+			{if $link}<a href="{$link}">{endif}
+			{if $image}{$image}&nbsp; {endif}{$value}
+			{if $link}</a>{endif}
+		</td>
+	</tr>
+	{endforeach}
+	{if $userprofileLocation}
+	<tr>
+		<td class="leftcol">{tr "location"}</td>
+		<td class="rightcol">{$userprofileLocation}</td>
+	</tr>
+	{endif}
+	{if $userprofileBirthdate}
+	<tr>
+		<td class="leftcol">{tr "birthday"}</td>
+		<td class="rightcol">{$userprofileBirthdate}</td>
+	</tr>
+	{endif}
+	{if $userprofileGender}
+	<tr>
+		<td class="leftcol">{tr "gender"}</td>
+		<td class="rightcol">{$userprofileGender}</td>
+	</tr>
+	{endif}
+	{if $userprofileTitle}
+	<tr>
+		<td class="leftcol">{tr "user title"}</td>
+		<td class="rightcol">{$userprofileTitle}</td>
+	</tr>
+	{endif}
+	{if $userprofileAbout}
+	<tr>
+		<td class="leftcol">{tr "description"}</td>
+		<td class="rightcol">{$userprofileAbout}</td>
+	</tr>
+	{endif}
+	</table>
+	</div>
+
+	<div class="p">
+	<h1>{tr "profile.forum activity"}</h1>
+
+	<table cellspacing="0" cellpadding="0" width="100%" class="profile_forumdata">
+	<tr>
+		<td class="leftcol">{tr "registered on"}</td>
+		<td class="rightcol">{$userprofileRegDate}</td>
+		<td class="groupscol1">{tr "group memberships"}</td>
+	</tr>
+	<tr>
+		<td class="leftcol">{tr "last online"}</td>
+		<td class="rightcol">{$userprofileOnlineImage}&nbsp; {$userprofileLastActivity}</td>
+		<td class="groupscol2" rowspan="{add 2 bool $userprofileLastPost}">{$userprofileGroups}</td>
+	</tr>
+	<tr>
+		<td class="leftcol">{tr "users.posts"}</td>
+		<td class="rightcol">{$userprofilePostCount}</td>
+	</tr>
+	{if $userprofileLastPost}
+	<tr>
+		<td class="leftcol">{tr "last post"}</td>
+		<td class="rightcol">{$userprofileLastPost}</td>
+	</tr>
+	{endif}
+	</table>
+	</div>
+
+	{if or $userprofileSignature $userprofileAvatarUrl}
+	<div class="p">
+	<h1>{tr "profile.post options"}</h1>
+
+	<table cellspacing="0" cellpadding="0" width="100%" class="profile_postdata">
+	<tr>
+	{if $userprofileSignature}
+		<td class="sigleftcol">{tr "post signature"}</td>
+		<td class="sigrightcol">{$userprofileSignature}</td>
+	{else}
+		<td class="sigleftcol"></td>
+		<td class="sigrightcol"></td>
+	{endif}
+	{if $userprofileAvatarUrl}	
+		<td class="avatarleftcol">{tr "avatar"}</td>
+		<td class="avatarrightcol"><img src="{$userprofileAvatarUrl}"{$userprofileAvatarSize} alt="{tr "avatar"}" /></td>
+	{endif}
+	</tr>
+	</table>
+	</div>
+	{endif}
+
+	{if $userprofileExtraCount}
+	<div class="p">
+	<h1>{tr "profile.further information"}</h1>
+
+	<table cellspacing="0" cellpadding="0" width="100%" class="profile_extradata">
+	{foreach $userprofileExtra}
+	{if $value}
+	<tr>
+		<td class="leftcol">{$name}</td>
+		<td class="rightcol">{$value}</td>
+	</tr>
+	{endif}
+	{endforeach}
+	</table>
+	</div>
+	{endif}{-- userprofileExtra}
+{endif}{-- userprofileShowProfile}
+
+{if $userprofileShowEMail}
+	<form action="{$userprofileFormLink}" method="post">
+	<input type="hidden" name="action" value="sendemail" />
+	<input type="hidden" name="id" value="{$userprofileUserId}" />
+	
+	<h1>{tr "send mail to user"}</h1>
+	
+	<div class="all_profile_email_container">
+	<div class="profile_email_container">
+	<div class="profile_email_content">
+	
+	<div>
+	{tr "recipient"}: {$userprofileRcptName} {$userprofileRcptOnlineImg}
+	</div>
+	
+	<div>
+	{tr "send email.message"}: 
+	<div class="outerTextarea100pc"><textarea class="reply_message" name="Msg" style="height: 200px;">{$userprofileMsgInput}</textarea></div>
+	</div>
+
+	<div style="margin-top: 4px;">
+	<label><input type="checkbox" name="reply_email" value="1" {form_checked "reply_email"} />{tr "allow direct reply"}</label>
+	</div>
+	<div style="margin-left: 19px; margin-bottom: 4px;">
+	<small>{tr "allow direct reply~"}</small>
+	</div>
+
+	<div>
+	<input type="submit" name="send" class="defaultbutton" value="{tr "send message"}" accesskey="{tr "sendbutton.accesskey"}" title="{tr "sendbutton.tip"}" onclick="disableObj(\'this\');" />
+	</div>
+	</div><!-- profile_email_content -->
+	</div><!-- profile_email_container -->
+	</div><!-- all_profile_email_container -->
+
+	</form>
+{endif}{-- userprofileShowEMail}

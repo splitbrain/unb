@@ -1,0 +1,92 @@
+{$path}
+
+{if $resendValidationLink}
+	<div class="error" style="margin-bottom: 12px;"><div>{tr "account not validated" "u" $resendValidationLink}</div></div>
+	{set $ShadowBottomOffset 12}
+	{include "_shadow_bottom.html"}
+{endif}
+
+{if or or or $resendValidationLink $UnreadTopicsCount $CurrentPollsCount $TopicsSinceLastLoginLink}
+	<div class="overview_actions_top">
+		{set $div ""}
+		{if $resendValidationLink}
+			{$div}<a href="{$resendValidationLink}">{tr "resend validation mail"}</a>
+			{set $div " &middot; "}
+		{endif}
+		{if $UnreadTopicsCount}
+			{$div}<a href="{$UnreadTopicsLink}"><img {$UNBImage.unread} /> {trnum "n unread topics" $UnreadTopicsCount "n" $UnreadTopicsCount}</a>
+			{set $div " &middot; "}
+		{endif}
+		{if $CurrentPollsCount}
+			{$div}<a href="{$CurrentPollsLink}"><img {$UNBImage.votes} /> {trnum "n current polls" $CurrentPollsCount "n" $CurrentPollsCount}</a>
+			{set $div " &middot; "}
+		{endif}
+		{if $TopicsSinceLastLoginLink}
+			{$div}<a href="{$TopicsSinceLastLoginLink}"><img {$UNBImage.new} /> {trnum "n current topics since last login" $NewTopicsCount "n" $NewTopicsCount}</a>
+			{set $div " &middot; "}
+		{endif}
+	</div>
+{endif}
+
+{if $thisForumIsHidden}
+<div class="p info"><div>{tr "forum.advanced.hiding"}</div></div>
+{set $ShadowBottomOffset 12}
+{include "_shadow_bottom.html"}
+{endif}
+
+{include "announcelist.html"}
+{include "forumlist.html"}
+
+{if $mainShowThreadlist}
+{include "threadlist.html"}
+{endif}
+
+{if or $searchForumTextbox $jumpForumBox}
+<div class="jumpandsearchbox">
+{if $searchForumTextbox}
+<div class="searchbox">{$searchForumTextbox}</div>
+{endif}
+{if $jumpForumBox}
+<div class="jumpforumbox">{$jumpForumBox}</div>
+{endif}
+</div>
+{endif}
+
+<div class="p">
+{if $onlineUsersThisForum}
+<div><small>
+	{$onlineUsersThisForum}
+</small></div>
+{endif}
+{if $birthdays}
+<div><small>
+	{$birthdays}
+</small></div>
+{endif}
+{if $onlineUsersNow}
+<div><small>
+	{$onlineUsersNow}
+</small></div>
+{endif}
+{if $onlineUsersToday}
+<div><small>
+	{$onlineUsersToday}
+</small></div>
+{endif}
+{if $lastVisit}
+<div><small>
+	{$lastVisit}
+</small></div>
+{endif}
+{if $selectLanguage}
+<div>
+	{$selectLanguage}
+</div>
+{endif}
+</div><!-- p -->
+
+{if $threadlistIconsLegend}
+<div style="text-align: right; clear: both;">
+{$threadlistIconsLegend}
+</div>
+{endif}

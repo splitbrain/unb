@@ -1,0 +1,322 @@
+{require-css "post"}
+{require-js "posteditor"}
+{require-js "unicodetable"}
+{require-txt "posteditor"}
+
+{=beginjs}
+var ALTCHARS_NOTE = "{tr "pe.alt chars~"}";
+{=endjs}
+
+{if eq $posteditorMode "editpost"}
+{set $posteditorSubmitTitle "pe.save post"}
+{set $posteditorSubmitKey "pe.save post.key"}
+{set $posteditorSubmitKeyName "pe.save post.tip"}
+{elseif eq $posteditorMode "editannounce"}
+{set $posteditorSubmitTitle "pe.save announce"}
+{set $posteditorSubmitKey "pe.save announce.key"}
+{set $posteditorSubmitKeyName "pe.save announce.tip"}
+{elseif $posteditorThreadId}
+{set $posteditorSubmitTitle "pe.reply"}
+{set $posteditorSubmitKey "pe.reply.key"}
+{set $posteditorSubmitKeyName "pe.reply.tip"}
+{elseif eq $posteditorMode "newannounce"}
+{set $posteditorSubmitTitle "pe.new announce"}
+{set $posteditorSubmitKey "pe.new announce.key"}
+{set $posteditorSubmitKeyName "pe.new announce.tip"}
+{else}
+{set $posteditorSubmitTitle "pe.new topic"}
+{set $posteditorSubmitKey "pe.new topic.key"}
+{set $posteditorSubmitKeyName "pe.new topic.tip"}
+{endif}
+
+{$path}
+
+{if $posteditorFormLink}
+<form id="posteditor_form" action="{$posteditorFormLink}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="key" value="{$posteditorFormKey}" />
+
+{---------- PREVIEW ----------}
+{if $posteditorPreviewPost}
+<div class="all_posts_container">
+{foreach $post in $posteditorPreviewPost}{-- should be only one, but this makes variable mapping easier}
+{include "post.html"}
+{endforeach}
+</div>
+{endif}
+
+{if $posteditorPreviewAnnounce}
+{foreach $announcement in $posteditorPreviewAnnounce}{-- same as above}
+{include "announcement.html"}
+{endforeach}
+{set $ShadowBottomOffset 4}
+{include "_shadow_bottom.html"}
+{endif}
+
+{if $posteditorPreviewSubmitButton}
+<div style="text-align: center;">
+<input type="submit" name="save2" id="savebutton2" value="{tr $posteditorSubmitTitle}" onclick="disableObj('savebutton'); disableObj('savebutton2');" />
+</div>
+{endif}
+
+{---------- EDITOR FORM ----------}
+<div>
+{if eq $posteditorMode "editpost"}
+{-- the 1st field will get lost on IE with unicode postings... TODO: test}
+<input type="hidden" name="action2" value="edit" />
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$posteditorPostId}" />
+{if $posteditorFirstPost}
+	<input type="hidden" name="SetPoll" value="1" />
+	<input type="hidden" name="Poll" value="{$posteditorPoll}" />
+{endif}
+{endif}
+{if eq $posteditorMode "newpost"}
+<input type="hidden" name="action" value="add" />
+<input type="hidden" name="forum" value="{$posteditorForumId}" />
+{if $posteditorFirstPost}
+	<input type="hidden" name="SetPoll" value="1" />
+	<input type="hidden" name="Poll" value="{$posteditorPoll}" />
+{endif}
+<input type="hidden" name="thread" value="{$posteditorThreadId}" />
+<input type="hidden" name="replyto" value="{$posteditorQuotePostId}" />
+{endif}
+{if eq $posteditorMode "editannounce"}
+<input type="hidden" name="action" value="editannounce" />
+<input type="hidden" name="announce" value="{$posteditorAnnounceId}" />
+{endif}
+{if eq $posteditorMode "newannounce"}
+<input type="hidden" name="action" value="addannounce" />
+<input type="hidden" name="announce" value="-1" />
+<input type="hidden" name="forum" value="{$posteditorForumId}" />
+{endif}
+
+{if eq $posteditorMode "editpost"}
+<h1>{tr "pe.edit post"}</h1>
+{endif}
+{if eq $posteditorMode "newpost"}
+<h1>{tr "pe.compose post"}</h1>
+{endif}
+{if eq $posteditorMode "editannounce"}
+<h1>{tr "pe.edit announce"}</h1>
+{endif}
+{if eq $posteditorMode "newannounce"}
+<h1>{tr "pe.compose announce"}</h1>
+{endif}
+</div>
+
+<div class="all_editor_container">
+<div class="editor_container">
+<div class="editor_content">
+
+<div class="editor_head">
+<table cellspacing="0" cellpadding="0" style="width: 100%;">
+{if $posteditorUsernameInput}
+<tr>
+	<td class="leftcol">{tr "username"}:</td>
+	<td>{$posteditorUsernameInput}</td>
+</tr>
+{endif}
+<tr>
+	<td class="leftcol">{tr "subject"}{if $posteditorSubjectOptional} <small><i>{tr "pe.optional"}</i></small>{endif}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="Subject" maxlength="150" value="{$posteditorSubjectInput}" {NextTabIndex} /></div></td>
+</tr>
+{if and $posteditorHavePost $posteditorFirstPost}
+<tr>
+	<td class="leftcol">{tr "description"} <small><i>{tr "pe.optional"}</i></small>:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="Desc" maxlength="150" value="{$posteditorDescriptionInput}" {NextTabIndex} /></div></td>
+</tr>
+{endif}
+{if $posteditorVericodeLink}
+<tr>
+	<td class="leftcol">{tr "vericode"}:</td>
+	<td><img src="{$posteditorVericodeLink}" alt="VeriCode" style="vertical-align: middle;" /> <input type="text" name="veriword" size="6" maxlength="6" style="width: 6em;" {NextTabIndex} /> {tr "vericode~"}</td>
+</tr>
+{endif}
+</table>
+</div>{-- editor_head}
+
+{if $posteditorShortenQuoteNote}
+<div class="info p"><div>{tr "pe.shorten quote"}</div></div>
+{endif}
+
+{if $posteditorGuestPostingNote}
+<div class="info p"><div>{tr "pe.guest posting"}</div></div>
+{endif}
+
+{if $posteditorWarnEditOtherUsersPost}
+<div class="info p"><div>{tr "pe.warn edit other users post"}</div></div>
+{endif}
+
+<div class="editor_formatting">
+<input type="button" value="{tr "pe.format.bold"}" style="font-weight: bold;" title="{tr "pe.format.bold.tip"}" onclick="UnbEditorDoCmd(event, 'bold');"
+/><input type="button" value="{tr "pe.format.italic"}" style="font-style: italic;" title="{tr "pe.format.italic.tip"}" onclick="UnbEditorDoCmd(event, 'italic');"
+/><input type="button" value="{tr "pe.format.underline"}" style="text-decoration: underline;" title="{tr "pe.format.underline.tip"}" onclick="UnbEditorDoCmd(event, 'underline');"
+/><input type="button" value="{tr "pe.format.linethrough"}" style="text-decoration: line-through;" title="{tr "pe.format.linethrough.tip"}" onclick="UnbEditorDoCmd(event, 'strike');"
+/><input type="button" value="{tr "pe.format.monospace"}" style="font-family: monospace;" title="{tr "pe.format.monospace.tip"}" onclick="UnbEditorDoCmd(event, 'mono');"
+/>
+<input type="button" value="{tr "pe.format.quote"}" title="{tr "pe.format.quote.tip"}" onclick="UnbEditorDoCmd(event, 'quote');"
+/><input type="button" value="{tr "pe.format.link"}" title="{tr "pe.format.link.tip"}" onclick="UnbEditorDoCmd(event, 'url');"
+/><input type="button" value="{tr "pe.format.image"}" title="{tr "pe.format.image.tip"}" onclick="UnbEditorDoCmd(event, 'img');"
+/><input type="button" value="{tr "pe.format.code"}" title="{tr "pe.format.code.tip"}" onclick="UnbEditorDoCmd(event, 'code');"
+/>
+<input type="button" value="" class="colourbutton" style="width: 13px; background-color: crimson;" title="{tr "pe.colour.red"}" onclick="UnbEditorDoCmd(event, 'color', 'crimson');"
+/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: orange;" title="{tr "pe.colour.orange"}" onclick="UnbEditorDoCmd(event, 'color', 'orange');"
+/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: limegreen;" title="{tr "pe.colour.green"}" onclick="UnbEditorDoCmd(event, 'color', 'limegreen');"
+/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: deepskyblue;" title="{tr "pe.colour.lightblue"}" onclick="UnbEditorDoCmd(event, 'color', 'deepskyblue');"
+/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: blue;" title="{tr "pe.colour.blue"}" onclick="UnbEditorDoCmd(event, 'color', 'blue');"
+/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: darkviolet;" title="{tr "pe.colour.violet"}" onclick="UnbEditorDoCmd(event, 'color', 'darkviolet');"
+/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: gray;" title="{tr "pe.colour.grey"}" onclick="UnbEditorDoCmd(event, 'color', 'gray');"
+/>
+
+{if $posteditorSmilies}<input type="button" id="reply_button1" value="{tr "pe.button.smilies"}" onclick="toggleVisId('reply_smilies', SelectButton(this))"
+/>{endif}<input type="button" id="reply_button2" value="{tr "special chars"}" onclick="toggleVisId('reply_specialchars', SelectButton(this))" />
+
+<a href="{$posteditorFormattingHelpLink}">{tr "pe.formatting help"}</a>
+</div>{-- editor_formatting}
+
+{if $posteditorSmilies}
+<div id="reply_smilies" class="editor_formatting_more">
+	{tr "pe.button.smilies"}:
+	{foreach $smilie in $posteditorSmilies}
+	<span class="smiliebutton" onclick="UnbInsertText(' {$smilie.codeJs} ');" title="{$smilie.code}">{$smilie.image}</span>
+	{endforeach}
+</div>
+<script type="text/javascript">toggleVisId('reply_smilies', 0);</script>
+{endif}
+
+<div id="reply_specialchars" class="editor_formatting_more">
+	{tr "special chars"}:
+	<span id="altchars"></span>
+</div>
+<script type="text/javascript">toggleVisId('reply_specialchars', 0);</script>
+
+<div class="editor_message">
+<div class="outerTextarea100pc"><textarea id="reply_message" class="reply_message" name="Msg" style="height: {$posteditorHeight}px;" rows="10" cols="40" onkeydown="return UnbTextKeydownHandler(this)" onkeypress="return UnbCheckLength(this, {$posteditorMaxLength})" onkeyup="UnbCheckLength(this, {$posteditorMaxLength}); UnbTextKeyup(event, this)" onblur="return UnbCheckLength(this, {$posteditorMaxLength})" onfocus="UnbCheckLength(this, 0)" {NextTabIndex}>{$posteditorMsgInput}</textarea></div>
+</div>{-- editor_message}
+
+<div class="editor_controls">
+<span class="reply_close_link"><a href="javascript:resizeBoxId('reply_message', -80)">{tr "pe.smaller"}</a></span>
+<span class="reply_close_link"><a href="javascript:resizeBoxId('reply_message', +80)">{tr "pe.larger"}</a></span>
+{if rc "post_show_textlength"}
+<div style="float: right;">
+<small>{tr "pe.text length"}: <span id="textlength">?</span> {tr "characters"} ({tr "maximum"}: {$posteditorMaxLengthFmt})</small>
+<script type="text/javascript">//<![CDATA[
+UnbCheckLength(getel("reply_message"), 0);
+//]]></script>
+</div>
+{endif}
+
+<input type="submit" class="defaultbutton" name="save" id="savebutton" value="{tr $posteditorSubmitTitle}" accesskey="{tr $posteditorSubmitKey}" onclick="disableObj('savebutton'); disableObj('savebutton2');" title="{tr $posteditorSubmitKeyName}" {NextTabIndex} />
+<input type="submit" name="preview" id="previewbutton" value="{tr "pe.preview"}" accesskey="{tr "pe.preview.key"}" title="{tr "pe.preview.tip"}" {NextTabIndex} />
+
+{if $posteditorAllowPoll}
+{if $posteditorHavePoll}
+<input type="submit" name="RemovePoll" value="{tr "pe.remove poll"}" {NextTabIndex} />
+{else}
+<input type="submit" name="AddPoll" value="{tr "pe.add poll"}" {NextTabIndex} />
+{endif}
+{endif}
+</div>{-- editor_controls}
+
+</div>{-- editor_content}
+</div>{-- editor_container}
+{set $ShadowBottomOffset 12}
+{include "_shadow_bottom.html"}
+
+<div class="editor_container">
+<div class="editor_caption" style="cursor: pointer;" onclick="setImageId('optionsImage', toggleVisIdScroll('posteditorOptions') == 1, '{imgurl}arrow_down.png', '{imgurl}arrow_right.png')"><img id="optionsImage" src="{imgurl}arrow_down.png" alt="" /> {tr "pe.post options"}</div>
+<div class="editor_content" id="posteditorOptions">
+<div class="editor_options">
+{$posteditorOptions}
+</div>{-- editor_options}
+
+{if $posteditorEditOptions}
+<div class="editor_editoptions">
+{$posteditorEditOptions}
+</div>{-- editor_options}
+{endif}
+
+{if or $posteditorAttachedFiles $posteditorMaxAttachSize}
+<div class="editor_attach">
+{if $posteditorAttachedFiles}
+Attached files:<br />
+{foreach $file in $posteditorAttachedFiles}
+{$file.name} ({$file.size} bytes, {$file.downloads} downloads)
+<label><input type="checkbox" name="RemoveAttach" value="1" {form_checked "RemoveAttach"} />{tr "pe.remove attach"}</label><br />
+{endforeach}
+{endif}
+
+{if $posteditorMaxAttachSize}
+{tr "pe.attach file"}:
+<input type="file" name="AttachFile" size="52" /> &nbsp; <small>({tr "maximum"}: {$posteditorMaxAttachSizeFmt})</small><br />
+{endif}
+</div>{-- editor_attach}
+{endif}{-- AttachedFiles or MaxAttachSize}
+
+{if $posteditorHavePoll}
+<div class="editor_poll">
+<input type="hidden" name="PollDef" value="1" />
+{tr "poll"}:<br />
+{tr "pe.poll.question"}:
+<div class="outerTextfield100pc"><input type="text" {if not $posteditorPollSetTitle}class="transparent" readonly="readonly"{endif} name="Question" value="{$posteditorPollTitleInput}" size="40" maxlength="150" /></div>
+
+{if $posteditorThreadId}
+{tr "pe.poll.replies+sort"}<br />
+{else}
+{tr "pe.poll.replies"}<br />
+{endif}
+
+{foreach $option in $posteditorPollOptions}
+<input type="hidden" name="ID{$option.num}" value="{$option.voteId}" />
+<input type="text" {if not $posteditorPollSetTitle}class="transparent" readonly="readonly"{endif} name="Poll{$option.num}" size="50" maxlength="100" value="{$option.textInput}" style="width: 70%;" />
+{if $posteditorThreadId}
+	<input type="text" name="Sort{$option.num}" size="3" maxlength="3" value="{$option.sortInput}" style="width: 3em;" />
+	{if $option.textInput}
+		{trnum "poll.n votes" $option.voteCount "n" $option.voteCount}
+	{endif}
+{endif}
+<br />
+{endforeach}
+
+{tr "pe.poll.timeout"} <input type="text" name="PollTimeout" size="3" maxlength="5" value="{$posteditorPollDuration}" style="width: 3em;" />
+<select name="PollTimeoutUnit">
+	<option value="hours" {form_selected_if $posteditorPollUnitHours}>{tr "pe.poll.timeout.hours"}</option>
+	<option value="days" {form_selected_if $posteditorPollUnitDays}>{tr "pe.poll.timeout.days"}</option>
+</select>
+<small>({tr "pe.poll.timeout~"})</small><br />
+</div>{-- editor_poll}
+{endif}{-- $posteditorHavePoll}
+
+</div>{-- editor_content}
+</div>{-- editor_container}
+{set $ShadowBottomOffset 12}
+{include "_shadow_bottom.html"}
+
+</div>{-- all_editor_container}
+
+</form>
+{endif}{-- $posteditorFormLink}
+
+{-- last posts}
+{if $postlist}
+{tr "pe.last posts in thread"}:<br />
+{include "postlist.html"}
+{endif}
+
+<script type="text/javascript">//<![CDATA[
+{if not $posteditorHavePoll}
+setImageId('optionsImage', toggleVisId('posteditorOptions', false) == 1, "{imgurl}arrow_down.png", "{imgurl}arrow_right.png");
+{endif}
+
+textbox = getel("reply_message");
+function myCtrlEnter(e)
+{{
+	if (getel("savebutton").disabled) return;
+	disableObj("savebutton");
+	disableObj("savebutton2");
+	getel("posteditor_form").submit();
+}
+UnbGlobalRegisterKeyHandler(13, 0, 2, myCtrlEnter);
+UnbShowChars("");
+//]]></script>
+

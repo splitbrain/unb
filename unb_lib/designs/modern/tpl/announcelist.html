@@ -1,0 +1,56 @@
+{require-css "announcement"}
+
+{if $announcelist}
+<h1>{trnum "announcements" sizeof $announcelist}</h1>
+{endif}
+
+{--include "_shadow_start.html"}
+<div class="all_announcements_container">
+{set $announceContainerOpen 0}
+{set $announcementsInList 1}
+
+{foreach $announcement in $announcelist}
+
+{if $announcement.importantDelimiter}
+	<!--small>This was all important. The following announcements will be sorted by their date again.</small-->
+	{if $announceContainerOpen}
+		</div><!-- announcement_container -->
+		{set $announceContainerOpen 0}
+		{set $ShadowBottomOffset 4}
+		{include "_shadow_bottom.html"}
+	{endif}
+{endif}
+{if $announceContainerOpen}
+	<div class="announcement_content announcement_separator {if $announcement.important}important{endif}"><div></div></div>
+{else}
+	<div class="announcement_container {if $announcement.important}important{endif} {if $announcement.firstitem}first{endif}">
+	{set $announceContainerOpen 1}
+{endif}
+
+{include "announcement.html"}
+
+{endforeach}
+
+{if $announceContainerOpen}
+	</div><!-- announcement_container -->
+	{set $announceContainerOpen 0}
+	{set $ShadowBottomOffset 4}
+	{include "_shadow_bottom.html"}
+{endif}
+
+</div><!-- all_announcements_container -->
+{--include "_shadow_end.html"}
+
+{if or $announcelistActionNewLink $announcelistActionShowAllLink}
+<div class="all_announcement_actions_bottom {if not sizeof $announcelist}alone{endif}">
+{set $div ""}
+{if $announcelistActionNewLink}
+	{$div}<a href="{$announcelistActionNewLink}"><img {$UNBImage.add} /> {tr "announcement.new"}</a>
+	{set $div " &middot; "}
+{endif}
+{if $announcelistActionShowAllLink}
+	{$div}<a href="{$announcelistActionShowAllLink}"><img {$UNBImage.announce} /> {tr "announcement.show all"}</a>
+	{set $div " &middot; "}
+{endif}
+</div>
+{endif}

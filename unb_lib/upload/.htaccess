@@ -1,0 +1,5 @@
+# Don't allow direct downloads of post attachments
+<Files post*>
+	Order allow,deny
+	Deny from all
+</Files>

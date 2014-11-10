@@ -1,0 +1,295 @@
+{require-css "forum"}
+
+{if and (not $forumlistLevel) $forumlistErrorMsg}
+	<div class="p error"><div>{$forumlistErrorMsg}</div></div>
+	{set $ShadowBottomOffset 12}
+	{include "_shadow_bottom.html"}
+{endif}
+
+{if and (not $forumlistLevel) $forumlistActionsTop}{-- currently unused}
+	<div class="all_forum_actions_top">
+	{$forumlistActionsTop}
+	</div>
+{endif}
+
+{if and (not $forumlistLevel) $forumlistEditformLink}
+	<form action="{$forumlistEditformLink}" method="post">
+{endif}
+
+{set $forumContainerOpen 0}
+{foreach $f in $forumlist}
+
+{if $f.firstitem}{-- entire forumlist head}
+	{$forumlistPreForumlist}
+	{set $forumlistID $forumlistTopForum}
+	<div class="all_forums_section">
+	<h1>{trnum "subforums" sizeof $forumlist}</h1>
+
+	<div class="all_forums_container">
+{endif}
+
+{if eq $f.type "forum"}
+	{if $f.editThis}<a id="here"></a>{endif}
+
+	{if $forumContainerOpen}
+		<div class="forum_content forum_separator"><div></div></div>
+	{else}
+		<div class="forum_container forum_forum {if $f.firstitem}first{endif}">
+		{set $forumContainerOpen 1}
+	{endif}
+	<div class="forum_content forum_forum">
+		<div class="forum_icon">
+			<a href="{$f.link}"><img {$f.iconImage} title="{$f.iconTitle}" /></a>
+		</div>
+
+		<div class="forum_data">
+			<span class="info">
+				{$f.hiddenImage}
+				{$f.ignoredImage}
+				{if $f.readOnly}<img {$UNBImage.nowrite} title="{tr "you cannot post here"}" />{endif}
+				{if $f.addLink}<a href="{$f.addLink}"><img {$UNBImage.add} title="{tr "add new forum"}" /></a>{endif}
+				{if $f.editLink}<a href="{$f.editLink}"><img {$UNBImage.edit} title="{tr "edit this forum"}" /></a>{endif}
+			</span>
+
+			<span class="name"><a href="{$f.link}">{$f.name}</a></span> &nbsp;
+			{if $f.isNew}<span class="new">{tr "new posts"}</span>{endif}
+		</div>
+
+		{if or or $f.desc $forumlistShowThreadsPosts $forumlistShowLastpost}
+		<div class="forum_counter">
+			<table cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td class="desc">{$f.desc}</td>
+
+				<td class="threadcount">
+					{if $forumlistShowThreadsPosts}
+						{if $f.threads}{$f.threads} {trnum "threads" $f.threads}{endif}
+					{endif}
+				</td>
+				<td class="postcount">
+					{if $forumlistShowThreadsPosts}
+						{if $f.posts}{$f.posts} {trnum "posts" $f.posts}{endif}
+					{endif}
+				</td>
+
+				{if $forumlistShowLastpost}
+					<td class="lastpost">
+						{if $f.lastpostDate}{tr "last post"} {$f.lastpostDate}<br />{tr "in"} <a href="{$f.lastpostLink}">{$f.lastpostSubject}</a>{endif}
+					</td>
+				{endif}
+			</tr>
+			</table>
+		</div>
+		{endif}
+
+		<div style="clear: both;"></div>
+	</div><!-- forum_content -->
+	{if $f.editThis}{include "forumlist_edit.html"}{endif}
+{endif}{-- type forum}
+
+{if eq $f.type "link"}
+	{if $f.editThis}<a id="here"></a>{endif}
+	{if $forumContainerOpen}
+		<div class="forum_content forum_separator"><div></div></div>
+	{else}
+		<div class="forum_container forum_weblink {if $f.firstitem}first{endif}">
+		{set $forumContainerOpen 1}
+	{endif}
+
+	<div class="forum_content forum_weblink">
+		<div class="forum_icon">
+			<a href="{$f.link}"><img {$UNBImage.weblink} title="{tr "weblink"}" /></a>
+		</div>
+
+		<div class="forum_data">
+			<span class="info">
+				{if $f.editLink}<a href="{$f.editLink}"><img {$UNBImage.edit} title="{tr "edit this forum"}" /></a>{endif}
+			</span>
+
+			<span class="name"><a href="{$f.link}">{$f.name}</a></span> &nbsp;
+			{if $f.desc}<div class="desc">{$f.desc}</div>{endif}
+		</div>
+
+		<div style="clear: left;"></div>
+	</div><!-- forum_content -->
+	{if $f.editThis}{include "forumlist_edit.html"}{endif}
+{endif}{-- type link}
+
+{if eq $f.type "category"}
+	{if $forumContainerOpen}
+		</div><!-- forum_container -->
+		{set $forumContainerOpen 0}
+		{set $ShadowBottomOffset 1}
+		{include "_shadow_bottom.html"}
+	{endif}
+
+	{if $f.editThis}<a id="here"></a>{endif}
+	<div class="forum_container forum_category {if and (gt $f.forumsCount 1) (not $forumlistLevel)}inner{endif} {if $f.firstitem}first{endif}">
+	<div class="forum_content forum_category {if and (gt $f.forumsCount 1) (not $forumlistLevel)}inner{endif}">
+		<div class="forum_icon">
+			{if $f.iconLink}<a href="{$f.iconLink}">{endif}
+			<img {$f.iconImage} title="{$f.iconTitle}" />
+			{if $f.iconLink}</a>{endif}
+		</div>
+
+		<div class="forum_data">
+			<span class="info">
+				{$f.hiddenImage}
+				{$f.ignoredImage}
+				{if $f.addLink}<a href="{$f.addLink}"><img {$UNBImage.add} title="{tr "add new forum"}" /></a>{endif}
+				{if $f.editLink}<a href="{$f.editLink}"><img {$UNBImage.edit} title="{tr "edit this forum"}" /></a>{endif}
+			</span>
+
+			<span class="name"><a href="{$f.link}">{$f.name}</a></span> &nbsp;
+			{if $f.isNew}<span class="new">{tr "new posts"}</span>{endif}
+			{if $f.desc}<div class="desc">{$f.desc}</div>{endif}
+		</div>
+
+		<div style="clear: left;"></div>
+	</div><!-- forum_content -->
+	{if $f.editThis}{include "forumlist_edit.html"}{endif}
+	</div><!-- forum_container -->
+	{set $ShadowBottomOffset 1}
+	{include "_shadow_bottom.html"}
+{endif}{-- type category}
+
+{if eq $f.type "toodeep"}
+	{if $forumContainerOpen}
+		</div><!-- forum_container -->
+		{set $forumContainerOpen 0}
+		{set $ShadowBottomOffset 0}
+		{include "_shadow_bottom.html"}
+	{endif}
+
+	<div class="forum_container forum_message {if $f.firstitem}first{endif}">
+	<div class="forum_content forum_message">
+		<small>{tr "more forums below"}: {$f.message}</small>
+	</div><!-- forum_content -->
+	</div><!-- forum_container -->
+	{set $ShadowBottomOffset 1}
+	{include "_shadow_bottom.html"}
+{endif}{-- type toodeep}
+
+{if $f.threadlist}
+	{if $forumContainerOpen}
+		</div><!-- forum_container -->
+		{set $forumContainerOpen 0}
+		{set $ShadowBottomOffset 1}
+		{include "_shadow_bottom.html"}
+	{endif}
+
+	{PushEnv}
+	{set $threadlist $f.threadlist}
+	{set $threadsInForum 1}
+	<div class="forums_sublevel">
+	{include "threadlist.html"}
+	</div>
+	{PopEnv}
+{endif}
+
+{if $f.subforums}
+	{if $forumContainerOpen}
+		</div><!-- forum_container -->
+		{set $forumContainerOpen 0}
+		{set $ShadowBottomOffset 1}
+		{include "_shadow_bottom.html"}
+	{endif}
+
+	{PushEnv}
+	{set $forumlist $f.subforums}
+	{set $forumlistID $f.id}
+	{set $forumlistLevel add $forumlistLevel 1}
+	<div class="forums_sublevel">
+	{include "forumlist.html"}
+	</div>
+	{PopEnv}
+{elseif and and (neq $forumlistAddID -1) (eq $forumlistAddID $f.id) (neq $f.id $forumlistID)}
+{-- not (no add-ID) and (add-ID is current-forum-ID) and (current-forum-ID is not top-level-forum-ID)}
+	{if $forumContainerOpen}
+		</div><!-- forum_container -->
+		{set $forumContainerOpen 0}
+		{set $ShadowBottomOffset 1}
+		{include "_shadow_bottom.html"}
+	{endif}
+	<a id="here"></a>
+
+	<div class="forums_sublevel">
+	<div class="forum_container">
+	{include "forumlist_edit.html"}
+	</div>
+	</div>
+{endif}
+
+{endforeach}{-- $f in $forumlist}
+
+{if and (neq $forumlistAddID -1) (eq $forumlistAddID $forumlistID)}
+	{if $forumContainerOpen}
+		<a id="here"></a>
+		<div class="forum_content forum_separator"><div></div></div>
+		{include "forumlist_edit.html"}
+	{else}
+		<a id="here"></a>
+		<div class="forum_container">
+		{include "forumlist_edit.html"}
+		</div>
+	{endif}
+{endif}
+
+{if $forumContainerOpen}
+	</div><!-- forum_container -->
+	{set $forumContainerOpen 0}
+	{set $ShadowBottomOffset 1}
+	{include "_shadow_bottom.html"}
+{endif}
+
+{if not $forumlistLevel}
+	{if $forumlistCount}
+		</div><!-- all_forums_container -->
+	{endif}
+
+	{-- if or $forumlistCount (not $forumlistTopForum)}
+	{if and (or $forumlistActionAdvanced $forumlistActionAddForumLink) (not $threadlistActionAdvanced)}{-- advanced options}
+		{if or or $forumlistActionAdvanced $forumlistActionMarkReadLink $forumlistActionAddForumLink}
+		<div class="all_forum_actions_bottom">
+			{set $div ""}
+			{if and $forumlistActionAdvanced (not $threadlistActionAdvanced)}
+				{$div}<a href="javascript:nothing()" onclick="setImageId('advanced_link_img_forums', toggleVisIdScroll('advanced_options_forums') == 1, '{imgurl}arrow_down.png', '{imgurl}arrow_right.png')"><img {$UNBImage.arrow_down} id="advanced_link_img_forums" />  {tr "advanced options"}</a>
+				{set $div " &middot; "}
+			{endif}
+			{if $forumlistActionMarkReadLink}{$div}<a href="{$forumlistActionMarkReadLink}"><img {$UNBImage.unread} /> {tr "mark all forums read"}</a>{set $div " &middot; "}{endif}
+			{if $forumlistActionAddForumLink}{$div}<a href="{$forumlistActionAddForumLink}"><img {$UNBImage.add} /> {tr "forum.new"}</a>{set $div " &middot; "}{endif}
+		</div>
+		{endif}
+	{endif}
+
+	{if $forumlistCount}
+		</div><!-- all_forums_section -->
+	{endif}
+	{if $forumlistEditformLink}
+		</form>
+	{endif}
+
+	{-- if and and $forumlistCount $forumlistActionAdvanced (not $threadlistActionAdvanced)}{-- advanced options}
+	{if and $forumlistActionAdvanced (not $threadlistActionAdvanced)}{-- advanced options}
+		<div id="advanced_options_forums" class="p">
+		<h1>{tr "forum.advanced options"}</h1>
+		<div class="advanced_options_container">
+		<div class="advanced_options_content">
+		{foreach $action in $forumlistActionAdvanced}
+			<div class="advanced_option">
+				<a href="{$action.link}">{$action.title}</a>
+				<div class="advanced_subtitle">{$action.subtitle}</div>
+			</div>
+		{endforeach}
+		</div><!-- advanced_options_content -->
+		</div><!-- advanced_options_container -->
+		{set $ShadowBottomOffset 0}
+		{include "_shadow_bottom.html"}
+		</div>
+
+		<script type="text/javascript">//<![CDATA[
+		toggleVisId("advanced_options_forums", false);
+		setImageId("advanced_link_img_forums", true, "{imgurl}arrow_right.png");
+		//]]></script>
+	{endif}{-- advanced options}
+{endif}{-- level = 0}

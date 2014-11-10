@@ -1,0 +1,39 @@
+<?php
+// Unclassified NewsBoard
+// Copyright 2003-5 by Yves Goergen
+// Homepage: http://newsboard.unclassified.de
+// See docs/license.txt for distribution/license details
+//
+// usercss.php
+// User CSS definition file
+//
+// This file is included at the end of the design's CSS definitions file so
+// that you can redefine any of the settings made there.
+// You can also make full use of PHP tags to create conditional code like for
+// different browsers. See the included clientinfo.lib.php for details.
+// If you want to reference images or files from this directory, use ../../ as
+// the relative pathname from the main CSS file to here.
+//
+?>
+
+.offtopic
+{
+	margin: 3px 20px;
+	/*font-size: 9px;
+	line-height: 12px;*/
+	color: #808080;
+}
+
+.spelling
+{
+	/*border-bottom: dashed 1px red;*/
+	padding-bottom: 2px;
+	background: url(../../spelling.png) bottom repeat-x;
+}
+
+.moderation
+{
+	margin: 3px 20px;
+	color: #208040;
+}
+

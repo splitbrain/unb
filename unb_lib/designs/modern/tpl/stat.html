@@ -1,0 +1,113 @@
+{require-css "stat"}
+{require-txt "stat"}
+
+<h1>{tr "statistics"}</h1>
+
+<div class="stat_container">
+<div class="stat_content">
+<table cellspacing="0" cellpadding="0" width="100%" class="graphs">
+<colgroup>
+	<col width="100" />
+	<col />
+	<col />
+	<col />
+	<col />
+</colgroup>
+
+<tr valign="top" class="head">
+	<td width="16%">{tr "date"}</td>
+	<td width="18%">{tr "stat.new threads"}</td>
+	<td width="18%">{tr "stat.new posts"}</td>
+	<td width="22%">{tr "stat.online users"}</td>
+	<td width="15%">{tr "stat.page hits"}</td>
+	<td width="11%">{tr "stat.regs"}</td>
+</tr>
+
+{foreach $statlist}
+<tr class="data {if $firstitem}first{endif} {if $lastitem}last{endif}">
+	<td style="white-space: nowrap;">{$time} &nbsp;</td>
+	<td>
+		<div class="stat_graph" style="width: {mul $widthNTRel 0.9}%;"></div>
+		<div class="stat_graphtext">{$NewThreads}</div>
+	</td>
+	<td>
+		<div class="stat_graph" style="width: {mul $widthNPRel 0.9}%;"></div>
+		<div class="stat_graphtext">{$NewPosts}</div>
+	</td>
+	<td>
+		<div class="stat_multigraph">
+		<div class="stat_subgraph1" style="width: {mul $widthOURel 0.9}%;"></div
+		><div class="stat_subgraph2" style="width: {mul $widthOGRel 0.9}%;"></div>
+		</div>
+		<div class="stat_graphtext">{$OnlineUsers}<small>+{$OnlineGuests}</small></div>
+	</td>
+	<td>
+		<div class="stat_graph" style="width: {mul $widthPHRel 0.9}%;"></div>
+		<div class="stat_graphtext">{$PageHits}</div>
+	</td>
+	<td>
+		<div class="stat_graph" style="width: {mul $widthNURel 0.9}%;"></div>
+		<div class="stat_graphtext">{$NewUsers}</div>
+	</td>
+</tr>
+{endforeach}
+</table>
+</div><!-- search_content -->
+</div><!-- search_container -->
+{set $ShadowBottomOffset 4}
+{include "_shadow_bottom.html"}
+
+<div class="stat_actions">
+{$statPages}
+</div>
+
+<div class="stat_container">
+<div class="stat_content">
+<table cellspacing="0" cellpadding="0" width="100%">
+<colgroup>
+	<col width="23%" />
+	<col width="31%" />
+	<col width="32%" />
+	<col width="14%" />
+</colgroup>
+
+<tr valign="top" class="head">
+	<td colspan="2">{tr "stat.forums threads and posts"}</td>
+	<td colspan="2">{tr "stat.users"}</td>
+</tr>
+<tr valign="top" class="data">
+	<td>{tr "stat.forums count"}:</td><td>{$statForumCount}</td>
+	<td>{tr "stat.registered users"}:</td><td>{$statUserCount}</td>
+</tr>
+<tr valign="top" class="data">
+	<td>{tr "stat.threads count"}:</td><td>{$statThreadCount} &nbsp;<small>({$statThreadsPerForum} {tr "stat.threads per forum"})</small></td>
+	<td>{tr "stat.users wait validation"}:</td><td>{$statNotValidCount}</td>
+</tr>
+<tr valign="top" class="data">
+	<td>{tr "stat.posts count"}:</td><td>{$statPostCount} &nbsp;<small>({$statPostsPerThread} {tr "stat.posts per thread"})</small></td>
+	<td>{tr "stat.posts per user"}:</td><td>{$statPostsPerUser}</td>
+</tr>
+<tr valign="top" class="data">
+	<td>{tr "stat.polls count"}:</td><td>{$statPollCount} &nbsp;<small>({$statVotesPerPoll} {tr "stat.votes per poll"})</small></td>
+	<td>{tr "stat.guest posts"}:</td><td>{$statPostGuests} &nbsp;<small>({$statPostGuestsPercent}%)</small></td>
+</tr>
+<tr valign="top" class="data">
+	<td>{tr "stat.database size"}:</td><td>{$statDatabaseSize}B</td>
+	<td>{tr "stat.upload folder size"}:</td><td>{$statUploadSize}B</td>
+</tr>
+</table>
+</div><!-- search_content -->
+</div><!-- search_container -->
+{set $ShadowBottomOffset 4}
+{include "_shadow_bottom.html"}
+
+<br />
+
+{set $searchTitle tr "stat.top 10 threads"}
+{include "threadlist.html"}
+
+{if $threadlistIconsLegend}
+<div style="text-align: right; clear: both;">
+{$threadlistIconsLegend}
+</div>
+{endif}

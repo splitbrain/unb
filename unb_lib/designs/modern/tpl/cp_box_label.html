@@ -1,0 +1,12 @@
+{if eq $fieldheader 2}
+<h2>{tr $fieldlabel}</h2>
+{else}
+<div class="box">
+{tr $fieldlabel}
+</div>
+{endif}
+{if tr $fielddesc}
+<div class="box small indent">
+{tr $fielddesc}
+</div>
+{endif}

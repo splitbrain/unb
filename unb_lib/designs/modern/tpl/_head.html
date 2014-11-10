@@ -1,0 +1,75 @@
+{if $headHTML}
+{$headXML}
+{$headDocType}
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$headLang}" lang="{$headLang}">
+<head>
+<title>{$headTitle}</title>
+{$headBase}
+{$headCSS}
+{if $UNBImage.icon}
+<link rel="shortcut icon" href="{$UNBImage.icon}" type="image/x-icon" />
+{endif}
+{if $headNoIndex}
+<meta name="robots" content="noindex, follow" />
+{endif}
+{$headAdd}{-- this is all links that are added later while programme execution}
+{$headCustom}{-- this comes from plug-ins}
+</head>
+<body{if $headSimple} class="simple"{endif}>
+{endif}{-- $headHTML}
+
+<script type="text/javascript">//<![CDATA[
+{$headJsCode}
+//]]></script>
+<script type="text/javascript" src="{$headLibraryURL}common.js"></script>
+
+{$headAddPreLogoCodeSimple}
+
+{if not $headSimple}
+	{$headAddPreLogoCode}
+
+	<div class="head_logo">
+	<a href="{$headLogoLink}"><img {$UNBImage.toplogo} alt="{$headLogoAlt}" /></a>
+	</div>
+
+	{$headAddPostLogoCode}
+
+	{if $headLoginControl}
+		<div class="head_logincontrol">
+		{$headLoginControl}
+		</div>
+	{endif}
+
+	{-- navigation}
+	{if $headnaviLinks}
+		<ul class="head_navigation">
+		{foreach $headnaviLinks}
+			<li{if $active} class="active"{endif}>
+				<a href="{$link}">
+				{if $imageUrl}<span class="backimage" style="background: url({imgurl}{$imageUrl}) no-repeat; padding-left: 20px;">{endif}
+				{$title}
+				{if $imageUrl}</span>{endif}
+				</a>
+			</li>
+		{endforeach}
+		</ul>
+	{endif}
+	
+	{$headAddPostNaviCode}
+{endif}{-- not $headSimple}
+
+{$headAddPostNaviCodeSimple}
+
+{if $errorMsg}
+<div class="p error"><div>{$errorMsg}</div></div>
+{set $ShadowBottomOffset 12}
+{include "_shadow_bottom.html"}
+{endif}
+
+{if $infoMsg}
+<div class="p info"><div>{$infoMsg}</div></div>
+{set $ShadowBottomOffset 12}
+{include "_shadow_bottom.html"}
+{endif}
+
+{$headAddPostWarningsCode}

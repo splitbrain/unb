@@ -1,0 +1,424 @@
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="boardapp" />
+
+<div class="page_outer_container">
+<div class="page_container">
+{if gt sizeof $controlpanelDesigns 1}
+<h1>{tr "cp.design"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.design~"}
+</div>
+<div class="box">
+<select name="Design" id="DesignSelection">
+{foreach $d in $controlpanelDesigns}
+	<option value="{$d.name}" {form_selected_if $d.selected}>{$d.title}</option>
+{endforeach}
+</select>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="button" value="{tr "preview"}" accesskey="{tr "previewbutton.accesskey"}" title="{tr "previewbutton.tip"}" onclick="UnbPreviewDesign()" /><br />
+<small>{tr "cp.design preview~"}</small>
+</div>
+{endif}{-- gt sizeof $controlpanelDesigns 1}
+
+{if gt sizeof $controlpanelSmileSets 1}
+<h1>{tr "cp.smilies set"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.smilies set~"}
+</div>
+<div class="box">
+<select name="SmileSet">
+{foreach $d in $controlpanelSmileSets}
+	<option value="{$d.name}" {form_selected_if $d.selected}>{$d.title}</option>
+{endforeach}
+</select>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+{endif}{-- gt sizeof $controlpanelSmileSets 1}
+
+<h1>{tr "cp.board appearance.general"}</h1>
+
+<div class="page_content">
+<div class="option first">
+{set $fieldname "LoginTop"}
+{set $fieldvalue $controlpanelLoginTop}
+{set $fieldlabel "cp.login top"}
+{set $fielddesc "cp.login top~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "ShowOnlineUsers"}
+{set $fieldvalue $controlpanelShowOnlineUsers}
+{set $fieldlabel "cp.show online users"}
+{set $fielddesc "cp.show online users~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "FootDbTime"}
+{set $fieldvalue $controlpanelFootDbTime}
+{set $fieldlabel "cp.foot db time"}
+{set $fielddesc "cp.foot db time~"}
+{include "cp_box_check.html"}
+
+<div class="box">
+{tr "cp.gzip"}:
+<select name="GZip">
+	<option value="off" {form_selected_if eq $controlpanelGZip "off"}>{tr "cp.gzip.off"}</option>
+	<option value="on" {form_selected_if eq $controlpanelGZip "on"}>{tr "cp.gzip.on"}</option>
+	<option value="auto" {form_selected_if eq $controlpanelGZip "auto"}>{tr "cp.gzip.auto"}</option>
+</select>
+</div>
+<div class="box small indent">
+{tr "cp.gzip~"}
+</div>
+
+{set $fieldname "ModRewriteUrls"}
+{set $fieldvalue $controlpanelModRewriteUrls}
+{set $fieldlabel "cp.mod_rewrite urls"}
+{set $fielddesc "cp.mod_rewrite urls~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "ShowGotoForum"}
+{set $fieldvalue $controlpanelShowGotoForum}
+{set $fieldlabel "cp.show goto forum"}
+{set $fielddesc "cp.show goto forum~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "ShowSearchForum"}
+{set $fieldvalue $controlpanelShowSearchForum}
+{set $fieldlabel "cp.show search forum"}
+{set $fielddesc "cp.show search forum~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "EnableTraceUsers"}
+{set $fieldvalue $controlpanelEnableTraceUsers}
+{set $fieldlabel "cp.enable trace users"}
+{set $fielddesc "cp.enable trace users~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "PostPreviewSendButton"}
+{set $fieldvalue $controlpanelPostPreviewSendButton}
+{set $fieldlabel "cp.post preview send button"}
+{set $fielddesc "cp.post preview send button~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "ShowLastVisitTime"}
+{set $fieldvalue $controlpanelShowLastVisitTime}
+{set $fieldlabel "cp.show last visit time"}
+{set $fielddesc "cp.show last visit time~"}
+{include "cp_box_check.html"}
+
+<div class="box">
+{tr "cp.forum tree style"}:
+<select name="ForumsTreeStyle">
+{foreach $l in $controlpanelForumsTreeStyles}
+	<option value="{$l.name}" {form_selected_if $l.selected}>
+		{$l.title}
+	</option>
+{endforeach}
+</select>
+</div>
+<div class="box small indent">
+{tr "cp.forum tree style~"}
+</div>
+
+{set $fieldname "DisplayForumLastpostRe"}
+{set $fieldvalue $controlpanelDisplayForumLastpostRe}
+{set $fieldlabel "cp.display forum lastpost re"}
+{set $fielddesc "cp.display forum lastpost re~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "ShowBirthdays"}
+{set $fieldvalue $controlpanelShowBirthdays}
+{set $fieldlabel "cp.show birthdays"}
+{set $fielddesc "cp.show birthdays~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "DisableSearchHighlighting"}
+{set $fieldvalue $controlpanelDisableSearchHighlighting}
+{set $fieldlabel "cp.disable search highlighting"}
+{set $fielddesc "cp.disable search highlighting~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "ShowForumRssLink"}
+{set $fieldvalue $controlpanelShowForumRssLink}
+{set $fieldlabel "cp.show forum rss link"}
+{set $fielddesc "cp.show forum rss link~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "LocationLink"}
+{set $fieldvalue $controlpanelLocationLink}
+{set $fieldlabel "cp.location link"}
+{set $fielddesc "cp.location link~"}
+{set $fieldsize 40}
+{set $fieldlength 200}
+{include "cp_box_text.html"}
+
+<div class="box small">
+{tr "cp.per page~"}
+</div>
+<div class="box">
+<table cellspacing="0" cellpadding="0" style="width: 100%;">
+<tr>
+	<td class="leftcol">{tr "cp.threads per page"}:</td>
+	<td><input type="text" name="ThreadsPerPage" value="{$controlpanelThreadsPerPage}" size="10" maxlength="10" style="width: 100px;" /></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.posts per page"}:</td>
+	<td><input type="text" name="PostsPerPage" value="{$controlpanelPostsPerPage}" size="10" maxlength="10" style="width: 100px;" /></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.users per page"}:</td>
+	<td><input type="text" name="UsersPerPage" value="{$controlpanelUsersPerPage}" size="10" maxlength="10" style="width: 100px;" /></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.hot threads posts"}:</td>
+	<td><input type="text" name="HotThreadsPosts" value="{$controlpanelHotThreadsPosts}" size="10" maxlength="10" style="width: 100px;" /></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.hot threads views"}:</td>
+	<td><input type="text" name="HotThreadsViews" value="{$controlpanelHotThreadsViews}" size="10" maxlength="10" style="width: 100px;" /></td>
+</tr>
+</table>
+</div>
+
+{set $fieldname "ExtraNames"}
+{set $fieldvalue $controlpanelExtraNames}
+{set $fieldlabel "cp.extra names"}
+{set $fielddesc "cp.extra names~"}
+{set $fieldsize 40}
+{set $fieldlength 200}
+{include "cp_box_text.html"}
+
+<div class="box small indent">
+{trnum "cp.extra names.n db cols" $controlpanelExtraCount "n" $controlpanelExtraCount}
+</div>
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.board appearance.posts"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+{set $fieldname "NewTopicLinkInThread"}
+{set $fieldvalue $controlpanelNewTopicLinkInThread}
+{set $fieldlabel "cp.new topic link in thread"}
+{set $fielddesc "cp.new topic link in thread~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "PostShowTextlength"}
+{set $fieldvalue $controlpanelPostShowTextlength}
+{set $fieldlabel "cp.post show textlength"}
+{set $fielddesc "cp.post show textlength~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "PostAttachInlineMaxsize"}
+{set $fieldvalue $controlpanelPostAttachInlineMaxsize}
+{set $fieldlabel "cp.post attach inline maxsize"}
+{set $fieldunit "cp.post attach inline maxsize.unit"}
+{set $fielddesc "cp.post attach inline maxsize~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "PostAttachInlineMaxwidth"}
+{set $fieldvalue $controlpanelPostAttachInlineMaxwidth}
+{set $fieldlabel "cp.post attach inline maxwidth"}
+{set $fieldunit "cp.post attach inline maxwidth.unit"}
+{set $fielddesc "cp.post attach inline maxwidth~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "PostAttachInlineMaxheight"}
+{set $fieldvalue $controlpanelPostAttachInlineMaxheight}
+{set $fieldlabel "cp.post attach inline maxheight"}
+{set $fieldunit "cp.post attach inline maxheight.unit"}
+{set $fielddesc "cp.post attach inline maxheight~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "MaxPollOptions"}
+{set $fieldvalue $controlpanelMaxPollOptions}
+{set $fieldlabel "cp.max poll options"}
+{set $fieldunit "cp.max poll options.unit"}
+{set $fielddesc "cp.max poll options~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.board appearance.threads forums"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+{set $fieldname "OwnPostsInThreadlist"}
+{set $fieldvalue $controlpanelOwnPostsInThreadlist}
+{set $fieldlabel "cp.own posts in threadlist"}
+{set $fielddesc "cp.own posts in threadlist~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "ShowBookmarkedThread"}
+{set $fieldvalue $controlpanelShowBookmarkedThread}
+{set $fieldlabel "cp.show bookmarked thread"}
+{set $fielddesc "cp.show bookmarked thread~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "DisplayThreadStartdate"}
+{set $fieldvalue $controlpanelDisplayThreadStartdate}
+{set $fieldlabel "cp.display thread startdate"}
+{set $fielddesc "cp.display thread startdate~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "AdvancedThreadCounter"}
+{set $fieldvalue $controlpanelAdvancedThreadCounter}
+{set $fieldlabel "cp.advanced thread counter"}
+{set $fielddesc "cp.advanced thread counter~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "CountThreadViews"}
+{set $fieldvalue $controlpanelCountThreadViews}
+{set $fieldlabel "cp.count thread views"}
+{set $fielddesc "cp.count thread views~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "DisplayThreadLastposter"}
+{set $fieldvalue $controlpanelDisplayThreadLastposter}
+{set $fieldlabel "cp.display thread lastposter"}
+{set $fielddesc "cp.display thread lastposter~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "CountForumThreadsPosts"}
+{set $fieldvalue $controlpanelCountForumThreadsPosts}
+{set $fieldlabel "cp.count forum threads posts"}
+{set $fielddesc "cp.count forum threads posts~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "DisplayForumLastpost"}
+{set $fieldvalue $controlpanelDisplayForumLastpost}
+{set $fieldlabel "cp.display forum lastpost"}
+{set $fielddesc "cp.display forum lastpost~"}
+{include "cp_box_check.html"}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.board appearance.users"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+{set $fieldname "UlistRegdate"}
+{set $fieldvalue $controlpanelUlistRegdate}
+{set $fieldlabel "cp.ulist regdate"}
+{set $fielddesc "cp.ulist regdate~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "UlistLocation"}
+{set $fieldvalue $controlpanelUlistLocation}
+{set $fieldlabel "cp.ulist location"}
+{set $fielddesc "cp.ulist location~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "UlistPosts"}
+{set $fieldvalue $controlpanelUlistPosts}
+{set $fieldlabel "cp.ulist posts"}
+{set $fielddesc "cp.ulist posts~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "UlistLastpost"}
+{set $fieldvalue $controlpanelUlistLastpost}
+{set $fieldlabel "cp.ulist lastpost"}
+{set $fielddesc "cp.ulist lastpost~"}
+{include "cp_box_check.html"}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.board appearance.timings"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+{set $fieldname "PollCurrentDays"}
+{set $fieldvalue $controlpanelPollCurrentDays}
+{set $fieldlabel "cp.poll current days"}
+{set $fieldunit "cp.poll current days.unit"}
+{set $fielddesc "cp.poll current days~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "QuoteWithDate"}
+{set $fieldvalue $controlpanelQuoteWithDate}
+{set $fieldlabel "cp.quote with date"}
+{set $fieldunit "cp.quote with date.unit"}
+{set $fielddesc "cp.quote with date~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "NoEditNoteGraceTime"}
+{set $fieldvalue $controlpanelNoEditNoteGraceTime}
+{set $fieldlabel "cp.no edit note grace time"}
+{set $fieldunit "cp.no edit note grace time.unit"}
+{set $fielddesc "cp.no edit note grace time~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "MovedThreadNoteTimeout"}
+{set $fieldvalue $controlpanelMovedThreadNoteTimeout}
+{set $fieldlabel "cp.moved thread note timeout"}
+{set $fieldunit "cp.moved thread note timeout.unit"}
+{set $fielddesc "cp.moved thread note timeout~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "OnlineUsersReloadInterval"}
+{set $fieldvalue $controlpanelOnlineUsersReloadInterval}
+{set $fieldlabel "cp.online users reload interval"}
+{set $fieldunit "cp.online users reload interval.unit"}
+{set $fielddesc "cp.online users reload interval~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+{set $fieldname "UserOnlineTimeout"}
+{set $fieldvalue $controlpanelUserOnlineTimeout}
+{set $fieldlabel "cp.user online timeout"}
+{set $fieldunit "cp.user online timeout.unit"}
+{set $fielddesc "cp.user online timeout~"}
+{set $fieldsize 10}
+{set $fieldlength 10}
+{include "cp_box_text.html"}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

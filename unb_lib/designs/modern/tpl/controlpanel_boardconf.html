@@ -1,0 +1,213 @@
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="boardconf" />
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "cp.category.board settings"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<h2>{tr "cp.forum title"}</h2>
+<div class="box small">
+{tr "cp.forum title~"}
+</div>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="ForumTitle" value="{$controlpanelForumTitle}" size="40" maxlength="100" /></div>
+</div>
+
+<h2>{tr "cp.home url"}</h2>
+<div class="box small">
+{tr "cp.home url~"}
+</div>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="HomeURL" value="{$controlpanelHomeURL}" size="40" maxlength="200" /></div>
+</div>
+
+<h2>{tr "cp.parent url"}</h2>
+<div class="box small">
+{tr "cp.parent url~"}
+</div>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="ParentURL" value="{$controlpanelParentURL}" size="40" maxlength="200" /></div>
+</div>
+
+<h2>{tr "cp.toplogo url"}</h2>
+<div class="box small">
+{tr "cp.toplogo url~"}
+</div>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="ToplogoURL" value="{$controlpanelToplogoURL}" size="40" maxlength="200" /></div>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.database connection"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box">
+<table cellspacing="0" cellpadding="0" style="width: 100%;">
+<tr>
+	<td class="leftcol">{tr "cp.db server"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="DbServer" value="{$controlpanelDbServer}" size="40" maxlength="100" /></div></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.db user"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="DbUser" value="{$controlpanelDbUser}" size="40" maxlength="100" /></div></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.db pass"}:</td>
+	<td><div class="outerTextfield100pc"><input type="password" name="DbPass" value="{$controlpanelDbPass}" size="40" maxlength="100" /></div></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.db name"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="DbName" value="{$controlpanelDbName}" size="40" maxlength="100" /></div></td>
+</tr>
+<tr>
+	<td class="leftcol topalign">{tr "cp.db prefix"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="DbPrefix" value="{$controlpanelDbPrefix}" size="40" maxlength="100" /></div>
+	<small>{tr "cp.db prefix~"}</small>
+	</td>
+</tr>
+</table>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.smtp settings"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box">
+<table cellspacing="0" cellpadding="0" style="width: 100%;">
+<tr id="smtp_server">
+	<td class="leftcol">{tr "cp.smtp server"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="SmtpServer" value="{$controlpanelSmtpServer}" size="40" maxlength="100" /></div></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.smtp sender"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="SmtpSender" value="{$controlpanelSmtpSender}" size="40" maxlength="100" /></div></td>
+</tr>
+<tr id="smtp_user">
+	<td class="leftcol">{tr "cp.smtp user"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="SmtpUser" value="{$controlpanelSmtpUser}" size="40" maxlength="100" /></div></td>
+</tr>
+<tr id="smtp_pass">
+	<td class="leftcol">{tr "cp.smtp pass"}:</td>
+	<td><div class="outerTextfield100pc"><input type="password" name="SmtpPass" value="{$controlpanelSmtpPass}" size="40" maxlength="100" /></div></td>
+</tr>
+</table>
+</div>
+
+<div class="box">
+<input type="hidden" name="SetUsePHPMail" value="1" />
+<label><input type="checkbox" name="UsePHPMail" value="1" {form_checked_if $controlpanelUsePHPMail} onclick="toggleVisId('smtp_server', !this.checked); toggleVisId('smtp_user', !this.checked); toggleVisId('smtp_pass', !this.checked)" />{tr "cp.use php mail"}</label>
+</div>
+<div class="box small indent">
+{tr "cp.use php mail~"}
+</div>
+{if $controlpanelUsePHPMail}{html_hide_id "smtp_server"}{html_hide_id "smtp_user"}{html_hide_id "smtp_pass"}{endif}
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.jabber settings"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box">
+<input type="hidden" name="SetEnableJabber" value="1" />
+<label><input type="checkbox" name="EnableJabber" value="1" {form_checked_if $controlpanelEnableJabber} onclick="toggleVisId('jabber_data_table', this.checked)" />{tr "cp.enable jabber"}</label>
+</div>
+
+<div class="box" id="jabber_data_table">
+<table cellspacing="0" cellpadding="0" style="width: 100%;">
+<tr>
+	<td class="leftcol topalign">{tr "cp.jabber server"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="JabberServer" value="{$controlpanelJabberServer}" size="40" maxlength="100" /></div>
+		<small>{tr "cp.jabber server~"}</small></td>
+</tr>
+<tr>
+	<td class="leftcol topalign">{tr "cp.jabber user"}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="JabberUser" value="{$controlpanelJabberUser}" size="40" maxlength="100" /></div>
+		<small>{tr "cp.jabber user~"}</small></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.jabber pass"}:</td>
+	<td><div class="outerTextfield100pc"><input type="password" name="JabberPass" value="{$controlpanelJabberPass}" size="40" maxlength="100" /></div></td>
+</tr>
+</table>
+</div>
+{if not $controlpanelEnableJabber}{html_hide_id "jabber_data_table"}{endif}
+</div><!-- option -->
+</div><!-- page_content -->
+
+{if gt sizeof $controlpanelLangs 1}
+<h1>{tr "language"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.board language~"}
+</div>
+<div class="box">
+<select name="Language">
+{foreach $l in $controlpanelLangs}
+	<option value="{$l.name}" {form_selected_if $l.selected} style="clear: right;">
+		{if $l.img}<img src="{$l.img}" alt="" style="float: right; margin-top: 1px;" />{endif}
+		{$l.title} {if $l.name}<small>({$l.name})</small>{endif}
+	</option>
+{endforeach}
+</select>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+{endif}{-- gt sizeof $controlpanelLangs 1}
+
+<h1>{tr "cp.date and time"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<h2>{tr "cp.timezone"}</h2>
+<div class="box small">
+{tr "cp.board timezone~"}
+</div>
+<div class="box">
+<select name="Timezone">
+{foreach $t in $controlpanelTimezones}
+	<option value="{$t.name}" {form_selected_if $t.selected}>
+		{$t.title}
+		{if tr concat "cp.timezone." $t.name}<small>{tr concat "cp.timezone." $t.name}</small>{endif}
+	</option>
+{endforeach}
+</select>
+</div>
+<div class="box">
+<input type="hidden" name="SetTimezoneDS" value="1" />
+<label><input type="checkbox" name="TimezoneDS" value="1" {form_checked_if $controlpanelTimezoneDS} />{tr "cp.use dst"}</label>
+</div>
+<div class="box small indent">
+{tr "cp.use dst~"}
+</div>
+<!--div class="box">
+<label><input type="checkbox" name="" value="1" {form_checked_if $controlpanelTimezoneDSForce} />{tr "cp.force dst"}</label>
+</div>
+<div class="box small indent">
+{tr "cp.force dst~"}
+</div-->
+<div class="box">
+{tr "cp.current time"}: {$controlpanelDateFormatPreview} (UTC {$controlpanelDateFormatTZ})
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

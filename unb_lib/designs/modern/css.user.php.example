@@ -1,0 +1,190 @@
+/* Put your custom CSS definition changes here. */
+
+/* ------------------------------------------------------------ */
+/* full browser width display                                   */
+/* ------------------------------------------------------------ */
+body
+{
+<?php if ($ie || $opera) { ?>
+	width: 97%;
+<?php } else { ?>
+	width: inherit;
+<?php } ?>
+	max-width: inherit;
+	margin: 12px;
+}
+
+/* ------------------------------------------------------------ */
+/* darker head area                                             */
+/* ------------------------------------------------------------ */
+.head_logo
+{
+	margin-top: -12px;
+	margin-left: -12px;
+	margin-right: -12px;
+	padding-top: 8px;
+	padding-left: 12px;
+	padding-right: 12px;
+<?php if ($ie) { ?>
+	background: #EEEEEE;
+<?php } else { ?>
+	background: url(<?php echo $ImgPath ?>shade_bk9.png);
+<?php } ?>
+}
+ul.head_navigation,
+.head_logincontrol
+{
+	margin-left: -12px;
+	margin-right: -12px;
+	padding-left: 12px;
+	padding-right: 12px;
+<?php if ($ie) { ?>
+	background: #EEEEEE;
+<?php } else { ?>
+	background: url(<?php echo $ImgPath ?>shade_bk9.png);
+<?php } ?>
+}
+ul.head_navigation li a
+{
+<?php if ($ie) { ?>
+	background: #DDDDDD;
+<?php } else { ?>
+	background: url(<?php echo $ImgPath ?>navlink_back_wh15.png) bottom repeat-x;
+<?php } ?>
+}
+ul.head_navigation li.active a,
+ul.head_navigation li a:hover,
+ul.head_navigation li a:active,
+ul.head_navigation li a:focus
+{
+	/*background: #FFFFFF url(../img/back_hlines.png);*/
+	background: #FFFFFF url(../img/back_paper.jpg);
+	/* WARNING: if used together with another page background, also update that background here! */
+}
+
+/* ------------------------------------------------------------ */
+/* allow full-window horizontal scrolling on too long lines     */
+/* ------------------------------------------------------------ */
+.all_posts_container
+{
+	overflow: visible;
+}
+
+/* ------------------------------------------------------------ */
+/* allow per-post horizontal scrolling on too long lines        */
+/* ------------------------------------------------------------ */
+.post_body
+{
+	width: 100%;
+	/* WARNING: this may disable floating of the post text around avatar images! */
+	overflow: auto;
+}
+
+/* ------------------------------------------------------------ */
+/* change page background                                       */
+/* ------------------------------------------------------------ */
+html
+{
+	/*
+	background: #FFFFFF url(../img/back_hlines.png);
+	background: #FFFFFF url(../img/back_marble.jpg);
+	background: #FFFFFF url(../img/back_paper.jpg);
+	background: #FFFFFF url(../img/back_plaster.jpg);
+	background: #FFFFFF url(../img/back_sandstone.gif);
+	*/
+	background: #FFFFFF url(../img/back_paper.jpg);
+	/* WARNING: if used together with darker head area, also update this background there! */
+}
+ul.head_navigation li.active a,
+ul.head_navigation li a:active,
+ul.head_navigation li a:focus
+{
+	border-bottom: solid 1px #F5F5F5;   /* should be average colour of background image */
+}
+
+/* ------------------------------------------------------------ */
+/* set lighter background for all shadowed containers           */
+/* (good for darker or high contrast page background images)    */
+/* ------------------------------------------------------------ */
+.announcement_container,
+.advanced_options_container,
+div.categories_container,
+.page_container,
+.forum_container,
+.post_container,
+.poll_container,
+.reply_container,
+.editor_container,
+.search_container,
+.stat_container,
+.thread_container,
+.users_container
+{
+	background: url(../img/shade_wh50.png);
+}
+
+/* ------------------------------------------------------------ */
+/* this can be enabled for small page fonts                     */
+/* ------------------------------------------------------------ */
+ul.head_navigation li a span.backimage
+{
+	/*padding: 2px 0 2px;*/
+}
+ul.head_navigation
+{
+	/*padding-bottom: 2px;*/
+}
+
+/* ------------------------------------------------------------ */
+/* underline or re-colour hyperlinks                            */
+/* ------------------------------------------------------------ */
+a
+{
+	color: #0051F6;
+	border-bottom: solid 1px #4D86FB;
+	/*text-decoration: underline;*/
+}
+a:hover,
+a:focus
+{
+	color: #FF9000;
+	/*border-bottom: solid 1px #4D86FB;*/
+	/*text-decoration: underline;*/
+}
+
+/* ------------------------------------------------------------ */
+/* change statictics and polls graphs height                    */
+/* (good for smaller page fonts)                                */
+/* ------------------------------------------------------------ */
+<?php
+$height = 17;   // default is 18
+?>
+.stat_graph
+{
+	height: <?php echo $height; ?>px;
+	margin-bottom: -<?php echo $height; ?>px;
+}
+.stat_multigraph
+{
+	height: <?php echo $height; ?>px;
+	margin-bottom: -<?php echo $height; ?>px;
+}
+.stat_subgraph1
+{
+	height: <?php echo $height; ?>px;
+	margin-bottom: -<?php echo $height - 1; ?>px;
+}
+.stat_subgraph2
+{
+	height: <?php echo $height; ?>px;
+	margin-bottom: -<?php echo $height; ?>px;
+}
+.poll_results
+{
+	line-height: <?php echo $height + 1; ?>px;
+}
+.poll_graph
+{
+	height: <?php echo $height; ?>px;
+	margin-bottom: -<?php echo $height + 1; ?>px;
+}

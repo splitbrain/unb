@@ -1,0 +1,19 @@
+{require-css "controlpanel"}
+{require-txt "controlpanel"}
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr $GenericTitle}</h1>
+
+{$GenericPreContent}
+
+<div class="page_content">
+{$GenericContent}
+</div><!-- page_content -->
+
+{$GenericPostContent}
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->

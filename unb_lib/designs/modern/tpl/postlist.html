@@ -1,0 +1,206 @@
+{require-css "post"}
+{require-js "posteditor"}
+{require-js "unicodetable"}
+{require-txt "posteditor"}
+
+{if not $postlistSimple}{-- NOT SIMPLE POSTS LISTING}
+	{if $warnHiddenThread}
+	<div class="p info">{tr "thread.advanced.hiding"}</div>
+	{endif}
+
+	{$path}
+
+	{include "announcelist.html"}
+
+	<a id="postlisttop"></a>
+	{if or or $postlistActionNewThread $postlistActionReply $postlistPages}
+		<div class="all_post_actions_top {if $searchTitle}searchresult{endif}">
+			{set $div ""}
+			{if $postlistActionNewThread}{$div}{$postlistActionNewThread}{set $div " &middot; "}{endif}
+			{if $postlistActionReply}{$div}{$postlistActionReply}{set $div " &middot; "}{endif}
+			{if $postlistPages}{$div}<img {$UNBImage.page} /> {$postlistPages}{set $div " &middot; "}{endif}
+		</div>
+	{endif}
+
+	{if $searchTitle}
+		<h1>{$searchTitle}</h1>
+	{endif}
+{else}
+	<a id="postlisttop"></a>
+{endif}{-- NOT SIMPLE POSTS LISTING}
+
+{if sizeof $postlist}
+	<div class="all_posts_container">
+	{foreach $post in $postlist}
+		{if $post.readLine}
+			<div class="post_readline">{tr "post.new posts"}</div>
+			<script type="text/javascript">UnbPostScrollUp(30);</script>
+
+			{if $post.editWarning}
+				<div class="p error"><div>{trnum "post.n previous edited" $post.editWarning "n" $post.editWarning}</div></div>
+				{set $ShadowBottomOffset 12}
+				{include "_shadow_bottom.html"}
+				<script type="text/javascript">UnbPostScrollUp(30);</script>
+			{endif}
+		{endif}
+
+		{include "post.html"}
+	{endforeach}
+	</div>
+	<a id="postlistbottom"></a>
+{endif}
+
+{if and (not $postlistSimple) (sizeof $postlist)}{-- NOT SIMPLE POSTS LISTING}
+	<!-- default reply container -->
+
+	{=beginjs}
+	var ALTCHARS_NOTE = "{tr "pe.alt chars~"}";
+	{=endjs}
+
+	<div id="reply_0_cont">
+	<div id="reply_form">
+
+	<div class="reply_container">
+	<div class="reply_form">
+	<form id="posteditor_form" action="{$posteditorFormLink}" method="post">
+	<input type="hidden" name="action" value="add" />
+	<input type="hidden" name="key" value="{$posteditorFormKey}" />
+	<input type="hidden" name="forum" value="{$posteditorForumId}" />
+	<input type="hidden" name="thread" value="{$posteditorThreadId}" />
+	<input type="hidden" name="replyto" id="reply_to_postid" value="0" />
+
+	<div class="reply_content">
+	<span class="reply_close_link"><a href="javascript:replyTo(0)">{tr "pe.close"}</a></span>
+	<span class="reply_close_link"><a href="javascript:resizeBoxId('reply_message', -80, true)">{tr "pe.smaller"}</a></span>
+	<span class="reply_close_link"><a href="javascript:resizeBoxId('reply_message', +80, true)">{tr "pe.larger"}</a></span>
+	{tr "pe.quick reply to this post"}:<br />
+	<div class="outerTextarea100pc">
+	<textarea id="reply_message" class="reply_message" name="Msg" rows="10" cols="40" onkeydown="return UnbTextKeydownHandler(this)" onkeypress="return UnbCheckLength(this, {$posteditorMaxLength})" onkeyup="UnbCheckLength(this, {$posteditorMaxLength}); UnbTextKeyup(event, this)" onblur="return UnbCheckLength(this, {$posteditorMaxLength})" onfocus="UnbCheckLength(this, 0)" {NextTabIndex}></textarea>
+	</div>
+	</div><!-- reply_content -->
+
+	{if $posteditorVericodeLink}
+	<div class="reply_controls">
+	{tr "vericode"}: <img src="{$posteditorVericodeLink}" alt="VeriCode" style="vertical-align: middle;" /> {tr "vericode~"} <input type="text" name="veriword" size="6" maxlength="6" {NextTabIndex} />
+	</div><!-- reply_controls -->
+	{endif}
+
+	<div class="reply_controls">
+	<!-- no space between buttons -->
+	<input type="submit" class="defaultbutton" name="save" id="savebutton" value="{tr "post.do reply"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip-ext"}" onclick="disableObj('savebutton');" {NextTabIndex}
+	/><input type="submit" name="preview" id="previewbutton" value="{tr "preview"}" accesskey="{tr "previewbutton.accesskey"}" title="{tr "previewbutton.tip"}" {NextTabIndex} />
+
+	<input type="button" value="{tr "pe.format.bold"}" style="font-weight: bold;" title="{tr "pe.format.bold.tip"}" onclick="UnbEditorDoCmd(event, 'bold');"
+	/><input type="button" value="{tr "pe.format.italic"}" style="font-style: italic;" title="{tr "pe.format.italic.tip"}" onclick="UnbEditorDoCmd(event, 'italic');"
+	/><input type="button" value="{tr "pe.format.underline"}" style="text-decoration: underline;" title="{tr "pe.format.underline.tip"}" onclick="UnbEditorDoCmd(event, 'underline');"
+	/><input type="button" value="{tr "pe.format.linethrough"}" style="text-decoration: line-through;" title="{tr "pe.format.linethrough.tip"}" onclick="UnbEditorDoCmd(event, 'strike');"
+	/><input type="button" value="{tr "pe.format.monospace"}" style="font-family: monospace;" title="{tr "pe.format.monospace.tip"}" onclick="UnbEditorDoCmd(event, 'mono');"
+	/>
+	<input type="button" value="{tr "pe.format.quote"}" title="{tr "pe.format.quote.tip"}" onclick="UnbEditorDoCmd(event, 'quote');"
+	/><input type="button" value="{tr "pe.format.link"}" title="{tr "pe.format.link.tip"}" onclick="UnbEditorDoCmd(event, 'url');"
+	/>
+	<input type="button" value="" class="colourbutton" style="width: 13px; background-color: crimson;" title="{tr "pe.colour.red"}" onclick="UnbEditorDoCmd(event, 'color', 'crimson');"
+	/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: orange;" title="{tr "pe.colour.orange"}" onclick="UnbEditorDoCmd(event, 'color', 'orange');"
+	/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: limegreen;" title="{tr "pe.colour.green"}" onclick="UnbEditorDoCmd(event, 'color', 'limegreen');"
+	/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: deepskyblue;" title="{tr "pe.colour.lightblue"}" onclick="UnbEditorDoCmd(event, 'color', 'deepskyblue');"
+	/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: blue;" title="{tr "pe.colour.blue"}" onclick="UnbEditorDoCmd(event, 'color', 'blue');"
+	/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: darkviolet;" title="{tr "pe.colour.violet"}" onclick="UnbEditorDoCmd(event, 'color', 'darkviolet');"
+	/><input type="button" value="" class="colourbutton" style="width: 13px; background-color: gray;" title="{tr "pe.colour.grey"}" onclick="UnbEditorDoCmd(event, 'color', 'gray');"
+	/>
+
+	{if $posteditorSmilies}<input type="button" id="reply_button1" value="{tr "pe.button.smilies"}" onclick="toggleVisId('reply_smilies', SelectButton(this))"
+	/>{endif}<input type="button" id="reply_button2" value="{tr "special chars"}" onclick="toggleVisId('reply_specialchars', SelectButton(this))" />
+	</div><!-- reply_controls -->
+
+	{if $posteditorSmilies}
+	<div id="reply_smilies" class="reply_controls">
+	{tr "pe.button.smilies"}:
+	{foreach $smilie in $posteditorSmilies}
+	<span class="smiliebutton" onclick="UnbInsertText(' {$smilie.codeJs} ');" title="{$smilie.code}">{$smilie.image}</span>
+	{endforeach}
+	</div><!-- reply_controls -->
+	<script type="text/javascript">toggleVisId('reply_smilies', 0);</script>
+	{endif}
+
+	<div id="reply_specialchars" class="reply_controls">
+	{tr "special chars"}:
+	<span id="altchars"></span>
+	</div><!-- reply_controls -->
+	<script type="text/javascript">toggleVisId('reply_specialchars', 0);</script>
+
+	<script type="text/javascript">//<![CDATA[
+	var textbox = getel("reply_message");
+	function myCtrlEnter(e)
+	{{
+		if (getel("savebutton").disabled) return;
+		disableObj("savebutton");
+		getel("posteditor_form").submit();
+	}
+	UnbGlobalRegisterKeyHandler(13, 0, 2, myCtrlEnter);
+	UnbShowChars("");
+	//]]></script>
+
+	</form>
+	</div><!-- reply_form -->
+	</div><!-- reply_container -->
+	{set $ShadowBottomOffset 6}
+	{include "_shadow_bottom.html"}
+
+	</div><!-- #reply_form -->
+	</div><!-- #reply_0_cont -->
+
+	<script type="text/javascript">toggleReplyCont(0, 0);</script>
+{endif}{-- NOT SIMPLE POSTS LISTING, for reply container}
+
+{if not $postlistSimple}{-- NOT SIMPLE POSTS LISTING}
+	{if $postlistEditWarning}
+	<div class="p error"><div>{trnum "post.n previous edited" $postlistEditWarning "n" $postlistEditWarning}</div></div>
+	{set $ShadowBottomOffset 12}
+	{include "_shadow_bottom.html"}
+	{endif}
+
+	{if or or or $postlistActionNewThread $postlistActionReply $postlistActionAdvanced $postlistPages}
+		<div class="all_post_actions_bottom">
+			{set $div ""}
+			{if $postlistActionAdvanced}
+				{$div}<a href="javascript:nothing()" onclick="setImageId('advanced_link_img_posts', toggleVisIdScroll('advanced_options_posts') == 1, '{imgurl}arrow_down.png', '{imgurl}arrow_right.png')"><img {$UNBImage.arrow_down} id="advanced_link_img_posts" />  {tr "advanced options"}</a>
+				{set $div " &middot; "}
+			{endif}
+			{if $postlistActionNewThread}{$div}{$postlistActionNewThread}{set $div " &middot; "}{endif}
+			{if $postlistActionReply}{$div}{$postlistActionReply}{set $div " &middot; "}{endif}
+			{if $postlistPages}{$div}<img {$UNBImage.page} /> {$postlistPages}{set $div " &middot; "}{endif}
+		</div>
+	{endif}
+
+	<a id="bottom"></a>
+
+	{if $postlistActionAdvanced}
+		<div id="advanced_options_posts" class="p">
+		<h1>{tr "thread.advanced options"}</h1>
+		<div class="advanced_options_container">
+		<div class="advanced_options_content">
+		{if sizeof $postlistAdvanced}
+			{foreach $option in $postlistAdvanced}
+				<div class="advanced_option{if $option.newgroup} new_group{endif}">
+					{$option.option}
+					{if $option.subtitle}<div class="advanced_subtitle">{$option.subtitle}</div>{endif}
+				</div>
+			{endforeach}
+		{endif}
+
+		{--<div class="advanced_option new_group">
+			<a href="javascript:nothing()" onclick="toggleLineNos();">{tr "post.show/hide code line numbers"}{--</a>
+		</div>}
+		</div><!-- advanced_options_content -->
+		</div><!-- advanced_options_container -->
+		{set $ShadowBottomOffset 0}
+		{include "_shadow_bottom.html"}
+		</div>
+
+		<script type="text/javascript">//<![CDATA[
+		toggleVisId("advanced_options_posts", false);
+		setImageId("advanced_link_img_posts", true, "{imgurl}arrow_right.png");
+		//]]></script>
+	{endif}
+
+{endif}{-- NOT SIMPLE POSTS LISTING}

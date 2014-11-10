@@ -1,0 +1,231 @@
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="account" />
+
+<div class="page_outer_container">
+<div class="page_container">
+<h1>{tr "cp.account and profile"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<h2>{tr "username"}</h2>
+<div class="box small">
+{tr "cp.username~"}
+{if not $controlpanelUsernameEdit} {tr "cp.username~noedit"}{endif}
+</div>
+<div class="box">
+{if $controlpanelUsernameEdit}
+<div class="outerTextfield100pc"><input type="text" name="Username" value="{$controlpanelUsernameInput}" size="40" maxlength="40" /></div>
+{else}
+{$controlpanelUsername}
+{endif}
+</div>
+</div><!-- option -->
+
+<div class="option">
+<h2>{tr "group memberships"}</h2>
+<div class="box small">
+{tr "cp.groups~"}
+</div>
+<div class="box">
+{if $controlpanelSetGroups}
+<input type="hidden" name="SetUserGroups" value="1" />
+<div style="max-height: 200px; overflow: auto;">
+{foreach $controlpanelGroups}
+<div style="white-space: nowrap;"><label><input type="checkbox" name="UserGroup{$id}" value="1" {form_checked_if $select} />{$name}</label></div>
+{endforeach}
+</div>
+{else}{-- not $controlpanelSetGroups}
+{if $controlpanelGroups}
+{$controlpanelGroups}
+{else}
+({tr "none"})
+{endif}
+{if $controlpanelPublicGroups}
+</div>
+<div class="box">
+{tr "public groups"}:
+<input type="hidden" name="SetPublicGroups" value="1" />
+<div style="max-height: 200px; overflow: auto;">
+{foreach $controlpanelPublicGroups}
+<div style="white-space: nowrap;"><label><input type="checkbox" name="UserGroup{$id}" value="1" {form_checked_if $select} />{$name}</label></div>
+{endforeach}
+</div>
+{endif}{-- $controlpanelPublicGroups}
+{endif}{-- $controlpanelSetGroups}
+</div>
+</div><!-- option -->
+
+<div class="option">
+<h2>{tr "e-mail address"}</h2>
+<div class="box small">
+{tr "cp.e-mail~"}
+{if not $controlpanelIsAdmin} {tr "cp.e-mail~need password"}{endif}
+</div>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="EMail" value="{$controlpanelEMailInput}" size="40" maxlength="100" /></div>
+{--if $controlpanelIsAdmin}
+	<div class="box small">
+	{tr "cp.validated e-mail~"}
+	</div>
+	<div class="box">
+	{$controlpanelValidatedEMail}
+	</div>
+{--endif}
+</div>
+</div><!-- option -->
+
+<div class="option">
+<h2>{tr "password"}</h2>
+<div class="box small">
+{tr "cp.password~"}
+{if not $controlpanelIsAdmin} {tr "cp.password~need password"}{endif}
+</div>
+<div class="box">
+<table cellspacing="0" cellpadding="0" style="width: 100%;">
+{if not $controlpanelIsAdmin}
+<tr>
+	<td class="leftcol">{tr "cp.current password"}:</td>
+	<td><div class="outerTextfield100pc"><input type="password" name="CurrentPassword" value="" size="40" maxlength="40" /></div></td>
+</tr>
+{endif}
+<tr>
+	<td class="leftcol">{tr "cp.new password"}:</td>
+	<td><div class="outerTextfield100pc"><input type="password" name="NewPassword" value="" size="40" maxlength="40" /></div></td>
+</tr>
+<tr>
+	<td class="leftcol">{tr "cp.repeat new password"}:</td>
+	<td><div class="outerTextfield100pc"><input type="password" name="NewPasswordCfm" value="" size="40" maxlength="40" /></div></td>
+</tr>
+</table>
+</div>
+</div><!-- option -->
+
+<div class="option">
+<h2>{tr "user title"}</h2>
+<div class="box small">
+{tr "cp.user title~"}
+</div>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="Title" value="{$controlpanelTitleInput}" size="40" maxlength="40" /></div>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.contact info"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.contact info~"}
+</div>
+<div class="box">
+<input type="hidden" name="SetVCard" value="1" />
+<table cellspacing="0" cellpadding="0" style="width: 100%;">
+{foreach $c in $controlpanelContacts}
+<tr>
+	<td class="leftcol">
+		<select name="VCardType{$c.num}">
+			<option value="">({tr "cp.contact.select"})</option>
+{foreach $type in $controlpanelContactTypes}
+			<option value="{$type.key}" {form_selected_if eq $c.type $type.key}>{$type.title}</option>
+{endforeach}
+		</select>
+	</td>
+	<td>
+		<div class="outerTextfield100pc"><input type="text" name="VCardData{$c.num}" value="{$c.data}" size="40" maxlength="150" /></div>
+	</td>
+</tr>
+{endforeach}
+<tr>
+	<td class="leftcol">
+		<select name="VCardType{add 1 sizeof $controlpanelContacts}">
+			<option value="" {form_selected_if true}>({tr "cp.contact.select"})</option>
+{foreach $type in $controlpanelContactTypes}
+			<option value="{$type.key}">{$type.title}</option>
+{endforeach}
+		</select>
+	</td>
+	<td>
+		<div class="outerTextfield100pc"><input type="text" name="VCardData{add 1 sizeof $controlpanelContacts}" value="" size="40" maxlength="150" /></div>
+	</td>
+</tr>
+</table>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.personal info"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<h2>{tr "gender"}</h2>
+<div class="box">
+<input type="hidden" name="SetGender" value="1" />
+<label><input type="radio" name="Gender" value="m" {form_checked_if eq $controlpanelGender "m"} />{tr "male"}</label>
+<label><input type="radio" name="Gender" value="f" {form_checked_if eq $controlpanelGender "f"} />{tr "female"}</label>
+<label><input type="radio" name="Gender" value="" {form_checked_if eq $controlpanelGender ""} />{tr "not specified"}</label>
+</div>
+</div><!-- option -->
+
+<div class="option">
+<h2>{tr "birthday"}</h2>
+<div class="box">
+{tr "cp.birthdate.day"}: <input type="text" name="BirthDay" value="{$controlpanelBirthDay}" size="2" maxlength="2" style="width: 2em;" />
+{tr "cp.birthdate.month"}: <select name="BirthMonth">
+{for $i 1 12}
+	<option value="{$i}" {form_selected_if eq $controlpanelBirthMonth $i}>{tr concat "longmonth" $i}</option>
+{endfor}
+</select>
+{tr "cp.birthdate.year"}: <input type="text" name="BirthYear" value="{$controlpanelBirthYear}" size="4" maxlength="4" style="width: 4em;" />
+</div>
+</div><!-- option -->
+
+<div class="option">
+<h2>{tr "location"}</h2>
+<div class="box">
+<div class="outerTextfield100pc"><input type="text" name="Location" value="{$controlpanelLocationInput}" size="40" maxlength="50" /></div>
+</div>
+</div><!-- option -->
+
+<div class="option">
+<h2>{tr "cp.description"}</h2>
+<div class="box small">
+{tr "cp.description~"}
+</div>
+<div class="box">
+<div class="outerTextarea100pc"><textarea name="Description" style="height: 100px;" rows="5" cols="40">{$controlpanelDescriptionInput}</textarea></div>
+</div>
+</div><!-- option -->
+
+</div><!-- page_content -->
+
+{if $controlpanelExtras}
+<h1>{tr "cp.additional info"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box">
+<table cellspacing="0" cellpadding="0" style="width: 100%;">
+{foreach $controlpanelExtras}
+<tr>
+	<td class="leftcol">{$name}:</td>
+	<td><div class="outerTextfield100pc"><input type="text" name="Extra{$num}" value="{$value}" size="40" maxlength="100" /></div></td>
+</tr>
+{endforeach}
+</table>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+{endif}{-- controlpanelExtras}
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

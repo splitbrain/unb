@@ -1,0 +1,76 @@
+<IfModule mod_expires.c>
+	# Enable image client-side cache
+	# (Your webserver may not support these directives)
+	#
+	ExpiresActive On
+	ExpiresByType image/gif "access plus 2 days"
+	ExpiresByType image/jpeg "access plus 2 days"
+	ExpiresByType image/png "access plus 2 days"
+</IfModule>
+
+DirectoryIndex forum.php
+
+<IfModule mod_rewrite.c>
+	# Enable short URLs
+	# (You need mod_rewrite for this, see FAQ section in the documentation)
+	#
+	RewriteEngine On
+	
+	# You may need to set your board's URL path here.
+	# (See http://httpd.apache.org/docs-2.0/mod/mod_rewrite.html#rewritebase )
+	#
+	#RewriteBase /
+	
+	# OLD declarations
+	RewriteRule ^0(;(.*))?$ forum.php?rewrite=$2 [L,QSA]
+	RewriteRule ^([0-9]+)(;(.*))?$ forum.php?req=thread&id=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^([0-9]+),(-?[0-9]+)(;(.*))?$ forum.php?req=thread&id=$1&page=$2&rewrite=$4 [L,QSA]
+	RewriteRule ^f\.([0-9]+)(;(.*))?$ forum.php?req=main&id=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^t\.([0-9]+)(;(.*))?$ forum.php?req=thread&id=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^p\.([0-9]+)(;(.*))?$ forum.php?req=thread&postid=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^u\.([0-9]+)(;(.*))?$ forum.php?req=cp&id=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^s\.(.*) forum.php?req=search&InSubject=1&InMessage=1&Query=$1 [L,QSA]
+	# End OLD declarations
+
+	RewriteRule ^forum/([0-9]+)[^;]*(;(.*))?$ forum.php?req=main&id=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^thread/([0-9]+),(-?[0-9]+)[^;/]*(;(.*))?$ forum.php?req=thread&id=$1&page=$2&rewrite=$4 [L,QSA]
+	RewriteRule ^thread/([0-9]+)[^;/]*(;(.*))?$ forum.php?req=thread&id=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^post/([0-9]+)[^;]*(;(.*))?$ forum.php?req=thread&postid=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^user/([0-9]+)[^;]*(;(.*))?$ forum.php?req=cp&id=$1&rewrite=$3 [L,QSA]
+	RewriteRule ^search/(.*) forum.php?req=search&InSubject=1&InMessage=1&Query=$1 [L,QSA]
+	RewriteRule ^unread(;(.*))?$ forum.php?req=search&nodef=1&Special=unread&ResultView=1&rewrite=$2 [L,QSA]
+	RewriteRule ^new(;(.*))?$ forum.php?req=search&nodef=1&Special=new&ResultView=1&rewrite=$2 [L,QSA]
+	RewriteRule ^mytopics(;(.*))?$ forum.php?req=search&nodef=1&Special=mytopics&ResultView=1&rewrite=$2 [L,QSA]
+	RewriteRule ^cp(;(.*))?$ forum.php?req=cp&item=1&rewrite=$2 [L,QSA]
+	RewriteRule ^users(;(.*))?$ forum.php?req=users&rewrite=$2 [L,QSA]
+	RewriteRule ^search(;(.*))?$ forum.php?req=search&rewrite=$2 [L,QSA]
+	RewriteRule ^stat(;(.*))?$ forum.php?req=stat&rewrite=$2 [L,QSA]
+	RewriteRule ^forum(;(.*))?$ forum.php?req=main&rewrite=$2 [L,QSA]
+	
+	# Add custom short URLs here:
+	#RewriteRule ^custompage(;(.*))?$ forum.php?req=custompage&rewrite=$2 [L,QSA]
+
+	# Recognise mod_rewrite presence for the installer
+	#
+	RewriteCond %{REQUEST_METHOD} ^GET$
+	RewriteCond %{QUERY_STRING} ^$
+	RewriteRule ^install.php$ install.php?mod_rewrite=1 [QSA]
+
+	# Potential problem solution:
+	# If your Apache webserver has the "MultiViews" option enabled, it will not process these
+	# rewriting rules properly so you won't be able to visit some pages using short URLs.
+	# To solve this problem, you can either disable the MultiViews option or rename the file
+	# forum.php and all references to it (in this file and in in board.conf.php). Uncomment
+	# the following line to go the MultiViews way first:
+	#
+	#Options -MultiViews
+	#
+	# If this leads to an internal server error (500), undo this change and go for the other
+	# solution. Finally you can disable short URLs (not recommended though).
+</IfModule>
+
+# Don't allow access to the config file
+<Files board.conf.*>
+	Order allow,deny
+	Deny from all
+</Files>

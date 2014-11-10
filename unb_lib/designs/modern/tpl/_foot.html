@@ -1,0 +1,47 @@
+{UnbAdditionalPageRefs}{-- this is all css additions that are added later by other templates}
+
+{$footAddPreFootCode}
+
+{if or $footLoginControl $showFootline}
+<div class="foot_container">
+
+{if $footLoginControl}
+	<div class="foot_logincontrol">
+	{$footLoginControl}
+	</div>
+{endif}
+
+{if $showFootline}
+	<div class="foot_content">
+	<div>
+		This board is powered by the <a href="{$footVendorLink}">Unclassified NewsBoard</a> software,
+		{$footVersionNumber},
+		&copy; 2003-2011 by Yves Goergen
+	</div>
+
+	{if $footPageTimeCombined}
+		<div>
+			{tr "foot.time x" "x" $footPageTimeCombined} &middot;
+			{tr "foot.x queries in y" "x" $footPageQueries "y" $footPageQueriesTime}
+		</div>
+	{endif}
+
+	<div>
+		{tr "foot.current time"}: {$footCurrentTime} (UTC {$footTimezone})
+	</div>
+
+	{$footCustomText}
+
+	</div>
+{endif}{-- $showFootline}
+
+</div><!-- foot_container -->
+{endif}{-- or $footLoginControl $showFootline}
+
+{$footAddPostFootCode}
+{$footAddPostFootCodeSimple}
+
+{if $headHTML}
+</body>
+</html>
+{endif}

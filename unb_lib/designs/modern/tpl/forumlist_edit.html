@@ -1,0 +1,64 @@
+{require-css "forum"}
+
+<div class="forum_content forum_edit">
+	{if neq $forumlistAddID -1}
+		<input type="hidden" name="action" value="addforum" />
+		<input type="hidden" name="Parent" value="{$forumlistAddID}" />
+		{set $f ""}
+	{else}
+		<input type="hidden" name="action" value="editforum" />
+		<input type="hidden" name="ID" value="{$f.id}" />
+		<!-- input type="hidden" name="Parent" value="{$f.parentId}" / -->
+	{endif}
+
+	<table cellspacing="0" cellpadding="0" style="width: 100%;">
+	<tr>
+		<td class="leftcol">{if neq $forumlistAddID -1}{tr "new forum"}{else}{tr "forum name"}{endif}:</td>
+		<td><div class="outerTextfield100pc"><input type="text" name="Name" maxlength="100" value="{$f.formName}" /></div></td>
+	</tr>
+	<tr>
+		<td class="leftcol">{tr "description"}:</td>
+		<td><div class="outerTextfield100pc"><input type="text" name="Description" value="{$f.formDesc}" /></div></td>
+	</tr>
+	{if not $f.threadCount}{-- derived dependence from options checkbox below}
+	<tr id="link_url_row">
+		<td class="leftcol">{tr "link url"}:</td>
+		<td><div class="outerTextfield100pc"><input type="text" name="Link" maxlength="255" value="{$f.formLink}" /></div></td>
+	</tr>
+	{endif}
+	<tr>
+		<td class="leftcol">{tr "order"}:</td>
+		<td><input type="text" class="text" name="Sort" size="3" maxlength="3" value="{$f.sort}" style="width: 3em;" /></td>
+	</tr>
+	{if eq $forumlistAddID -1}
+	<tr>
+		<td class="leftcol">{tr "parent forum"}:</td>
+		<td>
+			<select name="Parent">
+			<option value="0" {form_selected_if eq $f.parentId 0}>({tr "forum.top level"})</option>
+			{$f.parentForumsOptions}
+			</select>
+		</td>
+	</tr>
+	{endif}
+	{if not $f.threadCount}
+	<tr>
+		<td class="leftcol">{tr "options"}:</td>
+		<td>
+			<label><input type="checkbox" name="IsCategory" value="1" {form_checked_if $f.isCategory} />{tr "category"}</label> &nbsp;
+			<label><input type="checkbox" name="IsLink" value="1" {form_checked_if $f.isLink} onclick="toggleVisId('link_url_row', this.checked)" />{tr "weblink"}</label>
+		</td>
+	</tr>
+	{endif}
+	</table>
+
+	<script type="text/javascript">toggleVisId("link_url_row", {if $f.isLink}true{else}false{endif});</script>
+
+	<div style="text-align: right;">
+		{if eq $forumlistAddID -1}
+			<label><input type="checkbox" name="Remove" value="1" {$forumlistFormSureDelete} />{tr "delete"}</label> &middot;
+		{endif}
+		<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" /> &middot;
+		<a href="{$forumlistEditCancelLink}">{tr "cancel"}</a>
+	</div>
+</div><!-- forum_content -->

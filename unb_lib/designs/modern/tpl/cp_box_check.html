@@ -1,0 +1,9 @@
+<div class="box">
+<input type="hidden" name="Set{$fieldname}" value="1" />
+<label><input type="checkbox" name="{$fieldname}" value="1" {form_checked_if $fieldvalue}{if $fieldonclick} onclick="{$fieldonclick}"{endif} />{tr $fieldlabel}</label>
+</div>
+{if tr $fielddesc}
+<div class="box small indent">
+{tr $fielddesc}
+</div>
+{endif}

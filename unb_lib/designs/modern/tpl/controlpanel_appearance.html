@@ -1,0 +1,161 @@
+<form action="{$controlpanelFormLink}" method="post">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="appearance" />
+
+<div class="page_outer_container">
+<div class="page_container">
+{if gt sizeof $controlpanelDesigns 2}
+<h1>{tr "cp.design"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.design~"}
+</div>
+<div class="box">
+<select name="Design" id="DesignSelection">
+{foreach $d in $controlpanelDesigns}
+	<option value="{$d.name}" {form_selected_if $d.selected}>{$d.title}</option>
+{endforeach}
+</select>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="button" value="{tr "preview"}" accesskey="{tr "previewbutton.accesskey"}" title="{tr "previewbutton.tip"}" onclick="UnbPreviewDesign()" /><br />
+<small>{tr "cp.design preview~"}</small>
+</div>
+{endif}{-- gt sizeof $controlpanelDesigns 2}
+
+{if gt sizeof $controlpanelLangs 2}
+<h1>{tr "language"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.language~"}
+</div>
+<div class="box">
+<select name="Language">
+{foreach $l in $controlpanelLangs}
+	<option value="{$l.name}" {form_selected_if $l.selected} style="clear: right;">
+		{if $l.img}<img src="{$l.img}" alt="" style="float: right; margin-top: 1px;" />{endif}
+		{$l.title} {if $l.nameTitle}<small>({$l.nameTitle})</small>{endif}
+	</option>
+{endforeach}
+</select>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+{endif}{-- gt sizeof $controlpanelLangs 2}
+
+<h1>{tr "cp.date and time"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<h2>{tr "cp.date format"}</h2>
+<!--div class="box small">
+{tr "cp.date format~"}
+</div--><!-- Not required for selection box -->
+<div class="box">
+<select name="DateFormat">
+{foreach $d in $controlpanelDateFormats}
+	<option value="{$d.value}" {form_selected_if $d.selected}>{$d.title}</option>
+{endforeach}
+</select>
+<!--div class="outerTextfield100pc"><input type="text" name="DateFormat" value="{$controlpanelDateFormat}" maxlength="40" /></div-->
+</div>
+<h2>{tr "cp.timezone"}</h2>
+<div class="box small">
+{tr "cp.timezone~"}
+</div>
+<div class="box">
+<select name="Timezone">
+{foreach $t in $controlpanelTimezones}
+	<option value="{$t.name}" {form_selected_if $t.selected}>
+		{$t.title}
+		{if tr concat "cp.timezone." $t.name}<small>{tr concat "cp.timezone." $t.name}</small>{endif}
+	</option>
+{endforeach}
+</select>
+</div>
+<div class="box">
+<label><input type="checkbox" name="TimezoneDS" value="1" {form_checked_if $controlpanelTimezoneDS} />{tr "cp.use dst"}</label>
+</div>
+<div class="box small indent">
+{tr "cp.use dst~"}
+</div>
+<!--div class="box">
+<label><input type="checkbox" name="" value="1" {form_checked_if $controlpanelTimezoneDSForce} />{tr "cp.force dst"}</label>
+</div>
+<div class="box small indent">
+{tr "cp.force dst~"}
+</div-->
+<div class="box">
+{tr "cp.current time"}: {$controlpanelDateFormatPreview} (UTC {$controlpanelDateFormatTZ})
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<h1>{tr "cp.more options"}</h1>
+
+<div class="page_content">
+<div class="option first">
+
+{set $fieldname "HalfSizeAvatars"}
+{set $fieldvalue $controlpanelHalfSizeAvatars}
+{set $fieldlabel "cp.small avatars"}
+{set $fielddesc "cp.small avatars~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "FastReply"}
+{set $fieldvalue $controlpanelFastReply}
+{set $fieldlabel "cp.fast reply"}
+{set $fielddesc "cp.fast reply~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "AutoReLogin"}
+{set $fieldvalue $controlpanelAutoReLogin}
+{set $fieldlabel "cp.auto login"}
+{set $fielddesc "cp.auto login~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "AutoIgnoreTopics"}
+{set $fieldvalue $controlpanelAutoIgnore}
+{set $fieldlabel "cp.auto ignore"}
+{set $fielddesc "cp.auto ignore~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "HideAvatars"}
+{set $fieldvalue $controlpanelHideAvatars}
+{set $fieldlabel "cp.hide avatars"}
+{set $fielddesc "cp.hide avatars~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "HideSigs"}
+{set $fieldvalue $controlpanelHideSigs}
+{set $fieldlabel "cp.hide signatures"}
+{set $fielddesc "cp.hide signatures~"}
+{include "cp_box_check.html"}
+
+{set $fieldname "HideInlineImages"}
+{set $fieldvalue $controlpanelHideInlineImages}
+{set $fieldlabel "cp.hide inline image"}
+{set $fielddesc "cp.hide inline image~"}
+{include "cp_box_check.html"}
+
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

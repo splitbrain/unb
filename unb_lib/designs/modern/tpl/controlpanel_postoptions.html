@@ -1,0 +1,139 @@
+<form action="{$controlpanelFormLink}" method="post" enctype="multipart/form-data">
+<input type="hidden" name="action" value="edit" />
+<input type="hidden" name="id" value="{$controlpanelUserID}" />
+<input type="hidden" name="cat" value="postoptions" />
+
+<div class="page_outer_container">
+<div class="page_container">
+{if $controlpanelEnableSignature}
+<h1>{tr "cp.post signature"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.post signature~" "length" $controlpanelSignatureMaxlength}
+</div>
+
+{if $controlpanelSignaturePreview}
+	<div class="box">
+		{if $controlpanelIsPreview}
+			{tr "preview"}:
+		{else}
+			{tr "cp.current signature"}:
+		{endif}
+	</div>
+	{if $controlpanelSignatureIsEmpty}
+		({tr "cp.no current signature"})
+	{else}
+		<div class="box signature_preview">
+			{$controlpanelSignaturePreview}
+		</div>
+	{endif}
+{endif}
+
+<div class="box">
+<div class="outerTextarea100pc"><textarea name="Signature" style="height: 100px;" rows="5" cols="40">{$controlpanelSignatureInput}</textarea></div>
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+
+<div class="buttons">
+<input type="hidden" name="Preview" value="" />
+<input type="button" value="{tr "preview"}" accesskey="{tr "previewbutton.accesskey"}" title="{tr "previewbutton.tip"}" onclick="this.form.Preview.value='1'; this.form.submit()" /><br />
+<small>{tr "cp.post signature preview~"}</small>
+</div>
+{endif}{-- controlpanelEnableSignature}
+
+{if $controlpanelEnableAvatar}
+<h1>{tr "cp.avatar"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.avatar~" "maxwidth" $controlpanelMaxAvatarWidth "maxheight" $controlpanelMaxAvatarHeight "maxsize" $controlpanelMaxAvatarSize}
+</div>
+<div class="box small">
+{tr "cp.avatar~tip"}
+</div>
+
+<div class="box">
+{if $controlpanelCurrAvatarLink}
+<div style="text-align: center;"><img src="{$controlpanelCurrAvatarLink}" {$controlpanelCurrAvatarImagesize} class="img_trans_back" alt="{tr "cp.avatar"}" /></div>
+{else}
+{tr "cp.no avatar set"}
+{endif}
+</div>
+
+<div class="box">
+<label><input type="radio" name="avatar" id="avatar1" value="1" />{tr "cp.upload new avatar"}</label><br />
+<input type="file" name="avatarfile" size="40" style="margin-left:19px;" onchange="getel('avatar1').checked = true;" /><br />
+{if rc "allow_remote_avatars"}
+	<label><input type="radio" name="avatar" id="avatar2" value="2" />{tr "cp.load avatar from url"}</label><br />
+	<div class="outerTextfield100pc" style="margin-left: 19px;"><input type="text" name="avatarurl" value="{$controlpanelAvatarRemote}" size="55" maxlength="150" onchange="getel('avatar2').checked = true;" /></div>
+	<label><input type="radio" name="avatar" id="avatar3" value="3" />{tr "cp.use gravatar"}</label> <small>{tr "cp.use gravatar~"}</small><br />
+{endif}
+<label><input type="radio" name="avatar" value="0" />{tr "cp.remove avatar"}</label><br />
+<label><input type="radio" name="avatar" value="-1" checked="checked" />{tr "no change"}</label><br />
+{if $controlpanelCurrAvatarSize}
+<small style="margin-left:19px;">{tr "cp.current avatar size" "width" $controlpanelCurrAvatarWidth "height" $controlpanelCurrAvatarHeight "size" $controlpanelCurrAvatarSize}</small>
+{endif}
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+{endif}{-- controlpanelEnableAvatar}
+
+{if $controlpanelEnablePhoto}
+<h1>{tr "cp.user photo"}</h1>
+
+<div class="page_content">
+<div class="option first">
+<div class="box small">
+{tr "cp.user photo~" "maxwidth" $controlpanelMaxPhotoWidth "maxheight" $controlpanelMaxPhotoHeight "maxsize" $controlpanelMaxPhotoSize}
+</div>
+<div class="box small">
+{tr "cp.user photo~tip"}
+</div>
+
+<div class="box">
+{if $controlpanelCurrPhotoLink}
+<div style="text-align: center;"><img src="{$controlpanelCurrPhotoLink}" class="img_trans_back" alt="{tr "cp.user photo"}" /></div>
+{else}
+{tr "cp.no photo set"}
+{endif}
+</div>
+
+<div class="box">
+<label><input type="radio" name="photo" id="photo1" value="1" />{tr "cp.upload new photo"}</label><br />
+<input type="file" name="photofile" size="40" style="margin-left:19px;" onchange="getel('photo1').checked = true;" /><br />
+{if rc "allow_remote_avatars"}
+	<label><input type="radio" name="photo" id="photo2" value="2" />{tr "cp.load photo from url"}</label><br />
+	<div class="outerTextfield100pc" style="margin-left: 19px;"><input type="text" name="photourl" value="{$controlpanelPhotoRemote}" size="55" maxlength="150" onchange="getel('photo2').checked = true;" /></div>
+{endif}
+<label><input type="radio" name="photo" value="0" />{tr "cp.remove photo"}</label><br />
+<label><input type="radio" name="photo" value="-1" checked="checked" />{tr "no change"}</label><br />
+{if $controlpanelCurrPhotoSize}
+<small style="margin-left:19px;">{tr "cp.current photo size" "width" $controlpanelCurrPhotoWidth "height" $controlpanelCurrPhotoHeight "size" $controlpanelCurrPhotoSize}</small>
+{endif}
+</div>
+</div><!-- option -->
+</div><!-- page_content -->
+{endif}{-- controlpanelEnablePhoto}
+
+{--
+Thread lists
+Threads per page
+Sort by
+Time interval
+Posts per page
+}
+
+<div class="buttons">
+<input type="submit" class="defaultbutton" name="Save" value="{tr "save"}" accesskey="{tr "savebutton.accesskey"}" title="{tr "savebutton.tip"}" />
+</div>
+
+</div><!-- page_container -->
+{set $ShadowBottomOffset 0}
+{include "_shadow_bottom.html"}
+</div><!-- page_outer_container -->
+
+</form>

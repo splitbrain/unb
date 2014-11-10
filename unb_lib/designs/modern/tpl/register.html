@@ -1,0 +1,104 @@
+{require-txt "register"}
+{require-css "register"}
+
+{if $registerFormLink}
+	<form action="{$registerFormLink}" method="post">
+	<input type="hidden" name="action" value="step2" />
+
+	<h1>{tr "register.agreement"}</h1>
+
+	<div class="p">
+	{tr "register.agreement~"}
+	</div>
+
+	<div class="p">
+	{tr "register.data required"}
+	</div>
+
+	<table cellspacing="0" cellpadding="0" width="100%" class="register_form">
+	<tr>
+		<td class="leftcol">{tr "username"}:</td>
+		<td>
+			<div class="outerTextfield100pc"><input type="text" name="Name" value="{form_htmldata "Name"}" size="40" maxlength="40" /></div>
+			<small>{tr "register.username~"}</small>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="leftcol">{tr "password"}:</td>
+		<td>
+			<div class="outerTextfield100pc"><input type="password" name="Password" value="{form_htmldata "Password"}" size="40" maxlength="40" /></div>
+			<small>{tr "register.password~"}</small>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="leftcol">{tr "register.repeat password"}:</td>
+		<td>
+			<div class="outerTextfield100pc"><input type="password" name="Password2" value="{form_htmldata "Password2"}" size="40" maxlength="40" /></div>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="leftcol">{tr "e-mail address"}:</td>
+		<td>
+			<div class="outerTextfield100pc"><input type="text" name="EMail" value="{form_htmldata "EMail"}" size="40" maxlength="100" /></div>
+			<small>{tr "register.email~"}</small>
+			{if eq (rc "new_user_validation") 2}
+				<div class="p">{tr "register.need email"}</div>
+			{endif}
+		</td>
+	</tr>
+
+	{if $registerVeriWordLink}
+	<tr>
+		<td class="leftcol">{tr "vericode"}:</td>
+		<td>
+			<img src="{$registerVeriWordLink}" alt="VeriWord" style="vertical-align: middle;" /><br />
+			{tr "vericode~"}<br />
+			<input type="text" name="veriword" value="{form_htmldata "veriword"}" size="10" maxlength="40" style="width: 10em;" />
+		</td>
+	</tr>
+	{endif}
+	</table>
+
+	<div class="p" style="margin: 20px 0 30px; text-align: center;">
+	<input type="submit" class="defaultbutton" value="{tr "register.submit"}" />
+	</div>
+
+	<input type="hidden" name="timezone" id="timezone" value="" />
+	{=beginjs}
+	getel("timezone").value = fetchTimezone();
+	{=endjs}
+
+	</form>
+{elseif $registerWelcome}
+	<div class="p">
+	{tr "register.welcome created"}<br />
+
+	{if $registerValidated}
+		{tr "register.account already validated"}
+	{else}
+		{tr "register.account not validated"}
+		{if eq $registerValidationReason 2}
+			{tr "register.validate by mail"}
+		{elseif eq $registerValidationReason 3}
+			{tr "register.validate manually"}
+		{else}
+			{tr "register.acc_error"}
+		{endif}
+		{tr "register.welcome login"}
+	{endif}
+
+	{tr "register.welcome profile"}
+	</div>
+{elseif $registerValidated}
+	<div class="p">
+	{tr "register.account validated~"}
+	</div>
+{elseif $registerValidationResent}
+	<div class="p">
+	{tr "register.validation resent"}
+	</div>
+{endif}
+
