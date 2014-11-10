@@ -799,7 +799,7 @@ function Add($Name, $Password, $EMail)
 	$this->Location = '';
 	$this->Homepage = '';
 	$this->Gender = '';
-	$this->Avatar = '';
+	$this->Avatar = 'gravatar'; //ANDI
 	$this->Photo = '';
 	if ($UNB['ProfileExtraCount'] > 0)
 		$this->Extra = array_fill(1, $UNB['ProfileExtraCount'], '');
