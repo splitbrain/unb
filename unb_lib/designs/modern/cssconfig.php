@@ -29,6 +29,10 @@ $mac = $UNB['Client']['os_class'] == 'mac';
 $fx15 = $UNB['Client']['browser'] == 'fx' && ($UNB['Client']['b_ver'] == '1.0+' || $UNB['Client']['b_ver'] >= '1.4');
 $_ie7 = $ie7;
 
+// To disable new IE7 rendering capabilities, uncomment this line:
+// ANDI
+$_ie7 = false;
+
 // Path to image files, relative to CSS files
 $ImgPath = '../img/';
 
