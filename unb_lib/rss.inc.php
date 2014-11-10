@@ -164,9 +164,11 @@ if ($found) do
 		$username = $post->GetUserName();
 	}
 	$item->author = $username;
-	$item->guid = TrailingSlash(rc('home_url')) . $thread->GetID();
-	if ($type == 2)
-		$item->guid .= '#' . $post->GetID();
+	# ANDI
+	#$item->guid = TrailingSlash(rc('home_url')) . $thread->GetID();
+	$item->guid = $url;
+	#if ($type == 2)
+	#	$item->guid .= '#' . $post->GetID();
 
 	$rss->addItem($item);
 
