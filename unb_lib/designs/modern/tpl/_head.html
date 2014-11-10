@@ -15,7 +15,7 @@
 {$headAdd}{-- this is all links that are added later while programme execution}
 {$headCustom}{-- this comes from plug-ins}
 </head>
-<body{if $headSimple} class="simple"{endif}>
+<body{if $headSimple} class="simple"{endif} id="subforum{$mysubforum}"><br /><!-- ANDI -->
 {endif}{-- $headHTML}
 
 <script type="text/javascript">//<![CDATA[
@@ -29,6 +29,14 @@
 	{$headAddPreLogoCode}
 
 	<div class="head_logo">
+	<!-- ANDI -->
+        <div class="andi_adsense">
+        {if $headXML}
+        <object width="468" height="60" data="/adsense.php" type="text/html"></object>
+        {else}
+        <iframe width="468" height="60" src="/adsense.php" frameborder="0"></iframe>
+        {endif}
+        </div>
 	<a href="{$headLogoLink}"><img {$UNBImage.toplogo} alt="{$headLogoAlt}" /></a>
 	</div>
 
