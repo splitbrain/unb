@@ -1707,7 +1707,7 @@ function UnbAvatarUrl($user)
 	if (!$user->GetAvatar()) return '';
 	if ($user->GetAvatar() == 'gravatar')
 		return 'http://www.gravatar.com/avatar.php?gravatar_id=' . md5(trim($user->GetEMail())) .
-			'&size=' . min(intval(rc('avatar_x')), intval(rc('avatar_y'))) . '&rating=PG';
+			'&size=' . min(intval(rc('avatar_x')), intval(rc('avatar_y'))) . '&rating=PG&d=monsterid';
 	return ($user->AvatarFromURL() ? '' : $UNB['AvatarURL']) . $user->GetAvatar();
 }
 
