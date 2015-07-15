@@ -393,7 +393,7 @@ if ($_POST['action'] == 'add' &&
 
 	if (!$UNB['LoginUserID'] &&
 	    rc('use_veriword') &&
-	    strtolower($_POST['veriword']) != strtolower($_SESSION['veriword']))
+	    !UnbCaptcha::CheckWord($_POST['veriword']))
 	{
 		$error .= $UNB_T['vericode.error.invalid key'] . '<br />';
 	}

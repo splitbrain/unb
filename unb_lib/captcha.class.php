@@ -212,10 +212,10 @@ class UnbCaptcha
 			$size = mt_rand($C['sizeLo'], $C['sizeHi']);
 			$angle = (mt_rand($C['angleLo'], $C['angleHi']) + $prevAngle) / 2;
 
-			// make sure random values are in right order
+			// Make sure random borders are in the right order
 			$min = -($imgHeight / 2 - $size);
 			$max = $imgHeight / 2 - $size * 1.3;
-			if($min > $max)  list($min, $max) = array($max, $min);
+			if ($min > $max) list($min, $max) = array($max, $min);
 
 			$x += round(($bbox[2] - $bbox[0]) * 0.8 - ($angle - $prevAngle) / 20 * 0.2) + 2;
 			$y =
