@@ -29,14 +29,20 @@
 	{$headAddPreLogoCode}
 
 	<div class="head_logo">
+
 	<!-- ANDI -->
-        <div class="andi_adsense">
-        {if $headXML}
-        <object width="468" height="60" data="/adsense.php" type="text/html"></object>
-        {else}
-        <iframe width="468" height="60" src="/adsense.php" frameborder="0"></iframe>
-        {endif}
-        </div>
+	{if not $headNoIndex}
+	{if not $errorMsg}
+        	<div class="andi_adsense">
+        		{if $headXML}
+        			<object width="468" height="60" data="/adsense.php" type="text/html"></object>
+        		{else}
+        			<iframe width="468" height="60" src="/adsense.php" frameborder="0"></iframe>
+        		{endif}
+        	</div>
+	{endif}
+	{endif}
+
 	<a href="{$headLogoLink}"><img {$UNBImage.toplogo} alt="{$headLogoAlt}" /></a>
 	</div>
 
