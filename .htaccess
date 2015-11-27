@@ -20,7 +20,11 @@ DirectoryIndex forum.php
 	# (See http://httpd.apache.org/docs-2.0/mod/mod_rewrite.html#rewritebase )
 	#
 	#RewriteBase /
-	
+
+	#ANDI use custom script for redirects - no session, no nothing
+	RewriteCond  %{QUERY_STRING} (.*(?:^|&))req=derefer((?:&|$).*)
+	RewriteRule  forum.php deref.php [L,QSA]
+
 	# OLD declarations
 	RewriteRule ^0(;(.*))?$ forum.php?rewrite=$2 [L,QSA]
 	RewriteRule ^([0-9]+)(;(.*))?$ forum.php?req=thread&id=$1&rewrite=$3 [L,QSA]
