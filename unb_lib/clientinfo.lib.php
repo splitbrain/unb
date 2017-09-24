@@ -35,7 +35,7 @@ function collectUserAgentData()
 	$info['referer'] = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
 	$info['ref_mydomain'] = false;
 	$ref = $info['referer'];
-	if (preg_match('_^https?://(.*?)/_i', $ref, $m))
+	if (preg_match('_^https?://(.*?)(:\d+)?/_i', $ref, $m))
 	{
 		$ref = $m[1];   // find domain from referer
 		$me = $_SERVER['SERVER_NAME'];   // find our own server name
