@@ -777,6 +777,16 @@ if (($_POST['action'] == 'edit' &&
 				$error .= $UNB_T['post.error.invalid attach'] . '<br />';
 			}
 
+			// Allow plug-ins to reject the post
+			$data = array(
+				'error' => '',
+				'subject' => $_POST['Subject'],
+				'body' => $_POST['Msg'],
+				'forumid' => $forumid,
+				'userid' => $UNB['LoginUserID']);
+			UnbCallHook('post.verifyaccept', $data);
+			if ($data['error']) $error .= $data['error'];
+
 			if (!$error)
 			{
 				$thread = new IThread($post->GetThread());
