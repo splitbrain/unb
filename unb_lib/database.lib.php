@@ -37,7 +37,9 @@ var $useUTF8 = true;   // Use UTF-8 character set if available
 
 // -------------------- Private variables --------------------
 
+/** @var mysqli|false */
 var $conn = false;
+/** @var mysqli_result|false */
 var $result = false;
 var $tablestatus = false;
 
@@ -110,28 +112,21 @@ function Open()
 		die('<b>UNB Error:</b> No database name set for database connection.<br />');
 	}
 
-	if (!function_exists('mysql_connect'))
+	if (!function_exists('mysqli_connect'))
 	{
-		die('<b>UNB Error:</b> MySQL PHP extension is not available. Check the <a href="http://newsboard.unclassified.de/docs/install#req">requirements</a>.<br />');
+		die('<b>UNB Error:</b> MySQLi PHP extension is not available. Check the <a href="http://newsboard.unclassified.de/docs/install#req">requirements</a>.<br />');
 	}
 
-	if (!function_exists('version_compare') || version_compare(phpversion(), '4.2.0') < 0)
-	{
-		$this->conn = mysql_connect($this->server, $this->user, $this->password);   // port 3306
-	}
-	else
-	{
-		$this->conn = mysql_connect($this->server, $this->user, $this->password, true);
-	}
+	$this->conn = mysqli_connect($this->server, $this->user, $this->password);   // port 3306
 	if ($this->conn == false)
 	{
-		UnbErrorLog('Cannot connect to database: ' . mysql_error());
+		UnbErrorLog('Cannot connect to database: ' . mysqli_connect_error());
 		die('<b>UNB Error:</b> Cannot connect to database. Check the error log for details.');
 	}
 
-	if (!mysql_select_db($this->dbname))
+	if (!mysqli_select_db($this->conn, $this->dbname))
 	{
-		UnbErrorLog('Cannot switch to my database: ' . mysql_error());
+		UnbErrorLog('Cannot switch to my database: ' . mysqli_error($this->conn));
 		die('<b>UNB Error:</b> Cannot switch to my database. Check the error log for details.');
 	}
 
@@ -163,7 +158,7 @@ function Open()
 function Close()
 {
 	if (!$this->IsConnected()) return false;
-	mysql_close($this->conn);
+	mysqli_close($this->conn);
 	return true;
 }
 
@@ -187,7 +182,7 @@ function IsConnected()
 //
 function LastError()
 {
-	return mysql_error($this->conn);
+	return mysqli_error($this->conn);
 }
 
 // -------------------- Raw DB access via SQL --------------------
@@ -210,7 +205,7 @@ function Exec($sql)
 		$start = debugGetMicrotime();
 	}
 
-	$this->result = mysql_query($sql, $this->conn);
+	$this->result = mysqli_query($this->conn, $sql);
 
 	if ($measure_time === true)
 	{
@@ -220,7 +215,7 @@ function Exec($sql)
 	}
 
 	// Log any query error to the error log for later recovery
-	$error = mysql_error($this->conn);
+	$error = mysqli_error($this->conn);
 	if ($error) UnbErrorLog('Database query error: ' . $error . "\nSQL: " . $sql);
 
 	if ($UNB['ShowSql'])
@@ -549,7 +544,7 @@ function QueryFields($fields = '*')
 //
 function GetRecord()
 {
-	return mysql_fetch_array($this->result);
+	return mysqli_fetch_array($this->result);
 
 	/*
 	global $gDBtime, $UNB;
@@ -586,7 +581,7 @@ function FastQuery($table, $fields = '*', $where = '', $order = '', $limit = '',
 	$this->SetGroup($group);
 	$this->SetHaving($having);
 	if ($this->QueryFields($fields) === false) return false;
-	return mysql_fetch_array($this->result);
+	return mysqli_fetch_array($this->result);
 	#return $this->GetRecord();
 }
 
@@ -619,7 +614,7 @@ function FastQuery1stArray($table, $fields = '*', $where = '', $order = '', $lim
 		if ($key === false) array_push($arr, $record[0]);
 		else                $arr[$record[$key]] = $record[0];
 	}
-	while ($record = mysql_fetch_array($this->result));
+	while ($record = mysqli_fetch_array($this->result));
 	#while ($record = $this->GetRecord());
 
 	return $arr;
@@ -644,7 +639,7 @@ function FastQueryArray($table, $fields = '*', $where = '', $order = '', $limit 
 		if ($key === false) array_push($arr, $record);
 		else                $arr[$record[$key]] = $record;
 	}
-	while ($record = mysql_fetch_array($this->result));
+	while ($record = mysqli_fetch_array($this->result));
 	#while ($record = $this->GetRecord());
 
 	return $arr;
@@ -769,7 +764,7 @@ function RemoveRecord($where = '', $table = '', $limit = '')
 //
 function AffectedRows()
 {
-	return mysql_affected_rows($this->conn);
+	return mysqli_affected_rows($this->conn);
 }
 
 // Get database table size, depends on table_status()
