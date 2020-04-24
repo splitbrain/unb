@@ -45,7 +45,7 @@ var $Options = 0;
 
 // -------------------- Constructor --------------------
 
-function IAnnounce($id = 0)
+function __construct($id = 0)
 {
 	global $UNB;
 

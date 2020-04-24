@@ -48,7 +48,7 @@ var $SpamRating = 0;
 
 // -------------------- Constructor --------------------
 
-function IPost($id = 0)
+function __construct($id = 0)
 {
 	global $UNB;
 

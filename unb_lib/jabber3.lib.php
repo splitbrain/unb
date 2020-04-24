@@ -26,7 +26,7 @@ class XMLObj {
 	var $subs = array();
 	var $data = '';
 
-	function XMLObj($name, $ns='', $attrs=array(), $data='') {
+	function __construct($name, $ns='', $attrs=array(), $data='') {
 		$this->name = strtolower($name);
 		$this->ns  = $ns;
 		if(is_array($attrs)) {
@@ -104,7 +104,7 @@ class XMLStream {
 	var $been_reset = False;
 	var $is_server;
 
-	function XMLStream($host=Null, $port=Null, $log=False, $loglevel=Null, $is_server=False) {
+	function __construct($host=Null, $port=Null, $log=False, $loglevel=Null, $is_server=False) {
 		$this->reconnect = !$is_server;
 		$this->is_server = $is_server;
 		$this->host = $host;
@@ -416,7 +416,7 @@ class Logging {
 	var $runlevel;
 	var $printout;
 
-	function Logging($printout = False, $runlevel=LOGGING_INFO) {
+	function __construct($printout = False, $runlevel=LOGGING_INFO) {
 		$this->names = array('ERROR  ', 'WARNING', 'INFO   ', 'DEBUG  ', 'VERBOSE');
 		$this->runlevel = $runlevel;
 		$this->printout = $printout;
@@ -446,7 +446,7 @@ class XMPP extends XMLStream {
 	var $authed;
 	var $use_encryption;
 
-	function XMPP($host, $port, $user, $password, $resource, $server=Null, $printlog=False, $loglevel=Null, $use_encryption=true) {
+	function __construct($host, $port, $user, $password, $resource, $server=Null, $printlog=False, $loglevel=Null, $use_encryption=true) {
 		$this->XMLStream($host, $port, $printlog, $loglevel);
 		$this->user = $user;
 		$this->password = $password;

@@ -38,7 +38,7 @@ var $Link = '';
 
 // -------------------- Constructor --------------------
 
-function IForum($id = 0)
+function __construct($id = 0)
 {
 	global $UNB;
 
