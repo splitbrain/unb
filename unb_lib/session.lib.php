@@ -49,7 +49,7 @@ function UnbCheckUserPassword($hashed, $stored)
 	{
 		$stored = '{sha1}' . $stored;
 	}
-	else if ($stored{0} != '{')
+	else if ($stored[0] != '{')
 	{
 		$stored = '{plain}' . $stored;
 	}

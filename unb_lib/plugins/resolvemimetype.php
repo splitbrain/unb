@@ -17,7 +17,7 @@ function UnbHookResolveMIME(&$data)
 	if (is_array($lines)) foreach ($lines as $line)
 	{
 		$line = trim($line);
-		if ($line{0} == '#') continue;
+		if ($line[0] == '#') continue;
 		if (!preg_match('_^(.*)\s+(.*)$_i', $line, $m)) continue;
 		if ($m[2] == $data['ext'])
 		{

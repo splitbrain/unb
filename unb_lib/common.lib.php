@@ -152,7 +152,7 @@ if (is_array($cf)) foreach ($cf as $line)
 {
 	$line = ltrim($line);
 	if ($line == '') continue;
-	if ($line{0} === '#' || trim($line) === '<?php' || trim($line) === '?>') continue;
+	if ($line[0] === '#' || trim($line) === '<?php' || trim($line) === '?>') continue;
 	$pos = strpos($line, '=');
 	$value = trim(substr($line, $pos + 1));
 	if ($UNB['CharSet'] === 'UTF-8' && !$conf_utf8) $value = utf8_encode($value);
@@ -979,7 +979,7 @@ function UnbLink($url, $params = null, $html = false, $sid = true, $derefer = fa
 		}
 
 		// Replace shortcuts by our own pages
-		if ($url{0} === '@')
+		if ($url[0] === '@')
 		{
 			$baseurl = rc('baseurl');
 			if ($url === '@this') $url = $UNB['ThisPage'];
@@ -1004,7 +1004,7 @@ function UnbLink($url, $params = null, $html = false, $sid = true, $derefer = fa
 					$data = array('url' => &$url, 'request' => &$req, 'params' => &$params);
 					UnbCallHook('link.shortcut.custom', $data);
 			}
-			if ($url{0} === '@')
+			if ($url[0] === '@')
 			{
 				UnbErrorLog('Invalid page reference in UnbLink: url=' . $url);
 				$url = $baseurl; $req = '';
@@ -1523,7 +1523,7 @@ function utf8_substr($str, $mbstart, $mblen = null)
 	$len = 0;         // number of bytes to copy
 	while ($pos < strlen($str))
 	{
-		$value = ord($str{$pos});
+		$value = ord($str[$pos]);
 		if ($value > 127)
 			if     ($value >= 224 && $value <= 239) $bytes = 3;
 			elseif ($value >= 240 && $value <= 247) $bytes = 4;
@@ -1615,10 +1615,10 @@ function str_limit($str, $len, $multibyte = false, $html = false)
 		$tags = array();
 		for ($pos = 0; $insth || $pos < $len - 1; $pos++)
 		{
-			$c = $str{$pos};
+			$c = $str[$pos];
 			if ($c == '<')
 			{
-				if ($str{$pos + 1} == '/')   // tag is closing
+				if ($str[$pos + 1] == '/')   // tag is closing
 					array_pop($tags);
 				else if (preg_match('_^<([a-z]+?)[ >]_', substr($str, $pos), $m))
 					$tags[] = $m[1];
@@ -1854,7 +1854,7 @@ function explode_quoted($sep, $str, $mask_bs = true)
 				$instr = true;
 				$startpos = $pos = $minpos + 1;   // jump over beginning "
 			}
-			elseif ($instr === true && $str{$minpos - 1} !== '\\' && ($str{$minpos + 1} === $sep
+			elseif ($instr === true && $str[$minpos - 1] !== '\\' && ($str[$minpos + 1] === $sep
 			                                                          || $minpos === $len - 1))
 				// inside a string AND previous symbol is not \ AND next symbol is space/separator
 				//                                                  OR no more characters (last symbol)
@@ -2239,12 +2239,12 @@ function UnbDate($fmt, $time = false)
 
 	for ($n = 0; $n < $len; $n++)
 	{
-		$c = $fmt{$n};
+		$c = $fmt[$n];
 		switch ($c)
 		{
 			case '\\':
 				$n++;
-				$out .= $fmt{$n};
+				$out .= $fmt[$n];
 				break;
 			case 'a':
 				if ($arr)

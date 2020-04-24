@@ -67,19 +67,19 @@ function UnbHookWordfilter(&$data)
 		{
 			if ($pos === 0)   // keep first character
 			{
-				$ch = regsafe($word{$pos});
+				$ch = regsafe($word[$pos]);
 				$b .= '(' . $ch . ')(\s*\[.*?\]\s*)?';
 				$g .= '\\' . $n++ . '\\' . $n++;
 			}
 			elseif ($pos === $len - 1)   // keep last character
 			{
-				$ch = regsafe($word{$pos});
+				$ch = regsafe($word[$pos]);
 				$b .= '(' . $ch . ')';
 				$g .= '\\' . $n++;
 			}
 			else   // replace anything in between
 			{
-				$ch = regsafe($word{$pos});
+				$ch = regsafe($word[$pos]);
 				$b .= $ch . '(\s*\[.*?\]\s*)?';
 				$g .= $UNB['_wordfilter_repl'] . '\\' . $n++;
 			}

@@ -244,7 +244,7 @@ function get_feedback_line()
 		if (!$response) return false;
 		$allresp .= $response;
 	}
-	while ($response{3} == '-');
+	while ($response[3] == '-');
 	return $allresp;
 }
 
