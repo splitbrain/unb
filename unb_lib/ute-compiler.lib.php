@@ -561,6 +561,23 @@ function UteExpressionTemplate(&$parts, &$pos, $template)
 	return $template;
 }
 
+function cb_specials($matches) {
+	$specials = [
+		'_\\n_' => "\n",
+		'_\\r_' => "\r",
+		'_\\t_' => "\t",
+		'_\\\\_' => '\\',
+		'_"_' => '\\"',
+	];
+
+	return $specials[$matches[0]];
+}
+
+function cb_hexdec($matches) {
+	return UteCodeUTF(hexdec($matches[1]));
+}
+
+
 // Recursively parse a prefix expression from an array
 //
 // This function is required for the Template Compiler only.
@@ -593,11 +610,18 @@ function UteParseExpressionRec(&$parts, &$pos)
 	if (preg_match('/^"(.*)"$/', $p, $m))
 	{
 		return '"' .
-			preg_replace(
-				array('_\\n_', '_\\r_', '_\\t_', '_\\\\_', '_"_', '_\\\\x([0-9a-f]{2})_ie',   '_\\\\u([0-9a-f]{4})_ie'),
-				array("\n",    "\r",    "\t",    '\\',     '\\"', 'UteCodeUTF(hexdec("$1"))', 'UteCodeUTF(hexdec("$1"))'),
-				$m[1]) .
-			'"';
+			preg_replace_callback_array(
+				[
+					'_\\n_' => 'cb_specials',
+					'_\\r_' => 'cb_specials',
+					'_\\t_' => 'cb_specials',
+					'_\\\\_' => 'cb_specials',
+					'_"_' => 'cb_specials',
+					'_\\\\x([0-9a-f]{2})_i' => 'cb_hexdec',
+					'_\\\\u([0-9a-f]{4})_i' => 'cb_hexdec'
+				],
+				$m[1]
+			) . '"';
 	}
 
 	// variable
