@@ -16,7 +16,7 @@ define('UNB_RUNNING', 1);
 // We don't want E_NOTICE output here!
 error_reporting(E_ALL & ~E_NOTICE);
 
-require('abbc.conf.php');
+require('abbc.lib.php');
 header('Content-Type: text/css');
 header('Expires: ' . date('r', time() + 86400));   // 1 day
 

@@ -37,8 +37,9 @@ require(dirname(__FILE__) . '/abbc.conf.php');
 require_once(dirname(__FILE__) . '/geshi.lib.php');
 
 // UNB-specific
-UnbCallHookN('abbc.userconfig');
-
+if(is_callable('UnbCallHookN')) {
+	UnbCallHookN('abbc.userconfig');
+}
 
 // Initialize some variables for a faster processing at a later time
 //
