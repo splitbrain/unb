@@ -70,6 +70,7 @@ function AbbcInit()
 
 	// prepare smileys
 	$ABBC['SmilieStarts'] = '';
+	$ABBC['Smilies'] = (array) $ABBC['Smilies'];
 	$ABBC['SmilieCount'] = sizeof($ABBC['Smilies']);
 	for ($n = 0; $n < $ABBC['SmilieCount']; $n++)
 	{
